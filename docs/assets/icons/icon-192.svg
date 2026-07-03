@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a"/>
+      <stop offset="100%" style="stop-color:#141414"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#107c10"/>
+      <stop offset="100%" style="stop-color:#1db954"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="40" fill="url(#bg)"/>
+  <g transform="translate(40, 35)">
+    <path d="M 15 30 Q 15 15 30 15 L 60 15 Q 75 15 75 30 L 75 45 Q 75 60 90 68 L 98 72 Q 105 75 105 83 L 105 87 Q 105 95 98 93 L 90 91 Q 75 87 67 89 L 60 91 Q 45 94 30 91 L 22 89 Q 15 87 8 93 L 0 95 Q -8 97 -8 88 L -8 83 Q -8 75 0 72 L 8 68 Q 23 63 23 50 L 23 42 Q 23 30 15 30 Z" fill="url(#green)"/>
+    <circle cx="75" cy="50" r="8" fill="#0a0a0a" stroke="#1db954" stroke-width="1.5"/>
+    <path d="M 72 48 L 78 50 L 72 52 Z" fill="#1db954"/>
+  </g>
+  <text x="96" y="170" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700" fill="#1db954">MODE</text>
+</svg>
