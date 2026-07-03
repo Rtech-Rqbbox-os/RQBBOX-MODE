@@ -1,10 +1,29 @@
-# RQBBOX MODE ®
+<p align="center">
+  <img src="assets/banner.svg" alt="RQBBOX MODE" width="100%">
+</p>
 
-**Plug Into Gaming. ®** — A full-screen, controller-optimized gaming mode for RQBBOX OS, inspired by Xbox Mode on Windows 11.
+<h1 align="center">RQBBOX MODE ®</h1>
 
-Turn any PC into a console-like gaming experience. Full controller navigation, Quick Resume, performance optimization, achievements, game DVR, and more.
+<p align="center">
+  <strong>Plug Into Gaming. ®</strong><br>
+  A full-screen, controller-optimized gaming mode for PC, inspired by Xbox Mode on Windows 11.
+</p>
+
+<p align="center">
+  <a href="https://rtech-rqbbox-os.github.io/RQBBOX-MODE">
+    <img src="https://img.shields.io/badge/GitHub-Pages-blue?style=for-the-badge&logo=github" alt="GitHub Pages">
+  </a>
+  <a href="https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License">
+  </a>
+  <a href="https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE">
+    <img src="https://img.shields.io/badge/Version-1.0.0-107c10?style=for-the-badge" alt="Version">
+  </a>
+</p>
 
 ---
+
+Turn any PC into a console-like gaming experience. Full controller navigation, Quick Resume, performance optimization, achievements, game DVR, cloud gaming, and 6 built-in games.
 
 ## Features
 
