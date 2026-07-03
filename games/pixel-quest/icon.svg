@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a2e0a"/>
+      <stop offset="100%" style="stop-color:#0d1500"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="20" fill="url(#bg)"/>
+  <rect x="40" y="35" width="48" height="48" rx="4" fill="#2d5a1e" stroke="#4ade80" stroke-width="2"/>
+  <rect x="48" y="43" width="8" height="8" fill="#4ade80"/>
+  <rect x="64" y="43" width="8" height="8" fill="#4ade80"/>
+  <rect x="48" y="59" width="8" height="8" fill="#4ade80"/>
+  <rect x="64" y="59" width="8" height="8" fill="#4ade80"/>
+  <rect x="56" y="67" width="8" height="8" fill="#fbbf24"/>
+  <text x="64" y="110" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="bold" fill="#4ade80">PIXEL QUEST</text>
+</svg>

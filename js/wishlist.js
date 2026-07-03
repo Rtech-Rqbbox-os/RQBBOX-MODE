@@ -55,16 +55,20 @@ const Wishlist = {
         </div>
         ${this.items.length > 0 ? `
           <div class="wishlist-grid">
-            ${this.items.map(item => `
+            ${this.items.map(item => {
+              const iconContent = item.iconSvg 
+                ? `<img src="${item.iconSvg}" alt="${item.title}" style="width:100%;height:100%;object-fit:cover;">` 
+                : (item.icon || '🎮');
+              return `
               <div class="wishlist-card">
-                <div class="card-art">${item.icon || '🎮'}</div>
+                <div class="card-art">${iconContent}</div>
                 <div class="card-info">
                   <div class="card-title">${item.title}</div>
                   <div class="card-sub">${item.category || ''} • ${item.price || 'Free'}</div>
                 </div>
                 <button class="btn-icon" onclick="Wishlist.removeGame('${item.id}')">✕</button>
               </div>
-            `).join('')}
+            `}).join('')}
           </div>
         ` : `
           <div class="empty-state">

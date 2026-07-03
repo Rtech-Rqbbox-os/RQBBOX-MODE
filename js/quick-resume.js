@@ -90,15 +90,19 @@ const QuickResume = {
 
     if (homeRow) {
       homeRow.innerHTML = this.sessions.length
-        ? this.sessions.map(s => `
+        ? this.sessions.map(s => {
+            const iconContent = s.iconSvg 
+              ? `<img src="${s.iconSvg}" alt="${s.title}" style="width:100%;height:100%;object-fit:cover;">` 
+              : (s.icon || '🎮');
+            return `
             <div class="card" onclick="QuickResume.resume('${s.id}')" style="width:160px;">
-              <div class="card-art">${s.icon}</div>
+              <div class="card-art">${iconContent}</div>
               <div class="card-info">
                 <div class="card-title">${s.title}</div>
                 <div class="card-sub">⏸️ ${this._timeAgo(s.savedAt)}</div>
               </div>
             </div>
-          `).join('')
+          `}).join('')
         : '<div class="empty-state">No suspended games. Press Guide button to suspend.</div>';
     }
 

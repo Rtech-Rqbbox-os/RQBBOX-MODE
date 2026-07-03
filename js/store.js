@@ -35,15 +35,19 @@ const Store = {
 
     const games = this.getFiltered();
     grid.innerHTML = games.length
-      ? games.map(g => `
+      ? games.map(g => {
+          const iconContent = g.iconSvg 
+            ? `<img src="${g.iconSvg}" alt="${g.title}" style="width:100%;height:100%;object-fit:cover;">` 
+            : (g.icon || '🎮');
+          return `
           <div class="card" onclick="Store.showDetail('${g.id}')">
-            <div class="card-art">${g.icon || '🎮'}</div>
+            <div class="card-art">${iconContent}</div>
             <div class="card-info">
               <div class="card-title">${g.title}</div>
               <div class="card-sub">${g.category || 'Game'} ${g.price ? '• ' + g.price : ''}</div>
             </div>
           </div>
-        `).join('')
+        `}).join('')
       : '<div class="empty-state" style="grid-column:1/-1;">No games in this category</div>';
   },
 

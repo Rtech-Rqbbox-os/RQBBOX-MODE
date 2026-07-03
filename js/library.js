@@ -73,9 +73,12 @@ const GameLibrary = {
   },
 
   renderCard(game) {
+    const iconContent = game.iconSvg 
+      ? `<img src="${game.iconSvg}" alt="${game.title}" style="width:100%;height:100%;object-fit:cover;">` 
+      : (game.icon || '🎮');
     return `
       <div class="card" data-id="${game.id}" onclick="GameLibrary.launch('${game.id}')">
-        <div class="card-art">${game.icon || '🎮'}</div>
+        <div class="card-art">${iconContent}</div>
         <div class="card-info">
           <div class="card-title">${game.title}</div>
           <div class="card-sub">${game.category || 'Game'} ${this.isInstalled(game.id) ? '• Installed' : ''}</div>

@@ -56,15 +56,19 @@ const CloudGaming = {
           <span class="section-badge">Game Pass Ultimate</span>
         </div>
         <div class="horz-scroll">
-          ${games.map(game => `
+          ${games.map(game => {
+            const iconContent = game.iconSvg 
+              ? `<img src="${game.iconSvg}" alt="${game.title}" style="width:100%;height:100%;object-fit:cover;">` 
+              : (game.icon || '🎮');
+            return `
             <div class="card cloud-card" onclick="CloudGaming.launchGame('${game.id}')">
-              <div class="card-art">${game.icon}</div>
+              <div class="card-art">${iconContent}</div>
               <div class="card-info">
                 <div class="card-title">${game.title}</div>
                 <div class="card-sub">☁️ Cloud • ${game.category}</div>
               </div>
             </div>
-          `).join('')}
+          `}).join('')}
         </div>
       </div>
     `;
