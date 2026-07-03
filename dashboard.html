@@ -86,7 +86,7 @@
 
         <div class="section">
           <div class="section-header">
-            <h3>Quick Resume</h3>
+            <h3>⏸️ Quick Resume</h3>
             <button class="section-action" onclick="RQBOX.navigate('resume')">Manage</button>
           </div>
           <div class="horz-scroll" id="quick-resume-row">
@@ -96,7 +96,7 @@
 
         <div class="section">
           <div class="section-header">
-            <h3>Recently Played</h3>
+            <h3>🎮 Recently Played</h3>
             <button class="section-action" onclick="RQBOX.navigate('games')">See All</button>
           </div>
           <div class="horz-scroll" id="recent-games-row"></div>
@@ -104,7 +104,7 @@
 
         <div class="section">
           <div class="section-header">
-            <h3>Recommended For You</h3>
+            <h3>⭐ Recommended For You</h3>
             <button class="section-action" onclick="RQBOX.navigate('store')">Store</button>
           </div>
           <div class="horz-scroll" id="recommended-row"></div>
@@ -114,16 +114,16 @@
       <!-- GAMES -->
       <section class="page" id="page-games">
         <div class="page-header">
-          <h2>Game Library</h2>
+          <h2>🎮 Game Library</h2>
           <div class="page-actions">
             <button class="btn btn-sm" onclick="GameLibrary.refresh()">🔄 Refresh</button>
           </div>
         </div>
         <div class="filter-bar" id="games-filter-bar">
-          <button class="filter-pill active" data-filter="all">All</button>
-          <button class="filter-pill" data-filter="installed">Installed</button>
-          <button class="filter-pill" data-filter="recent">Recent</button>
-          <button class="filter-pill" data-filter="favorites">Favorites</button>
+          <button class="filter-pill active" data-filter="all">🎮 All</button>
+          <button class="filter-pill" data-filter="installed">📦 Installed</button>
+          <button class="filter-pill" data-filter="recent">🕐 Recent</button>
+          <button class="filter-pill" data-filter="favorites">⭐ Favorites</button>
         </div>
         <div class="card-grid" id="games-grid"></div>
       </section>
@@ -131,7 +131,7 @@
       <!-- RESUME (Quick Resume) -->
       <section class="page" id="page-resume">
         <div class="page-header">
-          <h2>Quick Resume</h2>
+          <h2>⏸️ Quick Resume</h2>
           <button class="btn btn-sm" onclick="QuickResume.clearAll()">Clear All</button>
         </div>
         <p class="page-subtitle">Suspend games and resume them instantly. Up to 3 suspended sessions.</p>
@@ -141,8 +141,8 @@
       <!-- CAPTURES -->
       <section class="page" id="page-captures">
         <div class="page-header">
-          <h2>Captures & Game DVR</h2>
-          <button class="btn btn-sm" id="btn-capture-screenshot">📷 Screenshot</button>
+          <h2>📷 Captures & Game DVR</h2>
+          <button class="btn btn-sm" id="btn-capture-screenshot">📸 Screenshot</button>
         </div>
         <div class="capture-grid" id="capture-grid"></div>
       </section>
@@ -150,14 +150,14 @@
       <!-- STORE -->
       <section class="page" id="page-store">
         <div class="page-header">
-          <h2>Store</h2>
+          <h2>🛒 Store</h2>
         </div>
         <div class="filter-bar" id="store-filter-bar">
-          <button class="filter-pill active" data-filter="all">All</button>
-          <button class="filter-pill" data-filter="action">Action</button>
-          <button class="filter-pill" data-filter="racing">Racing</button>
-          <button class="filter-pill" data-filter="puzzle">Puzzle</button>
-          <button class="filter-pill" data-filter="retro">Retro</button>
+          <button class="filter-pill active" data-filter="all">🎮 All</button>
+          <button class="filter-pill" data-filter="action">⚔️ Action</button>
+          <button class="filter-pill" data-filter="racing">🏎️ Racing</button>
+          <button class="filter-pill" data-filter="puzzle">🧩 Puzzle</button>
+          <button class="filter-pill" data-filter="retro">🕹️ Retro</button>
         </div>
         <div class="card-grid" id="store-grid"></div>
       </section>
@@ -165,13 +165,13 @@
       <!-- FRIENDS -->
       <section class="page" id="page-friends">
         <div class="page-header">
-          <h2>Friends & Social</h2>
+          <h2>👥 Friends & Social</h2>
         </div>
         <div class="friends-layout">
           <div class="friends-list" id="friends-list"></div>
           <div class="social-sidebar">
             <div class="social-panel" id="social-activity">
-              <h4>Recent Activity</h4>
+              <h4>📰 Recent Activity</h4>
               <div id="activity-feed"><p class="muted">No recent activity</p></div>
             </div>
           </div>
@@ -181,22 +181,22 @@
       <!-- SETTINGS -->
       <section class="page" id="page-settings">
         <div class="page-header">
-          <h2>Settings</h2>
+          <h2>⚙️ Settings</h2>
         </div>
         <div class="settings-layout">
           <nav class="settings-nav">
-            <button class="settings-nav-item active" data-tab="general">General</button>
-            <button class="settings-nav-item" data-tab="display">Display</button>
-            <button class="settings-nav-item" data-tab="controller">Controller</button>
-            <button class="settings-nav-item" data-tab="performance">Performance</button>
-            <button class="settings-nav-item" data-tab="gaming">Gaming</button>
-            <button class="settings-nav-item" data-tab="audio">Audio</button>
-            <button class="settings-nav-item" data-tab="capture">Capture</button>
-            <button class="settings-nav-item" data-tab="theme">Theme</button>
-            <button class="settings-nav-item" data-tab="social">Social</button>
-            <button class="settings-nav-item" data-tab="parental">Parental</button>
-            <button class="settings-nav-item" data-tab="startup">Startup</button>
-            <button class="settings-nav-item" data-tab="windows">Windows</button>
+            <button class="settings-nav-item active" data-tab="general">⚙️ General</button>
+            <button class="settings-nav-item" data-tab="display">🖥️ Display</button>
+            <button class="settings-nav-item" data-tab="controller">🕹️ Controller</button>
+            <button class="settings-nav-item" data-tab="performance">⚡ Performance</button>
+            <button class="settings-nav-item" data-tab="gaming">🎮 Gaming</button>
+            <button class="settings-nav-item" data-tab="audio">🔊 Audio</button>
+            <button class="settings-nav-item" data-tab="capture">📷 Capture</button>
+            <button class="settings-nav-item" data-tab="theme">🎨 Theme</button>
+            <button class="settings-nav-item" data-tab="social">👥 Social</button>
+            <button class="settings-nav-item" data-tab="parental">🔒 Parental</button>
+            <button class="settings-nav-item" data-tab="startup">🚀 Startup</button>
+            <button class="settings-nav-item" data-tab="windows">💻 Windows</button>
           </nav>
           <div class="settings-content" id="settings-content"></div>
         </div>
