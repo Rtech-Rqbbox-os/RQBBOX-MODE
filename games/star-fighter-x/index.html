@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html><head><title>Star Fighter X</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#000;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px}h1{font-weight:300;letter-spacing:6px;color:#ff4444;font-size:1.5rem}button{padding:8px 20px;background:#ff4444;border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:inherit}.score{font-size:1rem;font-weight:200;color:rgba(255,255,255,.5)}</style></head><body>
+<h1>STAR FIGHTER X</h1><canvas id="game" width="500" height="500"></canvas>
+<div class="score" id="score2">Score: 0</div>
+<button onclick="startGame()">Play Again</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+let ship={x:230,y:430},bullets=[],enemies=[],score=0,gameOver=false;
+function startGame(){bullets=[];enemies=[];score=0;gameOver=false;requestAnimationFrame(gameLoop)}
+function gameLoop(){if(gameOver){ctx.fillStyle='rgba(0,0,0,.9)';ctx.fillRect(0,0,500,500);ctx.fillStyle='#ff4444';ctx.font='28px system-ui';ctx.textAlign='center';ctx.fillText('GAME OVER',250,230);ctx.font='16px system-ui';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText('Score: '+score,250,270);return}
+update();draw();requestAnimationFrame(gameLoop)}
+function update(){if(Math.random()<.03)enemies.push({x:Math.random()*470,y:-30,w:30,h:30})
+enemies.forEach(e=>e.y+=2);enemies=enemies.filter(e=>e.y<520)
+bullets.forEach(b=>b.y-=5);bullets=bullets.filter(b=>b.y>0)
+bullets.forEach(b=>{enemies=enemies.filter(e=>!(b.x>e.x&&b.x<e.x+e.w&&b.y>e.y&&b.y<e.y+e.h))})
+enemies.forEach(e=>{if(ship.x<e.x+e.w&&ship.x+30>e.x&&ship.y<e.y+e.h&&ship.y+30>e.y)gameOver=true})
+score++;document.getElementById('score2').textContent='Score: '+score}
+function draw(){ctx.fillStyle='#000';ctx.fillRect(0,0,500,500);ctx.fillStyle='rgba(255,255,255,.1)';for(let i=0;i<50;i++){ctx.beginPath();ctx.arc(Math.random()*500,Math.random()*500,1,0,Math.PI*2);ctx.fill()}
+ctx.fillStyle='#ff4444';ctx.shadowColor='#ff4444';ctx.shadowBlur=20;ctx.fillRect(ship.x,ship.y,30,30);ctx.shadowBlur=0
+ctx.fillStyle='#fff';bullets.forEach(b=>{ctx.fillRect(b.x-2,b.y-8,4,12)})
+ctx.fillStyle='#ff8800';ctx.shadowColor='#ff8800';ctx.shadowBlur=10;enemies.forEach(e=>{ctx.fillRect(e.x,e.y,30,30)});ctx.shadowBlur=0}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')ship.x=Math.max(0,ship.x-20)
+if(e.key==='ArrowRight')ship.x=Math.min(470,ship.x+20)
+if(e.key==='ArrowUp')ship.y=Math.max(0,ship.y-20)
+if(e.key==='ArrowDown')ship.y=Math.min(470,ship.y+20)
+if(e.key===' ')bullets.push({x:ship.x+15,y:ship.y})})
+startGame()
+</script></body></html>

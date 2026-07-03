@@ -1,0 +1,76 @@
+{
+  "games": [
+    {
+      "id": "neon-drift-racing",
+      "title": "Neon Drift Racing",
+      "category": "Racing",
+      "icon": "🏎️",
+      "desc": "High-speed neon racing through cyberpunk streets",
+      "price": "Free",
+      "type": "web",
+      "localPath": "/games/neon-drift-racing/",
+      "featured": true,
+      "controls": "Left/Right arrows to steer"
+    },
+    {
+      "id": "pixel-quest",
+      "title": "Pixel Quest",
+      "category": "Adventure",
+      "icon": "⚔️",
+      "desc": "Retro pixel-art adventure through mystical lands",
+      "price": "Free",
+      "type": "web",
+      "localPath": "/games/pixel-quest/",
+      "featured": true,
+      "controls": "Arrow keys to move • Collect gems"
+    },
+    {
+      "id": "star-fighter-x",
+      "title": "Star Fighter X",
+      "category": "Action",
+      "icon": "🚀",
+      "desc": "Space combat simulator with intense dogfights",
+      "price": "Free",
+      "type": "web",
+      "localPath": "/games/star-fighter-x/",
+      "featured": true,
+      "controls": "Arrow keys to move • Space to shoot"
+    },
+    {
+      "id": "void-craft-sandbox",
+      "title": "Void Craft Sandbox",
+      "category": "Sandbox",
+      "icon": "🔮",
+      "desc": "Build and explore in an infinite void world",
+      "price": "Free",
+      "type": "web",
+      "localPath": "/games/void-craft-sandbox/",
+      "featured": false,
+      "controls": "Left-click to place • Right-click to remove"
+    },
+    {
+      "id": "retro-zone",
+      "title": "Retro Zone",
+      "category": "Retro",
+      "icon": "🕹️",
+      "desc": "Classic arcade breakout game",
+      "price": "Free",
+      "type": "web",
+      "localPath": "/games/retro-zone/",
+      "featured": true,
+      "controls": "Arrow keys to move paddle"
+    },
+    {
+      "id": "cube-runner-3d",
+      "title": "Cube Runner 3D",
+      "category": "Action",
+      "icon": "🎲",
+      "desc": "Endless runner in a 3D cubic world",
+      "price": "Free",
+      "type": "web",
+      "localPath": "/games/cube-runner-3d/",
+      "featured": false,
+      "controls": "Arrow keys to dodge obstacles"
+    }
+  ]
+}

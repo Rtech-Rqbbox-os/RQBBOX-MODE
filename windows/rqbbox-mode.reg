@@ -1,0 +1,121 @@
+Windows Registry Editor Version 5.00
+
+; RQBBOX MODE Protocol Handler
+[HKEY_CLASSES_ROOT\rqbbox]
+@="URL:rqbbox Protocol"
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\rqbbox\shell\open\command]
+@="node.exe \"%~dp0rqbbox-launcher.js\" \"%1\""
+
+; ============================================================
+; WINDOWS SETTINGS - GAMING INTEGRATION
+; ============================================================
+
+; Register RQBBOX MODE in Gaming Settings
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Gaming]
+"RQBBOXModeEnabled"=dword:00000001
+"RQBBOXModeVersion"="1.0.0"
+"RQBBOXModeInstallPath"="C:\\Users\\RhysC\\Downloads\\RQBBOX MODE"
+
+; RQBBOX MODE in GameDVR AdvancedCapture
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR]
+"AppCaptureEnabled"=dword:00000001
+"HistoricalCaptureEnabled"=dword:00000001
+"GameDVREnabled"=dword:00000001
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR\AdvancedCapture]
+"CapturePath"="C:\\Users\\RhysC\\Downloads\\RQBBOX MODE\\captures"
+"RQBBOXMode"=dword:00000001
+
+; Game Mode Integration
+[HKEY_CURRENT_USER\Software\Microsoft\GameBar]
+"AllowAutoGameMode"=dword:00000001
+"AutoGameModeEnabled"=dword:00000001
+"ShowStartupPanel"=dword:00000001
+"GameBarEnabled"=dword:00000001
+"UseNamingServer"=dword:00000001
+"AllowGameModeManagedMode"=dword:00000001
+"RQBBOXModeIntegration"=dword:00000001
+
+; Xbox Game Bar - RQBBOX MODE Settings
+[HKEY_CURRENT_USER\Software\Microsoft\GameBar\ContentSources\RQBBOX]
+"Enabled"=dword:00000001
+"Name"="RQBBOX MODE"
+"Type"="Gaming"
+
+; Game Mode Task Profile for RQBBOX
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\RQBBOXMode]
+"GPU Priority"=dword:00000008
+"Priority"=dword:00000006
+"Scheduling Category"="High"
+"SFIO Priority"="High"
+"BackgroundPriority"=dword:00000000
+
+; Process priority for Node.js/RQBBOX
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\RQBBOXMode\Processes]
+"node.exe"="High"
+
+; Windows Settings Gaming Apps Integration
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameConfigStore]
+"RQBBOXModeEnabled"=dword:00000001
+
+; Game Performance Monitoring
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\GameExplorer]
+"RQBBOXModeMonitoring"=dword:00000001
+
+; Quick Resume Integration
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Gaming\RQBBOX]
+"QuickResumeEnabled"=dword:00000001
+"QuickResumeSlots"=dword:00000003
+"AutoSaveEnabled"=dword:00000001
+
+; Performance Profiles
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Gaming\RQBBOX\PerformanceProfiles]
+"DefaultProfile"="Balanced"
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Gaming\RQBBOX\PerformanceProfiles\Balanced]
+"FreeMemory"=dword:00000001
+"ReduceBackground"=dword:00000001
+"GPUPriority"="High"
+"CPUPriority"=dword:00000006
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Gaming\RQBBOX\PerformanceProfiles\Maximum]
+"FreeMemory"=dword:00000001
+"ReduceBackground"=dword:00000001
+"GPUPriority"="Maximum"
+"CPUPriority"=dword:00000008
+"VSync"=dword:00000000
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Gaming\RQBBOX\PerformanceProfiles\Quality]
+"FreeMemory"=dword:00000000
+"ReduceBackground"=dword:00000000
+"GPUPriority"="Quality"
+"CPUPriority"=dword:00000004
+"VSync"=dword:00000001
+
+; Display Settings Integration
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Gaming\RQBBOX\Display]
+"Fullscreen"=dword:00000001
+"FPS"=dword:0000003c
+"HardwareAcceleration"=dword:00000001
+"PerformanceOverlay"=dword:00000001
+
+; Audio Settings
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Gaming\RQBBOX\Audio]
+"GameVolume"=dword:00000050
+"UIVolume"=dword:00000064
+"SoundFXVolume"=dword:00000064
+
+; Controller Settings
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Gaming\RQBBOX\Controller]
+"VibrationEnabled"=dword:00000001
+"Sensitivity"=dword:00000032
+"DeadZone"=dword:0000000f
+"InvertYAxis"=dword:00000000
+
+; Achievements Integration
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Gaming\RQBBOX\Achievements]
+"AchievementsEnabled"=dword:00000001
+"ShowNotifications"=dword:00000001
+"EnableVibration"=dword:00000001

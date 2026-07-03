@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html><head><title>Retro Zone</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#1a0a0a;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px;image-rendering:pixelated}h1{font-weight:300;letter-spacing:4px;color:#ff6600;font-size:1.5rem;text-shadow:0 0 20px rgba(255,102,0,.3)}button{padding:8px 20px;background:#ff6600;border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:inherit}</style></head><body>
+<h1>🕹️ RETRO ZONE</h1><canvas id="game" width="400" height="300"></canvas>
+<p style="font-size:.75rem;color:rgba(255,255,255,.4)">Classic arcade shooter • Move: Arrow keys • Shoot: Space</p>
+<button onclick="resetGame()">New Game</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+let paddle,ball,bricks=[],score=0,lives=3,gameOver=false,paused=false;
+function resetGame(){paddle={x:160,y:280,w:80,h:10};ball={x:200,y:260,vx:2,vy:-3,r:5};bricks=[];score=0;lives=3;gameOver=false
+for(let r=0;r<5;r++)for(let c=0;c<8;c++)bricks.push({x:c*50,y:r*20,w:48,h:18,alive:true,color:`hsl(${r*40},80%,50%)`})
+loop()}
+function loop(){if(gameOver){ctx.fillStyle='rgba(0,0,0,.85)';ctx.fillRect(0,0,400,300);ctx.fillStyle='#ff6600';ctx.font='24px system-ui';ctx.textAlign='center';ctx.fillText('GAME OVER',200,140);ctx.font='14px system-ui';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText('Score: '+score,200,170);return}
+update();draw();requestAnimationFrame(loop)}
+function update(){ball.x+=ball.vx;ball.y+=ball.vy
+if(ball.x<0||ball.x>400)ball.vx*=-1
+if(ball.y<0)ball.vy*=-1
+if(ball.y>300){lives--;if(lives<=0)gameOver=true;else{ball.x=200;ball.y=260;ball.vx=2;ball.vy=-3}}
+if(ball.y+ball.r>paddle.y&&ball.x>paddle.x&&ball.x<paddle.x+paddle.w){ball.vy=-Math.abs(ball.vy)}
+bricks.forEach(b=>{if(b.alive&&ball.x>b.x&&ball.x<b.x+b.w&&ball.y>b.y&&ball.y<b.y+b.h){b.alive=false;ball.vy*=-1;score+=10}})
+bricks=bricks.filter(b=>b.alive||b.alive===false)}
+function draw(){ctx.fillStyle='#1a0a0a';ctx.fillRect(0,0,400,300)
+ctx.fillStyle='#ff6600';ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h)
+ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ball.x,ball.y,5,0,Math.PI*2);ctx.fill()
+bricks.forEach(b=>{if(b.alive){ctx.fillStyle=b.color;ctx.fillRect(b.x,b.y,b.w,b.h)}})
+ctx.fillStyle='rgba(255,255,255,.3)';ctx.font='12px system-ui';ctx.textAlign='left';ctx.fillText('Score: '+score+' Lives: '+lives,8,16)}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')paddle.x=Math.max(0,paddle.x-20)
+if(e.key==='ArrowRight')paddle.x=Math.min(320,paddle.x+20)
+if(e.key===' ')e.preventDefault()})
+resetGame()
+</script></body></html>

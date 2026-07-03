@@ -1,0 +1,17 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+.env
+.env.local
+dist/
+build/
+.cache/
+.vscode/
+.idea/
+captures/screenshot-*.png
+windows/scripts/Install-RQBBOXGamingSettings.ps1
+windows/scripts/install-gaming-settings.bat
+windows/scripts/install-gaming-settings.ps1

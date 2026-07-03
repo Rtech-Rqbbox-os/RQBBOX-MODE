@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>RQBBOX MODE — Full Screen Gaming Experience</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+  <link rel="stylesheet" href="css/main.css">
+  <link id="theme-css" rel="stylesheet" href="css/themes/default.css">
+</head>
+<body>
+  <!-- Boot Animation -->
+  <div id="boot-screen" class="boot-screen">
+    <div class="boot-scanline"></div>
+    <div class="boot-content">
+      <div class="boot-logo">RQBBOX</div>
+      <div class="boot-subtitle">MODE</div>
+      <div class="boot-tagline">Full Screen Gaming Experience</div>
+      <div class="boot-loader"><div id="boot-bar" class="boot-bar"></div></div>
+      <div id="boot-status" class="boot-status">Starting RQBBOX MODE...</div>
+    </div>
+  </div>
+
+  <!-- Auth Screen -->
+  <div id="auth-screen" class="screen overlay-screen" style="display:none">
+    <div class="auth-panel">
+      <div class="auth-logo">RQBBOX MODE</div>
+      <h2>Who's Playing?</h2>
+      <div id="profile-list" class="profile-list"></div>
+      <button class="btn btn-primary" id="btn-add-profile">+ Add Profile</button>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div id="dashboard" class="dashboard" style="display:none">
+    <!-- Background Layer -->
+    <div class="bg-layer"><div class="bg-orb" id="bg-orb-1"></div><div class="bg-orb" id="bg-orb-2"></div></div>
+
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="top-left">
+        <div class="brand">RQBBOX MODE</div>
+      </div>
+      <div class="top-center">
+        <div id="current-time" class="current-time">--:--</div>
+      </div>
+      <div class="top-right">
+        <div class="status-icons">
+          <span id="status-controller" class="status-icon" title="Controller">🎮</span>
+          <span id="status-network" class="status-icon" title="Network">🌐</span>
+          <span id="status-performance" class="status-icon" title="Performance Mode">⚡</span>
+          <span id="status-notif" class="status-icon" title="Notifications">🔔</span>
+        </div>
+        <div class="user-badge" id="user-badge">
+          <span class="user-avatar" id="user-avatar">P</span>
+          <span class="user-name" id="user-name">Player</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+      <!-- HOME -->
+      <section class="page active" id="page-home">
+        <div class="hero-section">
+          <div class="hero-text">
+            <span class="hero-tag">RQBBOX MODE</span>
+            <h1>Welcome Back</h1>
+            <p>Full screen gaming experience. Controller optimized.</p>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-card"><span class="stat-value" id="stat-games">0</span><span class="stat-label">Games</span></div>
+            <div class="stat-card"><span class="stat-value" id="stat-achievements">0</span><span class="stat-label">Achievements</span></div>
+            <div class="stat-card"><span class="stat-value" id="stat-friends">0</span><span class="stat-label">Friends</span></div>
+            <div class="stat-card"><span class="stat-value" id="stat-playtime">0h</span><span class="stat-label">Play Time</span></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">
+            <h3>Quick Resume</h3>
+            <button class="section-action" onclick="RQBOX.navigate('resume')">Manage</button>
+          </div>
+          <div class="horz-scroll" id="quick-resume-row">
+            <div class="empty-state">No suspended games. Press the Guide button to suspend a game.</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">
+            <h3>Recently Played</h3>
+            <button class="section-action" onclick="RQBOX.navigate('games')">See All</button>
+          </div>
+          <div class="horz-scroll" id="recent-games-row"></div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">
+            <h3>Recommended For You</h3>
+            <button class="section-action" onclick="RQBOX.navigate('store')">Store</button>
+          </div>
+          <div class="horz-scroll" id="recommended-row"></div>
+        </div>
+      </section>
+
+      <!-- GAMES -->
+      <section class="page" id="page-games">
+        <div class="page-header">
+          <h2>Game Library</h2>
+          <div class="page-actions">
+            <button class="btn btn-sm" onclick="GameLibrary.refresh()">🔄 Refresh</button>
+          </div>
+        </div>
+        <div class="filter-bar" id="games-filter-bar">
+          <button class="filter-pill active" data-filter="all">All</button>
+          <button class="filter-pill" data-filter="installed">Installed</button>
+          <button class="filter-pill" data-filter="recent">Recent</button>
+          <button class="filter-pill" data-filter="favorites">Favorites</button>
+        </div>
+        <div class="card-grid" id="games-grid"></div>
+      </section>
+
+      <!-- RESUME (Quick Resume) -->
+      <section class="page" id="page-resume">
+        <div class="page-header">
+          <h2>Quick Resume</h2>
+          <button class="btn btn-sm" onclick="QuickResume.clearAll()">Clear All</button>
+        </div>
+        <p class="page-subtitle">Suspend games and resume them instantly. Up to 3 suspended sessions.</p>
+        <div class="resume-grid" id="resume-grid"></div>
+      </section>
+
+      <!-- CAPTURES -->
+      <section class="page" id="page-captures">
+        <div class="page-header">
+          <h2>Captures & Game DVR</h2>
+          <button class="btn btn-sm" id="btn-capture-screenshot">📷 Screenshot</button>
+        </div>
+        <div class="capture-grid" id="capture-grid"></div>
+      </section>
+
+      <!-- STORE -->
+      <section class="page" id="page-store">
+        <div class="page-header">
+          <h2>Store</h2>
+        </div>
+        <div class="filter-bar" id="store-filter-bar">
+          <button class="filter-pill active" data-filter="all">All</button>
+          <button class="filter-pill" data-filter="action">Action</button>
+          <button class="filter-pill" data-filter="racing">Racing</button>
+          <button class="filter-pill" data-filter="puzzle">Puzzle</button>
+          <button class="filter-pill" data-filter="retro">Retro</button>
+        </div>
+        <div class="card-grid" id="store-grid"></div>
+      </section>
+
+      <!-- FRIENDS -->
+      <section class="page" id="page-friends">
+        <div class="page-header">
+          <h2>Friends & Social</h2>
+        </div>
+        <div class="friends-layout">
+          <div class="friends-list" id="friends-list"></div>
+          <div class="social-sidebar">
+            <div class="social-panel" id="social-activity">
+              <h4>Recent Activity</h4>
+              <div id="activity-feed"><p class="muted">No recent activity</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="page" id="page-settings">
+        <div class="page-header">
+          <h2>Settings</h2>
+        </div>
+        <div class="settings-layout">
+          <nav class="settings-nav">
+            <button class="settings-nav-item active" data-tab="general">General</button>
+            <button class="settings-nav-item" data-tab="display">Display</button>
+            <button class="settings-nav-item" data-tab="controller">Controller</button>
+            <button class="settings-nav-item" data-tab="performance">Performance</button>
+            <button class="settings-nav-item" data-tab="gaming">Gaming</button>
+            <button class="settings-nav-item" data-tab="audio">Audio</button>
+            <button class="settings-nav-item" data-tab="capture">Capture</button>
+            <button class="settings-nav-item" data-tab="theme">Theme</button>
+            <button class="settings-nav-item" data-tab="social">Social</button>
+            <button class="settings-nav-item" data-tab="parental">Parental</button>
+            <button class="settings-nav-item" data-tab="startup">Startup</button>
+            <button class="settings-nav-item" data-tab="windows">Windows</button>
+          </nav>
+          <div class="settings-content" id="settings-content"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Sidebar Navigation -->
+    <nav class="guide-bar" id="guide-bar">
+      <button class="guide-item active" data-page="home" title="Home"><span class="gi-icon">🏠</span><span class="gi-label">Home</span></button>
+      <button class="guide-item" data-page="games" title="Games"><span class="gi-icon">🎮</span><span class="gi-label">Games</span></button>
+      <button class="guide-item" data-page="resume" title="Quick Resume"><span class="gi-icon">⏸️</span><span class="gi-label">Resume</span></button>
+      <button class="guide-item" data-page="captures" title="Captures"><span class="gi-icon">📷</span><span class="gi-label">Captures</span></button>
+      <button class="guide-item" data-page="store" title="Store"><span class="gi-icon">🛒</span><span class="gi-label">Store</span></button>
+      <button class="guide-item" data-page="friends" title="Friends"><span class="gi-icon">👥</span><span class="gi-label">Friends</span></button>
+      <button class="guide-item" data-page="settings" title="Settings"><span class="gi-icon">⚙️</span><span class="gi-label">Settings</span></button>
+      <div class="guide-spacer"></div>
+      <button class="guide-item" id="guide-btn-audio" title="Audio">🔊</button>
+      <button class="guide-item" id="guide-btn-power" title="Exit RQBBOX MODE">⏻</button>
+    </nav>
+  </div>
+
+  <!-- Overlay / Guide Panel -->
+  <div id="guide-overlay" class="guide-overlay" style="display:none">
+    <div class="guide-panel">
+      <div class="guide-header">
+        <span class="guide-title">RQBBOX MODE Guide</span>
+        <button class="guide-close" id="guide-close">✕</button>
+      </div>
+      <div class="guide-body" id="guide-body"></div>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Modal Container -->
+  <div id="modal-container"></div>
+
+  <!-- Controller Connected Indicator -->
+  <div id="controller-indicator" class="controller-indicator" style="display:none">
+    <span>🎮 Controller Connected</span>
+  </div>
+
+  <!-- Runtime Overlay (for in-page game/app rendering) -->
+  <div id="runtime-overlay" class="runtime-overlay" style="display:none">
+    <div class="runtime-bar">
+      <button class="btn btn-sm btn-ghost" onclick="Runtime.close()">← Back</button>
+      <span id="runtime-title" style="flex:1;text-align:center;font-size:0.8rem;color:var(--text-secondary);">Game</span>
+      <button class="btn btn-sm btn-ghost" onclick="Runtime.openFullscreen()">⛶ Fullscreen</button>
+    </div>
+    <iframe id="runtime-frame" style="flex:1;width:100%;border:none;background:#000;" allow="autoplay; microphone; gamepad; fullscreen"></iframe>
+  </div>
+
+  <!-- Task Switcher Overlay -->
+  <div id="task-switcher" class="task-switcher">
+    <div class="task-header">
+      <span>Switch App</span>
+      <span class="task-hint">D-Pad: Navigate • A: Select • B: Close</span>
+    </div>
+    <div class="task-list" id="task-list"></div>
+  </div>
+
+  <!-- Performance Overlay -->
+  <div id="perf-overlay" class="perf-overlay" style="display:none">FPS: -- | CPU: --% | RAM: --%</div>
+
+  <script src="js/core.js"></script>
+  <script src="js/controller.js"></script>
+  <script src="js/performance.js"></script>
+  <script src="js/library.js"></script>
+  <script src="js/quick-resume.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/overlay.js"></script>
+  <script src="js/capture.js"></script>
+  <script src="js/achievements.js"></script>
+  <script src="js/social.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/task-switcher.js"></script>
+  <script src="js/game-optimized.js"></script>
+  <script src="js/performance-overlay.js"></script>
+  <script src="js/background-suppression.js"></script>
+  <script src="js/cloud-gaming.js"></script>
+  <script src="js/social-panel.js"></script>
+  <script src="js/achievement-tracker.js"></script>
+  <script src="js/wishlist.js"></script>
+  <script src="js/parental-controls.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Auto-fullscreen on load
+    (function() {
+      function goFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(function() {});
+        }
+      }
+      // Try fullscreen on first user interaction (required by browsers)
+      document.addEventListener('click', goFullscreen, { once: true });
+      document.addEventListener('keydown', goFullscreen, { once: true });
+      document.addEventListener('gamepadconnected', goFullscreen, { once: true });
+      // Also try immediately (works if launched from protocol/shortcut)
+      setTimeout(goFullscreen, 500);
+    })();
+  </script>
+</body>
+</html>

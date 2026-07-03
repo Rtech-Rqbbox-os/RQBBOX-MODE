@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RQBBOX MODE — Launcher</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0b0d17;
+      color: #f0f4ff;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .launcher {
+      text-align: center;
+      max-width: 600px;
+      padding: 48px;
+    }
+    .logo { font-size: 3rem; font-weight: 200; letter-spacing: 12px; color: #00d4ff; margin-bottom: 4px; }
+    .subtitle { font-size: 0.9rem; font-weight: 300; letter-spacing: 16px; color: rgba(0,212,255,0.6); text-transform: uppercase; margin-bottom: 40px; }
+    .tagline { font-size: 0.75rem; color: rgba(255,255,255,0.2); letter-spacing: 4px; margin-bottom: 48px; }
+    .btn {
+      display: inline-block;
+      padding: 14px 40px;
+      background: #00d4ff;
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s, filter 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.15); }
+    .btn:active { transform: scale(0.97); }
+    .btn-secondary {
+      background: transparent;
+      color: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .links { margin-top: 32px; display: flex; gap: 12px; justify-content: center; }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+      text-align: center;
+    }
+    .feature {
+      padding: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 12px;
+    }
+    .feature-icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .feature-title { font-size: 0.75rem; font-weight: 500; margin-bottom: 2px; }
+    .feature-desc { font-size: 0.65rem; color: rgba(255,255,255,0.3); }
+    .version { position: fixed; bottom: 16px; font-size: 0.6rem; color: rgba(255,255,255,0.1); letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+  <div class="launcher">
+    <div class="logo">RQBBOX</div>
+    <div class="subtitle">Mode</div>
+    <div class="tagline">Plug Into Gaming. ®</div>
+    <a href="/dashboard" class="btn">🎮 Enter RQBBOX MODE</a>
+    <div class="links">
+      <a href="/dashboard" class="btn btn-secondary" style="padding:10px 20px;font-size:0.8rem;">Dashboard</a>
+    </div>
+    <div class="features">
+      <div class="feature"><div class="feature-icon">🎮</div><div class="feature-title">Fullscreen Gaming</div><div class="feature-desc">Console-style interface</div></div>
+      <div class="feature"><div class="feature-icon">⏸️</div><div class="feature-title">Quick Resume</div><div class="feature-desc">Suspend/resume games</div></div>
+      <div class="feature"><div class="feature-icon">🎮</div><div class="feature-title">Controller Nav</div><div class="feature-desc">Full gamepad support</div></div>
+      <div class="feature"><div class="feature-icon">⚡</div><div class="feature-title">Performance</div><div class="feature-desc">Optimize for gaming</div></div>
+      <div class="feature"><div class="feature-icon">🏆</div><div class="feature-title">Achievements</div><div class="feature-desc">Earn achievements</div></div>
+      <div class="feature"><div class="feature-icon">📷</div><div class="feature-title">Captures</div><div class="feature-desc">Screenshots & DVR</div></div>
+    </div>
+    <div class="version">RQBBOX MODE v1.0.0 — © 2026 RhysTech</div>
+  </div>
+</body>
+</html>

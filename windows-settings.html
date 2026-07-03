@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RQBBOX MODE — Full Screen Gaming Settings</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+  <style>
+    :root {
+      --win-bg: #0e0e0e;
+      --win-surface: #1a1a1a;
+      --win-surface-hover: #252525;
+      --win-surface-active: #303030;
+      --win-border: rgba(255,255,255,0.06);
+      --win-text: #ffffff;
+      --win-text-secondary: rgba(255,255,255,0.6);
+      --win-text-muted: rgba(255,255,255,0.35);
+      --win-accent: #107c10;
+      --win-accent-dim: rgba(16,124,16,0.15);
+      --win-accent-hover: #13a013;
+      --win-radius: 4px;
+      --win-radius-lg: 6px;
+      --win-sidebar-width: 260px;
+      --win-header-height: 54px;
+      --font: 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--win-bg); color: var(--win-text); font-family: var(--font); font-size: 13px; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+
+    .app { display: flex; width: 100%; height: 100%; }
+    .sidebar {
+      width: var(--win-sidebar-width); flex-shrink: 0;
+      background: #1c1c1c; border-right: 1px solid var(--win-border);
+      display: flex; flex-direction: column;
+      padding: 0 8px 8px;
+    }
+    .sidebar-header {
+      height: var(--win-header-height);
+      display: flex; align-items: center; padding: 0 16px;
+      border-bottom: 1px solid var(--win-border); margin-bottom: 4px;
+    }
+    .sidebar-title { font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
+    .sidebar-title span { color: var(--win-accent); }
+
+    .nav-section { padding: 4px 0; }
+    .nav-label { font-size: 11px; color: var(--win-text-muted); padding: 8px 16px 4px; text-transform: uppercase; letter-spacing: 0.8px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 12px; border-radius: var(--win-radius);
+      cursor: pointer; color: var(--win-text-secondary);
+      border: 1px solid transparent; transition: all 0.1s;
+      font-family: inherit;
+      background: none; border: none; width: 100%; text-align: left;
+    }
+    .nav-item:hover { background: var(--win-surface-hover); color: var(--win-text); }
+    .nav-item.active {
+      background: var(--win-surface); color: var(--win-text);
+      border-color: var(--win-border);
+    }
+    .nav-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+    .nav-text { font-size: 13px; white-space: nowrap; }
+
+    .content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .content-header {
+      height: var(--win-header-height);
+      display: flex; align-items: center; padding: 0 32px;
+      border-bottom: 1px solid var(--win-border);
+    }
+    .content-header h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+
+    .content-body { flex: 1; overflow-y: auto; padding: 20px 32px 32px; }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .section { margin-bottom: 28px; }
+    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .section-desc { font-size: 12px; color: var(--win-text-secondary); margin-bottom: 16px; }
+
+    .card {
+      background: var(--win-surface);
+      border: 1px solid var(--win-border);
+      border-radius: var(--win-radius-lg);
+      overflow: hidden; margin-bottom: 12px;
+    }
+    .card-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .card-row:last-child { border-bottom: none; }
+    .card-row-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+    .card-icon { font-size: 18px; width: 24px; text-align: center; color: var(--win-accent); flex-shrink: 0; }
+    .card-label { font-size: 13px; }
+    .card-desc { font-size: 11px; color: var(--win-text-secondary); margin-top: 1px; }
+
+    .toggle {
+      width: 40px; height: 20px; border-radius: 10px;
+      background: rgba(255,255,255,0.15); cursor: pointer;
+      position: relative; flex-shrink: 0; transition: background 0.15s;
+    }
+    .toggle.on { background: var(--win-accent); }
+    .toggle::after {
+      content: ''; position: absolute; top: 2px; left: 2px;
+      width: 16px; height: 16px; border-radius: 50%; background: #fff;
+      transition: transform 0.15s ease;
+    }
+    .toggle.on::after { transform: translateX(20px); }
+
+    .select {
+      padding: 4px 10px; border-radius: var(--win-radius);
+      background: rgba(255,255,255,0.05); border: 1px solid var(--win-border);
+      color: var(--win-text); font-size: 12px; font-family: inherit;
+      outline: none; cursor: pointer; min-width: 120px;
+    }
+    .select:focus { border-color: var(--win-accent-dim); }
+
+    .badge {
+      display: inline-block; padding: 2px 8px; border-radius: 3px;
+      font-size: 11px; font-weight: 500;
+    }
+    .badge-green { background: rgba(74,222,128,0.15); color: #4ade80; }
+    .badge-yellow { background: rgba(250,204,21,0.15); color: #facc15; }
+    .badge-red { background: rgba(248,113,113,0.15); color: #f87171; }
+    .badge-blue { background: rgba(96,205,255,0.15); color: #60cdff; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: var(--win-radius);
+      font-size: 12px; font-weight: 500; cursor: pointer;
+      font-family: inherit; transition: all 0.1s;
+      border: 1px solid var(--win-border);
+      background: var(--win-surface); color: var(--win-text);
+    }
+    .btn:hover { background: var(--win-surface-hover); border-color: rgba(255,255,255,0.12); }
+    .btn-primary { background: var(--win-accent); color: #000; border-color: var(--win-accent); }
+    .btn-primary:hover { background: var(--win-accent-hover); }
+    .btn-danger { border-color: #f87171; color: #f87171; }
+    .btn-danger:hover { background: rgba(248,113,113,0.1); }
+
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 8px; margin-top: 12px;
+    }
+    .stat-card {
+      background: var(--win-surface); border: 1px solid var(--win-border);
+      border-radius: var(--win-radius-lg); padding: 14px 16px; text-align: center;
+    }
+    .stat-value { font-size: 22px; font-weight: 300; color: var(--win-accent); display: block; }
+    .stat-label { font-size: 10px; color: var(--win-text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; }
+
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .dot-green { background: #4ade80; }
+    .dot-red { background: #f87171; }
+    .dot-yellow { background: #facc15; }
+    .dot-gray { background: #666; }
+
+    .divider { height: 1px; background: var(--win-border); margin: 16px 0; }
+
+    .protocol-url {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px; background: rgba(255,255,255,0.03);
+      border: 1px solid var(--win-border); border-radius: var(--win-radius);
+      margin-top: 8px; font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 12px; color: var(--win-text-secondary);
+    }
+    .protocol-url code { color: var(--win-accent); }
+
+    .launch-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 16px; background: var(--win-surface);
+      border: 1px solid var(--win-border); border-radius: var(--win-radius-lg);
+      margin-top: 12px;
+    }
+    .launch-input {
+      flex: 1; padding: 6px 10px; border-radius: var(--win-radius);
+      background: rgba(0,0,0,0.3); border: 1px solid var(--win-border);
+      color: var(--win-text); font-size: 12px; font-family: inherit;
+      outline: none;
+    }
+    .launch-input:focus { border-color: var(--win-accent-dim); }
+
+    .gamepad-hint {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 8px; background: rgba(255,255,255,0.05);
+      border: 1px solid var(--win-border); border-radius: 3px;
+      font-size: 10px; color: var(--win-text-muted); margin-left: 8px;
+    }
+    .gp-key {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 3px;
+      font-size: 9px; font-weight: 600;
+    }
+
+    .info-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; border-radius: var(--win-radius);
+      font-size: 12px; margin-bottom: 16px;
+    }
+    .info-bar.info { background: rgba(96,205,255,0.08); border: 1px solid rgba(96,205,255,0.15); color: var(--win-text-secondary); }
+    .info-bar.warn { background: rgba(250,204,21,0.08); border: 1px solid rgba(250,204,21,0.15); color: #facc15; }
+    .info-bar.success { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.15); color: #4ade80; }
+
+    .perf-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+    .perf-fill { height: 100%; background: var(--win-accent); border-radius: 2px; transition: width 0.3s; }
+
+    .version-tag {
+      position: fixed; bottom: 8px; left: var(--win-sidebar-width);
+      padding: 4px 16px; font-size: 10px; color: var(--win-text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title"><span>RQBBOX</span> MODE</div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Gaming</div>
+        <button class="nav-item active" data-page="gaming">
+          <span class="nav-icon">🎮</span>
+          <span class="nav-text">RQBBOX MODE</span>
+        </button>
+        <button class="nav-item" data-page="gamebar">
+          <span class="nav-icon">📱</span>
+          <span class="nav-text">Game Bar</span>
+        </button>
+        <button class="nav-item" data-page="captures">
+          <span class="nav-icon">📷</span>
+          <span class="nav-text">Captures</span>
+        </button>
+        <button class="nav-item" data-page="dvr">
+          <span class="nav-icon">🎥</span>
+          <span class="nav-text">Game DVR</span>
+        </button>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">System</div>
+        <button class="nav-item" data-page="performance">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-text">Performance</span>
+        </button>
+        <button class="nav-item" data-page="controller">
+          <span class="nav-icon">🕹️</span>
+          <span class="nav-text">Controller</span>
+        </button>
+        <button class="nav-item" data-page="accounts">
+          <span class="nav-icon">👤</span>
+          <span class="nav-text">Accounts</span>
+        </button>
+        <button class="nav-item" data-page="about">
+          <span class="nav-icon">ℹ️</span>
+          <span class="nav-text">About</span>
+        </button>
+      </div>
+
+      <div style="flex:1;"></div>
+      <div style="padding:8px 12px;font-size:10px;color:var(--win-text-muted);">RQBBOX MODE v1.0</div>
+    </aside>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="content-header">
+        <h1 id="page-title">RQBBOX MODE</h1>
+      </div>
+
+      <div class="content-body">
+        <!-- RQBBOX MODE -->
+        <div class="page active" id="page-gaming">
+          <div id="gaming-status-bar"></div>
+
+          <div class="section">
+            <div class="section-title">RQBBOX MODE</div>
+            <div class="section-desc">Full screen gaming experience. Controller optimized. Like Xbox Mode.</div>
+            <div class="card">
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">🎮</div>
+                  <div>
+                    <div class="card-label">Enable RQBBOX MODE</div>
+                    <div class="card-desc">Full screen gaming dashboard</div>
+                  </div>
+                </div>
+                <button class="btn btn-primary" onclick="openDashboard()">Launch</button>
+              </div>
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">⚡</div>
+                  <div>
+                    <div class="card-label">Auto-Start on Boot</div>
+                    <div class="card-desc">Start RQBBOX MODE when Windows starts</div>
+                  </div>
+                </div>
+                <div class="toggle on" id="toggle-autostart" data-key="autostart"></div>
+              </div>
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">⛶</div>
+                  <div>
+                    <div class="card-label">Fullscreen by Default</div>
+                    <div class="card-desc">Auto-enter fullscreen mode</div>
+                  </div>
+                </div>
+                <div class="toggle on" id="toggle-fullscreen" data-key="fullscreen"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Performance</div>
+            <div class="section-desc">Optimize system resources for gaming.</div>
+            <div class="card">
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">🚀</div>
+                  <div>
+                    <div class="card-label">Performance Mode</div>
+                    <div class="card-desc">Balance performance and quality</div>
+                  </div>
+                </div>
+                <select class="select" id="select-perfmode">
+                  <option value="balanced">Balanced</option>
+                  <option value="maximum">Maximum Performance</option>
+                  <option value="quality">Quality</option>
+                </select>
+              </div>
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">🧊</div>
+                  <div>
+                    <div class="card-label">Free Up Memory</div>
+                    <div class="card-desc">Reduce memory usage during gaming</div>
+                  </div>
+                </div>
+                <div class="toggle on" id="toggle-freemem" data-key="freemem"></div>
+              </div>
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">🔋</div>
+                  <div>
+                    <div class="card-label">V-Sync</div>
+                    <div class="card-desc">Synchronize frame rate to display refresh</div>
+                  </div>
+                </div>
+                <div class="toggle on" id="toggle-vsync" data-key="vsync"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-title">Quick Actions</div>
+            <div class="card">
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">🔗</div>
+                  <div>
+                    <div class="card-label">Protocol Handler</div>
+                    <div class="card-desc">rqbbox:// protocol for quick access</div>
+                  </div>
+                </div>
+                <span class="badge badge-green">Active</span>
+              </div>
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">📌</div>
+                  <div>
+                    <div class="card-label">Start Menu Shortcut</div>
+                    <div class="card-desc">Add RQBBOX MODE to Start Menu</div>
+                  </div>
+                </div>
+                <button class="btn" onclick="createShortcut()">Add to Start</button>
+              </div>
+            </div>
+          </div>
+        </div>
+              </div>
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">🔗</div>
+                  <div>
+                    <div class="card-label">Protocol Handler</div>
+                    <div class="card-desc">Register rqbbox:// protocol for quick access</div>
+                  </div>
+                </div>
+                <span class="badge badge-green">Active</span>
+              </div>
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">📌</div>
+                  <div>
+                    <div class="card-label">Start Menu Shortcut</div>
+                    <div class="card-desc">Add RQBBOX MODE to Start Menu</div>
+                  </div>
+                </div>
+                <button class="btn" onclick="createShortcut()">Add to Start</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game Bar -->
+        <div class="page" id="page-gamebar">
+          <div class="info-bar info">Configure Xbox Game Bar settings for RQBBOX MODE integration.</div>
+          <div class="card">
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">📱</div>
+                <div>
+                  <div class="card-label">Enable Game Bar</div>
+                  <div class="card-desc">Show Game Bar while playing games</div>
+                </div>
+              </div>
+              <div class="toggle on" id="toggle-gamebar" data-key="gamebar"></div>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">🎙️</div>
+                <div>
+                  <div class="card-label">Enable Microphone in Game Bar</div>
+                  <div class="card-desc">Allow voice chat through Game Bar</div>
+                </div>
+              </div>
+              <div class="toggle on" id="toggle-mic" data-key="mic"></div>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">⌨️</div>
+                <div>
+                  <div class="card-label">Keyboard Shortcut</div>
+                  <div class="card-desc">Open Game Bar with shortcut</div>
+                </div>
+              </div>
+              <span class="badge badge-blue">Win + G</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Captures -->
+        <div class="page" id="page-captures">
+          <div class="info-bar success">Screenshots and clips are saved to the RQBBOX captures folder.</div>
+          <div class="card">
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">📁</div>
+                <div>
+                  <div class="card-label">Capture Folder</div>
+                  <div class="card-desc">Where screenshots and recordings are saved</div>
+                </div>
+              </div>
+              <span class="badge badge-blue" id="capture-path">C:\Users\...\Videos\Captures</span>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">📸</div>
+                <div>
+                  <div class="card-label">Screenshot Shortcut</div>
+                  <div class="card-desc">Take a screenshot</div>
+                </div>
+              </div>
+              <span class="badge badge-blue">Win + Alt + PrtSc</span>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">📹</div>
+                <div>
+                  <div class="card-label">Record Shortcut</div>
+                  <div class="card-desc">Start/stop recording</div>
+                </div>
+              </div>
+              <span class="badge badge-blue">Win + Alt + R</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game DVR -->
+        <div class="page" id="page-dvr">
+          <div class="card">
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">🎥</div>
+                <div>
+                  <div class="card-label">Enable Game DVR</div>
+                  <div class="card-desc">Record gameplay in the background</div>
+                </div>
+              </div>
+              <div class="toggle on" id="toggle-dvr" data-key="dvr"></div>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">⏱️</div>
+                <div>
+                  <div class="card-label">Background Recording Length</div>
+                  <div class="card-desc">How long to keep background footage</div>
+                </div>
+              </div>
+              <select class="select" id="select-dvrlength">
+                <option value="15">15 seconds</option>
+                <option value="30" selected>30 seconds</option>
+                <option value="60">60 seconds</option>
+              </select>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">🏆</div>
+                <div>
+                  <div class="card-label">Auto-Capture</div>
+                  <div class="card-desc">Automatically capture achievements & moments</div>
+                </div>
+              </div>
+              <div class="toggle" id="toggle-autocapture" data-key="autocapture"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Performance -->
+        <div class="page" id="page-performance">
+          <div class="info-bar info">Real-time system performance metrics.</div>
+          <div class="stats-grid" id="perf-stats">
+            <div class="stat-card">
+              <span class="stat-value" id="perf-cpu">--</span>
+              <span class="stat-label">CPU Load</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="perf-mem">--</span>
+              <span class="stat-label">Memory Used</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="perf-mempct">--</span>
+              <span class="stat-label">Memory %</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="perf-uptime">--</span>
+              <span class="stat-label">Uptime</span>
+            </div>
+          </div>
+          <div style="margin-top:16px;">
+            <div class="card">
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">📊</div>
+                  <div>
+                    <div class="card-label">CPU Usage</div>
+                    <div class="card-desc" id="perf-cpu-model">--</div>
+                  </div>
+                </div>
+              </div>
+              <div style="padding:0 16px 14px;">
+                <div class="perf-bar"><div class="perf-fill" id="perf-cpu-bar" style="width:0%"></div></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon">🧠</div>
+                  <div>
+                    <div class="card-label">Memory Usage</div>
+                    <div class="card-desc" id="perf-mem-detail">--</div>
+                  </div>
+                </div>
+              </div>
+              <div style="padding:0 16px 14px;">
+                <div class="perf-bar"><div class="perf-fill" id="perf-mem-bar" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controller -->
+        <div class="page" id="page-controller">
+          <div class="info-bar info">Configure controller settings for RQBBOX MODE.</div>
+          <div class="card">
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">🕹️</div>
+                <div>
+                  <div class="card-label">Controller Connected</div>
+                  <div class="card-desc" id="controller-status">Checking...</div>
+                </div>
+              </div>
+              <span class="badge" id="controller-badge">Detecting</span>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">📳</div>
+                <div>
+                  <div class="card-label">Vibration</div>
+                  <div class="card-desc">Enable controller vibration feedback</div>
+                </div>
+              </div>
+              <div class="toggle on" id="toggle-vibration" data-key="vibration"></div>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">🎯</div>
+                <div>
+                  <div class="card-label">Sensitivity</div>
+                  <div class="card-desc">Analog stick sensitivity</div>
+                </div>
+              </div>
+              <input type="range" min="1" max="100" value="50" id="range-sensitivity" style="width:120px;">
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">📐</div>
+                <div>
+                  <div class="card-label">Dead Zone</div>
+                  <div class="card-desc">Analog stick dead zone</div>
+                </div>
+              </div>
+              <input type="range" min="0" max="50" value="15" id="range-deadzone" style="width:120px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Accounts -->
+        <div class="page" id="page-accounts">
+          <div class="info-bar info">Manage your RQBBOX MODE accounts and profiles.</div>
+          <div class="card" id="accounts-list">
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">👤</div>
+                <div>
+                  <div class="card-label">Signed In</div>
+                  <div class="card-desc" id="account-name">Not signed in</div>
+                </div>
+              </div>
+              <button class="btn btn-primary" onclick="window.open('http://127.0.0.1:19778/dashboard#/settings','_blank')">Manage</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- About -->
+        <div class="page" id="page-about">
+          <div class="card">
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">🎮</div>
+                <div>
+                  <div class="card-label">RQBBOX MODE</div>
+                  <div class="card-desc">Console Gaming Experience for PC</div>
+                </div>
+              </div>
+              <span class="badge badge-blue">v1.0.0</span>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">🖥️</div>
+                <div>
+                  <div class="card-label">Platform</div>
+                  <div class="card-desc" id="about-platform">Windows</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">📦</div>
+                <div>
+                  <div class="card-label">Node.js</div>
+                  <div class="card-desc" id="about-node">--</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section" style="margin-top:24px;">
+            <div class="section-title">Quick Launch</div>
+            <div class="protocol-url">
+              <span>Protocol:</span>
+              <code>rqbbox://dashboard</code>
+            </div>
+          </div>
+
+          <div class="section" style="margin-top:16px;">
+            <div class="section-title">Server Status</div>
+            <div class="card">
+              <div class="card-row">
+                <div class="card-row-left">
+                  <div class="card-icon" id="server-dot-icon">●</div>
+                  <div>
+                    <div class="card-label">RQBBOX Server</div>
+                    <div class="card-desc" id="server-status-text">Checking...</div>
+                  </div>
+                </div>
+                <span class="badge" id="server-badge">Checking</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="version-tag">RQBBOX MODE v1.0.0 — Plug Into Gaming</div>
+
+  <script>
+    const API_BASE = 'http://127.0.0.1:19778';
+
+    // Navigation
+    document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        item.classList.add('active');
+        const pageId = 'page-' + item.dataset.page;
+        document.getElementById(pageId)?.classList.add('active');
+        document.getElementById('page-title').textContent = item.querySelector('.nav-text').textContent;
+      });
+    });
+
+    // Toggles
+    document.querySelectorAll('.toggle[data-key]').forEach(el => {
+      el.addEventListener('click', async () => {
+        el.classList.toggle('on');
+        const key = el.dataset.key;
+        const enabled = el.classList.contains('on');
+        if (key === 'gamemode') {
+          await apiPost('/api/gamemode', { action: enabled ? 'enable' : 'disable' });
+        }
+      });
+    });
+
+    async function apiGet(path) {
+      try {
+        const res = await fetch(API_BASE + path);
+        return await res.json();
+      } catch { return null; }
+    }
+
+    async function apiPost(path, body) {
+      try {
+        const res = await fetch(API_BASE + path, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        return await res.json();
+      } catch { return null; }
+    }
+
+    function formatBytes(b) {
+      if (b >= 1073741824) return (b / 1073741824).toFixed(1) + ' GB';
+      if (b >= 1048576) return (b / 1048576).toFixed(0) + ' MB';
+      return (b / 1024).toFixed(0) + ' KB';
+    }
+
+    function formatUptime(s) {
+      const d = Math.floor(s / 86400);
+      const h = Math.floor((s % 86400) / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      if (d > 0) return d + 'd ' + h + 'h';
+      return h + 'h ' + m + 'm';
+    }
+
+    // Load system info
+    async function loadPerf() {
+      const info = await apiGet('/api/sysinfo');
+      if (!info) return;
+      document.getElementById('perf-cpu').textContent = info.cpuLoad + '%';
+      document.getElementById('perf-mem').textContent = formatBytes(info.memoryUsed);
+      document.getElementById('perf-mempct').textContent = info.memoryPct + '%';
+      document.getElementById('perf-uptime').textContent = formatUptime(info.uptime);
+      document.getElementById('perf-cpu-model').textContent = info.cpuModel + ' (' + info.cpuCores + ' cores)';
+      document.getElementById('perf-mem-detail').textContent = formatBytes(info.memoryUsed) + ' / ' + formatBytes(info.memoryTotal);
+      document.getElementById('perf-cpu-bar').style.width = Math.min(info.cpuLoad, 100) + '%';
+      document.getElementById('perf-mem-bar').style.width = info.memoryPct + '%';
+    }
+
+    // Load Windows status
+    async function loadWinStatus() {
+      const res = await apiGet('/api/windows-status');
+      if (!res) return;
+      const bar = document.getElementById('gaming-status-bar');
+      if (res.gameMode === 'enabled') {
+        bar.innerHTML = '<div class="info-bar success">Game Mode is enabled and optimized for RQBBOX MODE.</div>';
+      } else {
+        bar.innerHTML = '<div class="info-bar warn">Game Mode is currently disabled. Enable it above for best performance.</div>';
+      }
+    }
+
+    // Check server
+    async function checkServer() {
+      const res = await apiGet('/api/sysinfo');
+      const dot = document.getElementById('server-dot-icon');
+      const text = document.getElementById('server-status-text');
+      const badge = document.getElementById('server-badge');
+      if (res) {
+        dot.style.color = '#4ade80';
+        text.textContent = 'Running on port 19778';
+        badge.className = 'badge badge-green';
+        badge.textContent = 'Online';
+        document.getElementById('about-platform').textContent = res.platform + ' ' + res.arch;
+        document.getElementById('about-node').textContent = res.nodeVersion;
+      } else {
+        dot.style.color = '#f87171';
+        text.textContent = 'Server not running';
+        badge.className = 'badge badge-red';
+        badge.textContent = 'Offline';
+      }
+    }
+
+    // Check controller
+    function checkController() {
+      const status = document.getElementById('controller-status');
+      const badge = document.getElementById('controller-badge');
+      const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+      let connected = false;
+      for (const gp of gamepads) {
+        if (gp) { connected = true; break; }
+      }
+      if (connected) {
+        status.textContent = 'Controller detected and ready';
+        badge.className = 'badge badge-green';
+        badge.textContent = 'Connected';
+      } else {
+        status.textContent = 'No controller detected';
+        badge.className = 'badge badge-red';
+        badge.textContent = 'Disconnected';
+      }
+    }
+
+    function openDashboard() {
+      window.open(API_BASE + '/dashboard', '_blank');
+    }
+
+    async function createShortcut() {
+      try {
+        const ws = new ActiveXObject('WScript.Shell');
+        const folder = ws.SpecialFolders.Item('Programs');
+        const lnk = ws.CreateShortcut(folder + '\\RQBBOX MODE.lnk');
+        lnk.TargetPath = 'node.exe';
+        lnk.Arguments = '"C:\\Users\\RhysC\\Downloads\\RQBBOX MODE\\server.js"';
+        lnk.WorkingDirectory = 'C:\\Users\\RhysC\\Downloads\\RQBBOX MODE';
+        lnk.Description = 'RQBBOX MODE - Console Gaming Dashboard';
+        lnk.Save();
+        alert('Shortcut created in Start Menu!');
+      } catch(e) {
+        alert('Could not create shortcut: ' + e.message);
+      }
+    }
+
+    // Init
+    loadPerf();
+    loadWinStatus();
+    checkServer();
+    checkController();
+    setInterval(loadPerf, 3000);
+    setInterval(checkController, 2000);
+
+    window.addEventListener('gamepadconnected', checkController);
+    window.addEventListener('gamepaddisconnected', checkController);
+  </script>
+</body>
+</html>

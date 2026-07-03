@@ -1,0 +1,12 @@
+{
+  "apps": [
+    { "id": "youtube", "title": "YouTube", "icon": "▶️", "category": "Media", "launchUrl": "https://youtube.com" },
+    { "id": "spotify", "title": "Spotify", "icon": "🎵", "category": "Music", "launchUrl": "https://open.spotify.com" },
+    { "id": "twitch", "title": "Twitch", "icon": "📺", "category": "Streaming", "launchUrl": "https://twitch.tv" },
+    { "id": "netflix", "title": "Netflix", "icon": "🎬", "category": "Media", "launchUrl": "https://netflix.com" },
+    { "id": "discord", "title": "Discord", "icon": "💬", "category": "Social", "launchUrl": "https://discord.com/app" },
+    { "id": "reddit", "title": "Reddit", "icon": "👽", "category": "Social", "launchUrl": "https://reddit.com" },
+    { "id": "x-twitter", "title": "X / Twitter", "icon": "🐦", "category": "Social", "launchUrl": "https://x.com" },
+    { "id": "github", "title": "GitHub", "icon": "💻", "category": "Dev", "launchUrl": "https://github.com" }
+  ]
+}

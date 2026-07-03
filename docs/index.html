@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RQBBOX MODE - Console Gaming Experience for PC</title>
+  <link rel="icon" type="image/svg+xml" href="assets/rqbbox-icon.svg">
+  <meta property="og:title" content="RQBBOX MODE - Console Gaming Experience for PC">
+  <meta property="og:description" content="Transform your PC into a console gaming machine with Xbox-like dashboard, controller navigation, and Game Mode integration.">
+  <meta property="og:image" content="assets/og-image.png">
+  <meta property="og:type" content="website">
+  <meta name="description" content="RQBBOX MODE - Full-screen console gaming dashboard for Windows. Like Xbox Mode for PC.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --accent: #107c10;
+      --accent-light: #1db954;
+      --bg: #0e0e0e;
+      --bg-card: #1a1a1a;
+      --bg-card-hover: #242424;
+      --text: #ffffff;
+      --text-secondary: #a0a0a0;
+      --text-muted: #666;
+      --border: rgba(255,255,255,0.06);
+      --radius: 12px;
+    }
+    
+    body {
+      font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 24px;
+      position: relative;
+      background: radial-gradient(ellipse at 50% 0%, rgba(16,124,16,0.15) 0%, transparent 60%);
+    }
+    
+    .hero-logo {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 32px;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero .tagline {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin-bottom: 40px;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .btn {
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(16,124,16,0.3);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-outline:hover {
+      background: var(--bg-card);
+      border-color: var(--text-muted);
+    }
+    
+    /* Features */
+    .features {
+      padding: 80px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .features h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 48px;
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: all 0.2s;
+    }
+    
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255,255,255,0.1);
+      transform: translateY(-4px);
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+    
+    .feature-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Screenshots */
+    .screenshots {
+      padding: 80px 24px;
+      background: var(--bg-card);
+    }
+    
+    .screenshots-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .screenshots h2 {
+      font-size: 2rem;
+      margin-bottom: 48px;
+    }
+    
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 24px;
+    }
+    
+    .screenshot-card {
+      background: var(--bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    
+    .screenshot-placeholder {
+      height: 225px;
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(16,124,16,0.1) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    
+    .screenshot-label {
+      padding: 16px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Download */
+    .download {
+      padding: 80px 24px;
+      text-align: center;
+    }
+    
+    .download h2 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    
+    .download p {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .requirements {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 48px;
+    }
+    
+    .req-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 32px;
+      min-width: 200px;
+    }
+    
+    .req-card h4 {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    
+    .req-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+    
+    /* Footer */
+    footer {
+      padding: 40px 24px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+    
+    footer a {
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="assets/rqbbox-icon.svg" alt="RQBBOX MODE" class="hero-logo">
+    <h1>RQBBOX MODE</h1>
+    <p class="tagline">Transform your PC into a full-screen console gaming machine. Xbox-like dashboard, controller navigation, Game Mode integration — all in one app.</p>
+    <div class="hero-buttons">
+      <a href="https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE/releases" class="btn btn-primary">Download RQBBOX.EXE</a>
+      <a href="https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE" class="btn btn-outline">View on GitHub</a>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <h2>Everything You Need</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎮</div>
+        <h3>Full-Screen Dashboard</h3>
+        <p>Xbox-inspired UI with Home, Games, Quick Resume, Captures, Store, Friends, and Settings pages.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🕹️</div>
+        <h3>Controller Navigation</h3>
+        <p>Navigate the entire dashboard with D-pad, A/B/X/Y buttons, triggers, and Guide button — zero mouse required.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Game Mode Integration</h3>
+        <p>Enables Windows Game Mode, GameDVR, and optimizes system performance for gaming.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⏸️</div>
+        <h3>Quick Resume</h3>
+        <p>Suspend up to 3 games and resume them instantly — just like Xbox Series X.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3>Achievements & Captures</h3>
+        <p>Track achievements with popups, take screenshots, record clips with Game DVR.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <h3>Social & Friends</h3>
+        <p>Friends list with online status, party creation, and messaging system.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">☁️</div>
+        <h3>Cloud Gaming</h3>
+        <p>Xbox Cloud Gaming integration — stream games directly from the dashboard.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>6 Built-In Games</h3>
+        <p>Neon Drift Racing, Pixel Quest, Star Fighter X, Void Craft Sandbox, Retro Zone, Cube Runner 3D.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Parental Controls</h3>
+        <p>Set play time limits, content restrictions, and PIN-protected settings.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <h3>Themes</h3>
+        <p>Default, Dark, Neon, and Xbox Green themes — fully customizable.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚀</div>
+        <h3>Auto-Start on Boot</h3>
+        <p>Launches automatically on Windows logon — boots directly into gaming mode.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📐</div>
+        <h3>Windows Settings</h3>
+        <p>Right-click Desktop → Settings → Gaming → RQBBOX MODE. Full Windows integration.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screenshots -->
+  <section class="screenshots">
+    <div class="screenshots-inner">
+      <h2>See It In Action</h2>
+      <div class="screenshot-grid">
+        <div class="screenshot-card">
+          <div class="screenshot-placeholder">🏠</div>
+          <div class="screenshot-label">Dashboard — Home with game library and quick actions</div>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-placeholder">🎮</div>
+          <div class="screenshot-label">Games — Browse and launch your game collection</div>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-placeholder">⏸️</div>
+          <div class="screenshot-label">Quick Resume — Suspend and resume games instantly</div>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-placeholder">⚙️</div>
+          <div class="screenshot-label">Settings — Gaming, Performance, Controller, Parental Controls</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download -->
+  <section class="download">
+    <h2>Get Started</h2>
+    <p>Download RQBBOX.EXE, run it, and your PC transforms into a gaming console.</p>
+    <a href="https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE/releases" class="btn btn-primary">Download Now</a>
+    
+    <div class="requirements">
+      <div class="req-card">
+        <h4>OS</h4>
+        <p>Windows 10/11</p>
+      </div>
+      <div class="req-card">
+        <h4>Node.js</h4>
+        <p>v18+ (bundled)</p>
+      </div>
+      <div class="req-card">
+        <h4>RAM</h4>
+        <p>4GB minimum</p>
+      </div>
+      <div class="req-card">
+        <h4>Storage</h4>
+        <p>100MB</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>RQBBOX MODE by <a href="https://github.com/Rtech-Rqbbox-os">Rtech-Rqbbox-os</a> &bull; 
+       <a href="https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE">GitHub</a> &bull; 
+       MIT License
+    </p>
+  </footer>
+
+</body>
+</html>
