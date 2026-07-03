@@ -14,82 +14,413 @@
   <meta property="og:image" content="assets/social-preview.svg">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --accent: #107c10;
+      --accent-light: #1db954;
+      --bg: #0a0b0f;
+      --bg-card: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.06);
+    }
+    
     body {
-      background: #0b0d17;
+      background: var(--bg);
       color: #f0f4ff;
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
       overflow: hidden;
+      position: relative;
     }
+    
+    /* Animated background orbs */
+    .bg-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: float 8s ease-in-out infinite;
+    }
+    .bg-orb-1 { width: 400px; height: 400px; background: #107c10; top: -100px; left: -100px; }
+    .bg-orb-2 { width: 300px; height: 300px; background: #1db954; bottom: -80px; right: -80px; animation-delay: -4s; }
+    .bg-orb-3 { width: 200px; height: 200px; background: #0a5c0a; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -2s; }
+    
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(20px, -20px) scale(1.05); }
+    }
+    
+    /* Grid pattern */
+    .grid-pattern {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    
     .launcher {
       text-align: center;
-      max-width: 600px;
+      max-width: 700px;
       padding: 48px;
+      position: relative;
+      z-index: 1;
     }
-    .logo { font-size: 3rem; font-weight: 200; letter-spacing: 12px; color: #00d4ff; margin-bottom: 4px; }
-    .subtitle { font-size: 0.9rem; font-weight: 300; letter-spacing: 16px; color: rgba(0,212,255,0.6); text-transform: uppercase; margin-bottom: 40px; }
-    .tagline { font-size: 0.75rem; color: rgba(255,255,255,0.2); letter-spacing: 4px; margin-bottom: 48px; }
-    .btn {
+    
+    /* Logo container */
+    .logo-container {
+      position: relative;
       display: inline-block;
-      padding: 14px 40px;
-      background: #00d4ff;
-      color: #000;
+      margin-bottom: 24px;
+    }
+    .logo-ring {
+      position: absolute;
+      inset: -20px;
+      border: 1px solid rgba(16,124,16,0.2);
+      border-radius: 50%;
+      animation: pulse-ring 3s ease-in-out infinite;
+    }
+    .logo-ring-2 {
+      position: absolute;
+      inset: -40px;
+      border: 1px solid rgba(16,124,16,0.1);
+      border-radius: 50%;
+      animation: pulse-ring 3s ease-in-out infinite 0.5s;
+    }
+    @keyframes pulse-ring {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.02); }
+    }
+    
+    .logo-img {
+      width: 140px;
+      height: 140px;
+      animation: logo-float 4s ease-in-out infinite;
+    }
+    @keyframes logo-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    
+    .logo-text {
+      font-size: 3.5rem;
+      font-weight: 800;
+      letter-spacing: 8px;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-light) 50%, #fff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+    
+    .subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 20px;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    
+    .tagline {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 6px;
+      margin-bottom: 40px;
+    }
+    
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 40px;
+      background: var(--accent);
+      color: white;
       border: none;
       border-radius: 12px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       text-decoration: none;
-      transition: transform 0.15s, filter 0.2s;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(16,124,16,0.3);
     }
-    .btn:hover { transform: translateY(-2px); filter: brightness(1.15); }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(16,124,16,0.4); background: var(--accent-light); }
     .btn:active { transform: scale(0.97); }
-    .btn-secondary {
+    .btn-icon { font-size: 1.2rem; }
+    
+    .btn-outline {
       background: transparent;
-      color: rgba(255,255,255,0.5);
-      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.7);
+      border: 1px solid var(--border);
+      box-shadow: none;
     }
-    .links { margin-top: 32px; display: flex; gap: 12px; justify-content: center; }
+    .btn-outline:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+    
+    /* Feature pills */
+    .pills {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+    }
+    .pill-icon { font-size: 0.9rem; }
+    
+    /* Features grid */
     .features {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-top: 48px;
-      text-align: center;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 32px;
     }
     .feature {
-      padding: 16px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.04);
-      border-radius: 12px;
+      padding: 20px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: all 0.2s;
     }
-    .feature-icon { font-size: 1.5rem; margin-bottom: 6px; }
-    .feature-title { font-size: 0.75rem; font-weight: 500; margin-bottom: 2px; }
-    .feature-desc { font-size: 0.65rem; color: rgba(255,255,255,0.3); }
-    .version { position: fixed; bottom: 16px; font-size: 0.6rem; color: rgba(255,255,255,0.1); letter-spacing: 1px; }
+    .feature:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(16,124,16,0.3);
+      transform: translateY(-2px);
+    }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .feature-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .feature-desc {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.3);
+      line-height: 1.4;
+    }
+    
+    /* Game icons row */
+    .games-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin: 32px 0;
+    }
+    .game-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .game-icon:hover {
+      border-color: var(--accent);
+      transform: scale(1.1);
+    }
+    .game-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* Divider */
+    .divider {
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      margin: 32px auto;
+    }
+    
+    /* Footer */
+    .footer {
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+    }
+    .footer-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.2);
+    }
+    .footer-icon { font-size: 0.8rem; }
+    
+    .version {
+      position: fixed;
+      bottom: 16px;
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.1);
+      letter-spacing: 1px;
+    }
   </style>
 </head>
 <body>
+  <!-- Background -->
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+  <div class="grid-pattern"></div>
+
   <div class="launcher">
-    <div class="logo">RQBBOX</div>
+    <!-- Logo with rings -->
+    <div class="logo-container">
+      <div class="logo-ring"></div>
+      <div class="logo-ring-2"></div>
+      <img src="assets/logo.svg" alt="RQBBOX MODE" class="logo-img">
+    </div>
+    
+    <div class="logo-text">RQBBOX</div>
     <div class="subtitle">Mode</div>
     <div class="tagline">Plug Into Gaming. ®</div>
-    <a href="/dashboard" class="btn">🎮 Enter RQBBOX MODE</a>
-    <div class="links">
-      <a href="/dashboard" class="btn btn-secondary" style="padding:10px 20px;font-size:0.8rem;">Dashboard</a>
+    
+    <!-- Feature pills -->
+    <div class="pills">
+      <span class="pill"><span class="pill-icon">🎮</span> Controller Nav</span>
+      <span class="pill"><span class="pill-icon">⚡</span> Game Mode</span>
+      <span class="pill"><span class="pill-icon">⏸️</span> Quick Resume</span>
+      <span class="pill"><span class="pill-icon">🏆</span> Achievements</span>
+      <span class="pill"><span class="pill-icon">📷</span> Game DVR</span>
+      <span class="pill"><span class="pill-icon">☁️</span> Cloud Gaming</span>
     </div>
+    
+    <!-- Buttons -->
+    <div class="btn-group">
+      <a href="/dashboard" class="btn">
+        <span class="btn-icon">🎮</span>
+        Enter RQBBOX MODE
+      </a>
+      <a href="/windows-settings" class="btn btn-outline">
+        <span class="btn-icon">⚙️</span>
+        Settings
+      </a>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <!-- Game icons -->
+    <div class="games-row">
+      <div class="game-icon"><img src="games/neon-drift-racing/icon.svg" alt="Neon Drift Racing"></div>
+      <div class="game-icon"><img src="games/pixel-quest/icon.svg" alt="Pixel Quest"></div>
+      <div class="game-icon"><img src="games/star-fighter-x/icon.svg" alt="Star Fighter X"></div>
+      <div class="game-icon"><img src="games/void-craft-sandbox/icon.svg" alt="Void Craft"></div>
+      <div class="game-icon"><img src="games/retro-zone/icon.svg" alt="Retro Zone"></div>
+      <div class="game-icon"><img src="games/cube-runner-3d/icon.svg" alt="Cube Runner 3D"></div>
+    </div>
+    
+    <!-- Features grid -->
     <div class="features">
-      <div class="feature"><div class="feature-icon">🎮</div><div class="feature-title">Fullscreen Gaming</div><div class="feature-desc">Console-style interface</div></div>
-      <div class="feature"><div class="feature-icon">⏸️</div><div class="feature-title">Quick Resume</div><div class="feature-desc">Suspend/resume games</div></div>
-      <div class="feature"><div class="feature-icon">🎮</div><div class="feature-title">Controller Nav</div><div class="feature-desc">Full gamepad support</div></div>
-      <div class="feature"><div class="feature-icon">⚡</div><div class="feature-title">Performance</div><div class="feature-desc">Optimize for gaming</div></div>
-      <div class="feature"><div class="feature-icon">🏆</div><div class="feature-title">Achievements</div><div class="feature-desc">Earn achievements</div></div>
-      <div class="feature"><div class="feature-icon">📷</div><div class="feature-title">Captures</div><div class="feature-desc">Screenshots & DVR</div></div>
+      <div class="feature">
+        <span class="feature-icon">🖥️</span>
+        <div class="feature-title">Fullscreen Dashboard</div>
+        <div class="feature-desc">Xbox-style UI</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🕹️</span>
+        <div class="feature-title">Controller Support</div>
+        <div class="feature-desc">Full gamepad nav</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">⚡</span>
+        <div class="feature-title">Performance Mode</div>
+        <div class="feature-desc">Max FPS boost</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">⏸️</span>
+        <div class="feature-title">Quick Resume</div>
+        <div class="feature-desc">3 game slots</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🏆</span>
+        <div class="feature-title">Achievements</div>
+        <div class="feature-desc">12 unlockables</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">📷</span>
+        <div class="feature-title">Game DVR</div>
+        <div class="feature-desc">Screenshots & clips</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">👥</span>
+        <div class="feature-title">Friends List</div>
+        <div class="feature-desc">Online status</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🎨</span>
+        <div class="feature-title">4 Themes</div>
+        <div class="feature-desc">Dark, Neon, Xbox</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">☁️</span>
+        <div class="feature-title">Cloud Gaming</div>
+        <div class="feature-desc">Xbox Cloud</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🔒</span>
+        <div class="feature-title">Parental Controls</div>
+        <div class="feature-desc">Play time limits</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🚀</span>
+        <div class="feature-title">Auto-Start</div>
+        <div class="feature-desc">Boot to gaming</div>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">🎯</span>
+        <div class="feature-title">6 Games</div>
+        <div class="feature-desc">Built-in HTML5</div>
+      </div>
     </div>
-    <div class="version">RQBBOX MODE v1.0.0 — © 2026 RhysTech</div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-item">
+        <span class="footer-icon">📦</span>
+        v1.0.0
+      </div>
+      <div class="footer-item">
+        <span class="footer-icon">💻</span>
+        Windows 10/11
+      </div>
+      <div class="footer-item">
+        <span class="footer-icon">📄</span>
+        MIT License
+      </div>
+      <div class="footer-item">
+        <span class="footer-icon">🐙</span>
+        GitHub
+      </div>
+    </div>
+    
+    <div class="version">RQBBOX MODE v1.0.0 — © 2026 RhysTech — Plug Into Gaming ®</div>
   </div>
 </body>
 </html>
