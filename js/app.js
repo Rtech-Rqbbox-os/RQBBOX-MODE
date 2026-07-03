@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Power button
   RQBOX.id('guide-btn-power')?.addEventListener('click', () => {
     RQBOX.openModal(`
-      <h3>Exit RQBBOX MODE?</h3>
+      <h3>🚪 Exit RQBBOX MODE?</h3>
       <p style="color:var(--text-secondary);font-size:0.8rem;margin:8px 0;">
         Return to the desktop / RQBBOX OS launcher.
       </p>
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   RQBOX.id('guide-btn-audio')?.addEventListener('click', () => {
     const cfg = RQBOX.state.config?.audio || {};
     RQBOX.openModal(`
-      <h3>Audio Quick Controls</h3>
+      <h3>🔊 Audio Quick Controls</h3>
       <div style="padding:8px 0;">
         <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;">
           <span style="font-size:0.8rem;">Master Volume</span>
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // User badge
   RQBOX.id('user-badge')?.addEventListener('click', () => {
     RQBOX.openModal(`
-      <h3>Profile</h3>
+      <h3>👤 Profile</h3>
       <div style="text-align:center;padding:16px 0;">
         <div style="font-size:3rem;margin-bottom:8px;">${RQBOX.state.user?.avatar || '👤'}</div>
         <h4>${RQBOX.state.user?.name || 'Player'}</h4>

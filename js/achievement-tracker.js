@@ -71,7 +71,7 @@ const AchievementTracker = {
     return `
       <div class="achievement-list">
         <div class="achievement-header">
-          <h3>Achievements</h3>
+          <h3>🏆 Achievements</h3>
           <span class="achievement-count">${this.getUnlockedCount()} / ${this.achievements.length}</span>
         </div>
         <div class="achievement-progress">

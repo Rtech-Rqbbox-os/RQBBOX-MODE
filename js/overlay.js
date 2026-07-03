@@ -69,7 +69,7 @@ const Notifications = {
   },
 
   togglePanel() {
-    RQBOX.openModal(`<h3>Notifications</h3>
+    RQBOX.openModal(`<h3>🔔 Notifications</h3>
       ${this.items.length
         ? this.items.slice(0, 10).map(n => `
           <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-subtle);${n.read ? 'opacity:0.6;' : ''}">

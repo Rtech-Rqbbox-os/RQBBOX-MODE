@@ -50,7 +50,7 @@ const Wishlist = {
     return `
       <div class="wishlist-container">
         <div class="wishlist-header">
-          <h3>Wishlist</h3>
+          <h3>⭐ Wishlist</h3>
           <span class="wishlist-count">${this.items.length} games</span>
         </div>
         ${this.items.length > 0 ? `

@@ -32,7 +32,7 @@ const SocialPanel = {
     return `
       <div class="social-panel-container">
         <div class="social-header">
-          <h3>Friends</h3>
+          <h3>👥 Friends</h3>
           <span class="friend-count">${online.length} Online</span>
         </div>
         
@@ -78,7 +78,7 @@ const SocialPanel = {
 
   showAddFriend() {
     RQBOX.openModal(`
-      <h3>Add Friend</h3>
+      <h3>➕ Add Friend</h3>
       <div class="modal-content">
         <input type="text" id="friend-search" placeholder="Search by username..." class="search-input">
         <div id="friend-results"></div>
@@ -91,7 +91,7 @@ const SocialPanel = {
 
   showParty() {
     RQBOX.openModal(`
-      <h3>Start Party</h3>
+      <h3>🎉 Start Party</h3>
       <div class="modal-content">
         <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:16px;">
           Create a party to chat and play with friends.

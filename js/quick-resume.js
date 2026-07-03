@@ -66,7 +66,7 @@ const QuickResume = {
   async clearAll() {
     if (!this.sessions.length) { RQBOX.toast('No suspended sessions'); return; }
     RQBOX.openModal(`
-      <h3>Clear All Suspended Games?</h3>
+      <h3>🗑️ Clear All Suspended Games?</h3>
       <p style="color:var(--text-secondary);font-size:0.8rem;margin:8px 0;">
         ${this.sessions.length} game(s) will be removed from Quick Resume.
       </p>

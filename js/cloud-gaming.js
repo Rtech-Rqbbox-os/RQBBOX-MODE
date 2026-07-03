@@ -52,7 +52,7 @@ const CloudGaming = {
     return `
       <div class="section">
         <div class="section-header">
-          <h3>Cloud Gaming</h3>
+          <h3>☁️ Cloud Gaming</h3>
           <span class="section-badge">Game Pass Ultimate</span>
         </div>
         <div class="horz-scroll">

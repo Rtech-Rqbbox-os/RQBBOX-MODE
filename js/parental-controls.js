@@ -95,7 +95,7 @@ const ParentalControls = {
     return `
       <div class="parental-panel">
         <div class="parental-header">
-          <h3>Parental Controls</h3>
+          <h3>🔒 Parental Controls</h3>
           <div class="toggle ${this.enabled ? 'on' : ''}" onclick="ParentalControls.toggleEnabled()"></div>
         </div>
         
@@ -146,7 +146,7 @@ const ParentalControls = {
   toggleEnabled() {
     if (this.enabled) {
       RQBOX.openModal(`
-        <h3>Disable Parental Controls</h3>
+        <h3>🔓 Disable Parental Controls</h3>
         <div class="modal-content">
           <input type="password" id="pin-input" placeholder="Enter PIN" class="pin-input">
         </div>
@@ -157,7 +157,7 @@ const ParentalControls = {
       `);
     } else {
       RQBOX.openModal(`
-        <h3>Enable Parental Controls</h3>
+        <h3>🔒 Enable Parental Controls</h3>
         <div class="modal-content">
           <input type="password" id="pin-input" placeholder="Set PIN" class="pin-input">
         </div>

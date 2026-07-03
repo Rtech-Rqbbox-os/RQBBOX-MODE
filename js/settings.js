@@ -135,7 +135,7 @@ const Settings = {
     const cfg = RQBOX.state.config || {};
     return `
       <div class="settings-panel">
-        <h3>General</h3>
+        <h3>⚙️ General</h3>
         <div class="settings-row">
           <div><div class="settings-label">RQBBOX MODE</div><div class="settings-desc">Enable the full-screen gaming experience</div></div>
           <div class="toggle on settings-toggle" data-key="display.rqbboxMode"></div>
@@ -158,7 +158,7 @@ const Settings = {
     const cfg = RQBOX.state.config?.display || {};
     return `
       <div class="settings-panel">
-        <h3>Display</h3>
+        <h3>🖥️ Display</h3>
         <div class="settings-row">
           <div><div class="settings-label">Theme</div><div class="settings-desc">Choose your color theme</div></div>
           <div class="select-wrap"><select class="settings-select" data-key="display.theme">
@@ -192,7 +192,7 @@ const Settings = {
     const cfg = RQBOX.state.config?.controller || {};
     return `
       <div class="settings-panel">
-        <h3>Controller</h3>
+        <h3>🕹️ Controller</h3>
         <div class="settings-row">
           <div><div class="settings-label">Enable Controller</div></div>
           <div class="toggle ${cfg.enabled !== false ? 'on' : ''} settings-toggle" data-key="controller.enabled"></div>
@@ -229,7 +229,7 @@ const Settings = {
     const cfg = RQBOX.state.config?.performance || {};
     return `
       <div class="settings-panel">
-        <h3>Performance</h3>
+        <h3>⚡ Performance</h3>
         <div class="settings-row">
           <div><div class="settings-label">Game Mode</div><div class="settings-desc">Optimize system for gaming</div></div>
           <div class="toggle ${cfg.gameMode !== false ? 'on' : ''} settings-toggle" data-key="performance.gameMode"></div>
@@ -267,7 +267,7 @@ const Settings = {
     const cfg = RQBOX.state.config?.audio || {};
     return `
       <div class="settings-panel">
-        <h3>Audio</h3>
+        <h3>🔊 Audio</h3>
         <div class="settings-row">
           <div><div class="settings-label">Master Volume</div></div>
           <div><input type="range" min="0" max="100" value="${cfg.masterVolume || 80}" class="settings-range" data-key="audio.masterVolume"> <span style="font-size:0.75rem;color:var(--text-muted);">${cfg.masterVolume || 80}%</span></div>
@@ -288,7 +288,7 @@ const Settings = {
     const cfg = RQBOX.state.config?.capture || {};
     return `
       <div class="settings-panel">
-        <h3>Capture & Game DVR</h3>
+        <h3>📷 Capture & Game DVR</h3>
         <div class="settings-row">
           <div><div class="settings-label">Game DVR</div><div class="settings-desc">Record gameplay clips</div></div>
           <div class="toggle ${cfg.gameDvrEnabled !== false ? 'on' : ''} settings-toggle" data-key="capture.gameDvrEnabled"></div>
@@ -312,7 +312,7 @@ const Settings = {
   themePanel() {
     return `
       <div class="settings-panel">
-        <h3>Theme</h3>
+        <h3>🎨 Theme</h3>
         <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:16px;">
           Choose a theme or go to Display settings for theme selection.
         </p>
@@ -332,7 +332,7 @@ const Settings = {
     const cfg = RQBOX.state.config?.social || {};
     return `
       <div class="settings-panel">
-        <h3>Social & Privacy</h3>
+        <h3>👥 Social & Privacy</h3>
         <div class="settings-row">
           <div><div class="settings-label">Online Status</div></div>
           <div class="select-wrap"><select class="settings-select" data-key="social.onlineStatus">
@@ -358,7 +358,7 @@ const Settings = {
     const cfg = RQBOX.state.config?.startup || {};
     return `
       <div class="settings-panel">
-        <h3>Startup & Boot</h3>
+        <h3>🚀 Startup & Boot</h3>
         <div class="settings-row">
           <div><div class="settings-label">Boot to RQBBOX MODE</div><div class="settings-desc">Automatically enter gaming mode on startup</div></div>
           <div class="toggle ${cfg.bootToMode !== false ? 'on' : ''} settings-toggle" data-key="startup.bootToMode"></div>
@@ -378,7 +378,7 @@ const Settings = {
   gamingPanel() {
     return `
       <div class="settings-panel">
-        <h3>Gaming</h3>
+        <h3>🎮 Gaming</h3>
         <div class="settings-row">
           <div><div class="settings-label">Game Optimized Mode</div><div class="settings-desc">Disable notifications, animations & background tasks while gaming</div></div>
           <div class="toggle ${RQBOX.state.config?.gaming?.optimized ? 'on' : ''} settings-toggle" data-key="gaming.optimized" id="toggle-game-optimized"></div>
@@ -410,7 +410,7 @@ const Settings = {
   windowsPanel() {
     return `
       <div class="settings-panel">
-        <h3>Windows Gaming Settings</h3>
+        <h3>💻 Windows Gaming Settings</h3>
         <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:16px;">
           Integrate RQBBOX MODE with Windows Gaming Settings, Game Bar, and Game Mode.
         </p>
@@ -444,7 +444,7 @@ const Settings = {
         </div>
       </div>
       <div class="settings-panel">
-        <h3>Install to Windows</h3>
+        <h3>📦 Install to Windows</h3>
         <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:16px;">
           Run the installer to fully integrate RQBBOX MODE into Windows Gaming Settings.
         </p>
@@ -478,7 +478,7 @@ const Settings = {
 
   runInstaller() {
     RQBOX.openModal(`
-      <h3>Install RQBBOX MODE to Windows</h3>
+      <h3>📦 Install RQBBOX MODE to Windows</h3>
       <p style="color:var(--text-secondary);font-size:0.8rem;margin:8px 0;">
         This will register the rqbbox:// protocol, enable Game Mode, create Start Menu shortcut, and configure GameDVR.
       </p>
