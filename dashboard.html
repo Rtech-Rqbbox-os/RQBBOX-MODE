@@ -170,6 +170,7 @@
       <nav class="topbar-nav">
         <a class="active" onclick="navPage('home')">Home</a>
         <a onclick="navPage('store')">Store</a>
+        <a onclick="navPage('apps')">Apps</a>
       </nav>
       <div class="topbar-right">
         <span class="clock" id="clock"></span>
@@ -330,10 +331,16 @@
       }
       if (page === 'home') {
         const topLinks = document.querySelectorAll('.topbar-nav a');
+        topLinks.forEach(a => a.classList.remove('active'));
         if (topLinks[0]) topLinks[0].classList.add('active');
       } else if (page === 'store') {
         const topLinks = document.querySelectorAll('.topbar-nav a');
+        topLinks.forEach(a => a.classList.remove('active'));
         if (topLinks[1]) topLinks[1].classList.add('active');
+      } else if (page === 'apps') {
+        const topLinks = document.querySelectorAll('.topbar-nav a');
+        topLinks.forEach(a => a.classList.remove('active'));
+        if (topLinks[2]) topLinks[2].classList.add('active');
       }
     }
 
