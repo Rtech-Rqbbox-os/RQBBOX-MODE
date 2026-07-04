@@ -86,7 +86,7 @@ function Install-StartMenuShortcut {
 }
 
 function Install-ProtocolAndGameMode {
-    Write-Host "[3/3] Registering protocol and Game Mode..." -ForegroundColor Yellow
+    Write-Host "[3/4] Registering protocol and Game Mode..." -ForegroundColor Yellow
 
     # Protocol handler
     $protocolPath = "HKCU:\Software\Classes\rqbbox"
@@ -113,6 +113,19 @@ function Install-ProtocolAndGameMode {
     Write-Host "  [OK] Game Mode enabled" -ForegroundColor Green
 }
 
+function Install-AutoStart {
+    Write-Host "[4/4] Creating login startup entry..." -ForegroundColor Yellow
+
+    $runKey = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+    if (!(Test-Path $runKey)) { New-Item -Path $runKey -Force | Out-Null }
+
+    $scriptPath = Join-Path $PSScriptRoot "Start-RQBBOXAtLogin.ps1"
+    $value = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`""
+    Set-ItemProperty -Path $runKey -Name "RQBBOX MODE" -Value $value -Force
+
+    Write-Host "  [OK] RQBBOX MODE will launch in fullscreen after login" -ForegroundColor Green
+}
+
 function Uninstall-All {
     Write-Host "Removing RQBBOX MODE..." -ForegroundColor Yellow
     Remove-Item -Path "Registry::HKEY_CURRENT_USER\Software\Classes\DesktopBackground\Shell\Settings\shell\09menu\shell\rqbbox" -Recurse -Force -ErrorAction SilentlyContinue
@@ -130,6 +143,7 @@ if ($args -contains "-Uninstall") {
     Install-DesktopContextMenu
     Install-StartMenuShortcut
     Install-ProtocolAndGameMode
+    Install-AutoStart
 
     Write-Host ""
     Write-Host "==========================================" -ForegroundColor Cyan

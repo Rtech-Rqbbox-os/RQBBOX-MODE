@@ -450,10 +450,37 @@ const server = http.createServer(async (req, res) => {
       }
       send(200, JSON.stringify(result));
     }
+    // API: Xbox Mode toggle
+    else if (pathname === '/api/xboxmode') {
+      const b = method === 'POST' ? await body(req) : {};
+      const { execSync } = require('child_process');
+      let result = { ok: true };
+      try {
+        if (b.action === 'enable') {
+          execSync('reg add "HKCU\\Software\\Microsoft\\GameBar\\ContentSources\\XBOX" /v Enabled /t REG_DWORD /d 1 /f', { timeout: 2000 });
+          execSync('reg add "HKCU\\Software\\Microsoft\\GameBar" /v AutoGameModeEnabled /t REG_DWORD /d 1 /f', { timeout: 2000 });
+          execSync('reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\XBOXMode" /v "GPU Priority" /t REG_DWORD /d 8 /f', { timeout: 2000 });
+          execSync('reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\XBOXMode" /v "Scheduling Category" /t REG_SZ /d "High" /f', { timeout: 2000 });
+          result.mode = 'enabled';
+          result.message = 'XBOX MODE enabled in Windows Game Bar';
+        } else if (b.action === 'disable') {
+          execSync('reg add "HKCU\\Software\\Microsoft\\GameBar\\ContentSources\\XBOX" /v Enabled /t REG_DWORD /d 0 /f', { timeout: 2000 });
+          result.mode = 'disabled';
+          result.message = 'XBOX MODE disabled in Windows Game Bar';
+        } else {
+          const out = execSync('reg query "HKCU\\Software\\Microsoft\\GameBar\\ContentSources\\XBOX" /v Enabled 2>nul', { timeout: 2000, encoding: 'utf-8' });
+          result.mode = out.includes('0x1') ? 'enabled' : 'disabled';
+        }
+      } catch (e) {
+        result.mode = 'unknown';
+        result.error = e.message;
+      }
+      send(200, JSON.stringify(result));
+    }
     // API: Windows status
     else if (pathname === '/api/windows-status') {
       const { execSync } = require('child_process');
-      let gameMode = 'unknown', gameBar = 'unknown';
+      let gameMode = 'unknown', gameBar = 'unknown', xboxMode = 'unknown';
       try {
         const gm = execSync('reg query "HKCU\\Software\\Microsoft\\GameBar" /v AutoGameModeEnabled 2>nul', { timeout: 2000, encoding: 'utf-8' });
         gameMode = gm.includes('0x1') ? 'enabled' : 'disabled';
@@ -462,7 +489,11 @@ const server = http.createServer(async (req, res) => {
         const gb = execSync('reg query "HKCU\\Software\\Microsoft\GameBar" /v UseNexusForGameBarEnabled 2>nul', { timeout: 2000, encoding: 'utf-8' });
         gameBar = gb.includes('0x1') ? 'enabled' : 'disabled';
       } catch {}
-      send(200, JSON.stringify({ ok: true, gameMode, gameBar, platform: process.platform }));
+      try {
+        const xb = execSync('reg query "HKCU\\Software\\Microsoft\\GameBar\\ContentSources\\XBOX" /v Enabled 2>nul', { timeout: 2000, encoding: 'utf-8' });
+        xboxMode = xb.includes('0x1') ? 'enabled' : 'disabled';
+      } catch {}
+      send(200, JSON.stringify({ ok: true, gameMode, gameBar, xboxMode, platform: process.platform }));
     }
     // Windows Settings page
     else if (pathname === '/windows-settings' || pathname === '/windows-settings.html') {

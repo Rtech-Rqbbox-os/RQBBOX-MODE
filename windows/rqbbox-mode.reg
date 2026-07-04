@@ -44,6 +44,12 @@ Windows Registry Editor Version 5.00
 "Name"="RQBBOX MODE"
 "Type"="Gaming"
 
+; Xbox Game Bar - XBOX MODE Settings
+[HKEY_CURRENT_USER\Software\Microsoft\GameBar\ContentSources\XBOX]
+"Enabled"=dword:00000001
+"Name"="XBOX MODE"
+"Type"="Gaming"
+
 ; Game Mode Task Profile for RQBBOX
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\RQBBOXMode]
 "GPU Priority"=dword:00000008
@@ -55,6 +61,20 @@ Windows Registry Editor Version 5.00
 ; Process priority for Node.js/RQBBOX
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\RQBBOXMode\Processes]
 "node.exe"="High"
+
+; Game Mode Task Profile for XBOX MODE
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\XBOXMode]
+"GPU Priority"=dword:00000008
+"Priority"=dword:00000006
+"Scheduling Category"="High"
+"SFIO Priority"="High"
+"BackgroundPriority"=dword:00000000
+
+; Process priority for Xbox-related processes
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\XBOXMode\Processes]
+"GameBar.exe"="High"
+"XboxApp.exe"="High"
+"xboxcloud.exe"="High"
 
 ; Windows Settings Gaming Apps Integration
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameConfigStore]

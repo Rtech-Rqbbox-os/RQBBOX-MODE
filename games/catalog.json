@@ -77,6 +77,19 @@
       "localPath": "/games/cube-runner-3d/",
       "featured": false,
       "controls": "Arrow keys to dodge obstacles"
+    },
+    {
+      "id": "rqbbox-life",
+      "title": "RQBBOX LIFE",
+      "category": "Simulation",
+      "icon": "🧬",
+      "iconSvg": "/games/rqbbox-life/icon.svg",
+      "desc": "Live a neon life — work, build, socialize, and thrive in RQBBOX City",
+      "price": "Free",
+      "type": "web",
+      "localPath": "/games/rqbbox-life/",
+      "featured": true,
+      "controls": "Mouse click to select • ESC to pause • Ctrl+Shift+S to screenshot"
     }
   ]
 }

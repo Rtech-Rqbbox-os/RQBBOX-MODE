@@ -23,11 +23,10 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo [INFO] Starting RQBBOX MODE server...
+echo [INFO] Starting RQBBOX MODE launcher...
 echo.
 
-REM Start server
-start http://127.0.0.1:19778/
-node server.js
+REM Start the shared fullscreen-aware launcher
+node rqbbox-launcher.js --fullscreen
 
 pause

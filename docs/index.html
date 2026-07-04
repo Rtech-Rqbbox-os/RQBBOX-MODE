@@ -395,6 +395,10 @@
       <div class="brand-card"><img src="assets/logo-horizontal.svg" alt="RQBBOX MODE Horizontal" style="height:80px;margin-top:20px;"><div style="font-size:0.7rem;color:var(--text-muted);margin-top:8px;">Horizontal</div></div>
       <div class="brand-card"><img src="assets/logo-mark.svg" alt="RQBBOX MODE Mark" style="height:100px;"><div style="font-size:0.7rem;color:var(--text-muted);margin-top:8px;">Icon Mark</div></div>
     </div>
+    <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;">
+      <div class="brand-card" style="border-color:rgba(29,185,196,0.3);background:linear-gradient(135deg,var(--bg) 0%,rgba(16,124,158,0.05) 100%);"><img src="assets/rqbbox-os-logo.svg" alt="RQBBOX OS Logo" style="height:120px;"><div style="font-size:0.7rem;color:#1db9c4;margin-top:8px;">RQBBOX OS — Full Logo</div></div>
+      <div class="brand-card" style="border-color:rgba(29,185,196,0.3);background:linear-gradient(135deg,var(--bg) 0%,rgba(16,124,158,0.05) 100%);"><img src="assets/rqbbox-os-banner.svg" alt="RQBBOX OS Banner" style="width:100%;max-width:280px;"><div style="font-size:0.7rem;color:#1db9c4;margin-top:8px;">RQBBOX OS — Banner</div></div>
+    </div>
     <div style="text-align:center;margin-bottom:24px;">
       <h3 style="font-size:1rem;font-weight:500;margin-bottom:16px;">Platform Icons</h3>
       <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
@@ -406,7 +410,7 @@
       </div>
     </div>
     <div style="text-align:center;">
-      <h3 style="font-size:1rem;font-weight:500;margin-bottom:16px;">Full Icon Set (56 SVGs)</h3>
+      <h3 style="font-size:1rem;font-weight:500;margin-bottom:16px;">Full Icon Set (60 SVGs)</h3>
       <div class="icons-grid" id="iconsGrid"></div>
     </div>
   </section>
@@ -425,7 +429,7 @@
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const icons = ['about','achievements','actions','audio','back','branches','captures-settings','captures','close','cloud','commits','contributors','controller-settings','controller','discord','discussions','display','download','forks','forward','friends','fullscreen','games','gaming','github','home','icon-192','icon-512','insights','issues','license','maximize','minimize','nodejs','notifications','npm','packages','parental','performance','projects','releases','resume','security','settings','social','sponsor','stars','startup','steam','store','tags','themes','watch','wiki','windows','xbox'];
+      const icons = ['about','achievements','actions','audio','back','branches','captures-settings','captures','close','cloud','commits','console','contributors','controller-settings','controller','discord','discussions','display','download','forks','forward','friends','fullscreen','games','gaming','github','home','icon-192','icon-512','insights','issues','license','maximize','minimize','nodejs','notifications','npm','packages','parental','performance','projects','releases','resume','security','settings','social','sponsor','stars','startup','steam','store','tags','terminal','themes','update','usb-drive','watch','wiki','windows','xbox'];
       const grid = document.getElementById('iconsGrid');
       if (!grid) return;
       icons.forEach(name => {

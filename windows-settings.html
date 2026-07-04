@@ -235,6 +235,10 @@
           <span class="nav-icon">📱</span>
           <span class="nav-text">Game Bar</span>
         </button>
+        <button class="nav-item" data-page="xboxmode">
+          <span class="nav-icon">❌</span>
+          <span class="nav-text">Xbox Mode</span>
+        </button>
         <button class="nav-item" data-page="captures">
           <span class="nav-icon">📷</span>
           <span class="nav-text">Captures</span>
@@ -266,7 +270,7 @@
       </div>
 
       <div style="flex:1;"></div>
-      <div style="padding:8px 12px;font-size:10px;color:var(--win-text-muted);">RQBBOX MODE v1.0</div>
+      <div style="padding:8px 12px;font-size:10px;color:var(--win-text-muted);">RQBBOX MODE v1.0 | RQBBOX OS v1.0</div>
     </aside>
 
     <!-- Content -->
@@ -443,6 +447,58 @@
                 </div>
               </div>
               <span class="badge badge-blue">Win + G</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Xbox Mode -->
+        <div class="page" id="page-xboxmode">
+          <div class="info-bar info">Configure Xbox Mode in Windows Game Bar for quick access to Xbox features.</div>
+          <div class="card">
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">❌</div>
+                <div>
+                  <div class="card-label">Enable Xbox Mode</div>
+                  <div class="card-desc">Show XBOX MODE in Game Bar overlay (Win+G)</div>
+                </div>
+              </div>
+              <div class="toggle on" id="toggle-xboxmode" data-key="xboxmode"></div>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">☁️</div>
+                <div>
+                  <div class="card-label">Xbox Cloud Gaming</div>
+                  <div class="card-desc">Launch Xbox Cloud Gaming (xbox.com/play)</div>
+                </div>
+              </div>
+              <div class="toggle on" id="toggle-xboxcloud" data-key="xboxcloud"></div>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">🎮</div>
+                <div>
+                  <div class="card-label">Xbox Console Companion</div>
+                  <div class="card-desc">Open Xbox app for remote play & social</div>
+                </div>
+              </div>
+              <span class="badge badge-blue" id="xboxcompanion-status">Ready</span>
+            </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">⚡</div>
+                <div>
+                  <div class="card-label">Xbox Mode Profile</div>
+                  <div class="card-desc">High-performance multimedia profile for Xbox tasks</div>
+                </div>
+              </div>
+              <span class="badge badge-green">Active</span>
+            </div>
+          </div>
+          <div class="card">
+            <div style="padding:16px;font-size:12px;color:var(--win-text-muted);line-height:1.5;">
+              <strong style="color:var(--win-text);">XBOX MODE</strong> registers a dedicated content source in the Windows Game Bar. When enabled, you can pin XBOX MODE to the Game Bar overlay (Win+G) for one-click access to Xbox Cloud Gaming, the Xbox app, and optimized performance profiles.
             </div>
           </div>
         </div>
@@ -672,6 +728,16 @@
                 </div>
               </div>
             </div>
+            <div class="card-row">
+              <div class="card-row-left">
+                <div class="card-icon">💾</div>
+                <div>
+                  <div class="card-label">RQBBOX OS Portable USB</div>
+                  <div class="card-desc">Bootable gaming OS — v1.0.0</div>
+                </div>
+              </div>
+              <span class="badge" style="background:rgba(29,185,196,0.15);color:#1db9c4;">USB</span>
+            </div>
           </div>
 
           <div class="section" style="margin-top:24px;">
@@ -702,7 +768,7 @@
     </div>
   </div>
 
-  <div class="version-tag">RQBBOX MODE v1.0.0 — Plug Into Gaming</div>
+  <div class="version-tag">RQBBOX MODE v1.0.0 — RQBBOX OS Portable USB v1.0.0 — Plug Into Gaming</div>
 
   <script>
     const API_BASE = 'http://127.0.0.1:19778';
@@ -727,6 +793,8 @@
         const enabled = el.classList.contains('on');
         if (key === 'gamemode') {
           await apiPost('/api/gamemode', { action: enabled ? 'enable' : 'disable' });
+        } else if (key === 'xboxmode') {
+          await apiPost('/api/xboxmode', { action: enabled ? 'enable' : 'disable' });
         }
       });
     });
@@ -786,6 +854,12 @@
         bar.innerHTML = '<div class="info-bar success">Game Mode is enabled and optimized for RQBBOX MODE.</div>';
       } else {
         bar.innerHTML = '<div class="info-bar warn">Game Mode is currently disabled. Enable it above for best performance.</div>';
+      }
+      const xboxToggle = document.getElementById('toggle-xboxmode');
+      if (xboxToggle && res.xboxMode === 'enabled') {
+        xboxToggle.classList.add('on');
+      } else if (xboxToggle) {
+        xboxToggle.classList.remove('on');
       }
     }
 

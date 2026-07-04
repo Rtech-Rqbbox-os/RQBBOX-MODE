@@ -21,7 +21,8 @@ function isServerRunning() {
 }
 
 function openBrowser(url) {
-  const cmd = process.platform === 'win32' ? `start "" "${url}"` : `xdg-open "${url}"`;
+  const fullscreenUrl = url.includes('?') ? `${url}&fullscreen=1` : `${url}?fullscreen=1`;
+  const cmd = process.platform === 'win32' ? `start "" "${fullscreenUrl}"` : `xdg-open "${fullscreenUrl}"`;
   exec(cmd, { timeout: 2000 }, () => {});
 }
 

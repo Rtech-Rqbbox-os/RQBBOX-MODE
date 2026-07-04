@@ -269,6 +269,41 @@ Built as a standalone project that integrates with RQBBOX OS.
 
 ---
 
+## 🖥️ RQBBOX OS Portable USB
+
+<p align="center">
+  <img src="assets/rqbbox-os-banner.svg" alt="RQBBOX OS Portable USB" width="100%">
+</p>
+
+**RQBBOX OS Portable USB** is a full bootable gaming operating system that runs entirely from a USB drive. It brings the RQBBOX MODE console experience to any PC without installation.
+
+| Feature | Description |
+|---------|-------------|
+| 📦 **Portable** | Boots from any 8GB+ USB drive |
+| 🚀 **Lightweight** | Linux-based, optimized for gaming |
+| 🎮 **Full RQBBOX MODE** | Built-in dashboard, games, and apps |
+| 🔄 **Persistent Storage** | Save games and settings across boots |
+| ⚡ **Performance Tuned** | Low-latency kernel for maximum FPS |
+
+> **Repository:** [github.com/Rtech-Rqbbox-os/RQBBOX-OS](https://github.com/Rtech-Rqbbox-os/RQBBOX-OS)  
+> **More info:** [docs/wiki/rqbbox-os.md](docs/wiki/rqbbox-os.md)
+
+---
+
+## Brand Assets
+
+| Asset | Preview | Description |
+|-------|---------|-------------|
+| RQBBOX MODE Logo | `assets/logo.svg` | Full 512×512 gamepad logo |
+| RQBBOX MODE Banner | `assets/banner.svg` | 1280×320 README banner |
+| RQBBOX MODE Mark | `assets/logo-mark.svg` | Gamepad icon mark |
+| RQBBOX MODE Horizontal | `assets/logo-horizontal.svg` | Horizontal logo layout |
+| **RQBBOX OS Logo** | `assets/rqbbox-os-logo.svg` | RQBBOX OS 512×512 logo |
+| **RQBBOX OS Banner** | `assets/rqbbox-os-banner.svg` | RQBBOX OS 1280×320 banner |
+| Icon Set (60 SVGs) | `assets/icons/` | Full icon library for all features |
+
+---
+
 ## 📄 License
 
 MIT License — © 2026 RhysTech
@@ -279,6 +314,8 @@ RQBBOX® is a trademark of RhysTech. All rights reserved.
 
 <p align="center">
   <img src="assets/logo.svg" alt="RQBBOX MODE" width="80" height="80">
+  &nbsp;&nbsp;&nbsp;
+  <img src="assets/rqbbox-os-logo.svg" alt="RQBBOX OS" width="80" height="80">
   <br>
-  <em>🎮 Plug Into Gaming. ®</em>
+  <em>🎮 Plug Into Gaming. ® — ⚡ Boot Into Gaming.</em>
 </p>

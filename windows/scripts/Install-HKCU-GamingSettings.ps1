@@ -48,10 +48,17 @@ Set-RegistryValues -Path $gameBarPath -Values @{
     'RQBBOXModeIntegration' = 1
 }
 
-$sourcePath = 'HKCU:\Software\Microsoft\GameBar\ContentSources\RQBBOX'
-Set-RegistryValues -Path $sourcePath -Values @{
+$sourcePathRQBBOX = 'HKCU:\Software\Microsoft\GameBar\ContentSources\RQBBOX'
+Set-RegistryValues -Path $sourcePathRQBBOX -Values @{
     'Enabled' = 1
     'Name' = 'RQBBOX MODE'
+    'Type' = 'Gaming'
+}
+
+$sourcePathXBOX = 'HKCU:\Software\Microsoft\GameBar\ContentSources\XBOX'
+Set-RegistryValues -Path $sourcePathXBOX -Values @{
+    'Enabled' = 1
+    'Name' = 'XBOX MODE'
     'Type' = 'Gaming'
 }
 
@@ -115,5 +122,5 @@ if (-not (Test-Path $capturesPath)) {
     New-Item -ItemType Directory -Path $capturesPath -Force | Out-Null
 }
 
-Write-Host "RQBBOX MODE user-level Gaming Settings installed under HKCU." -ForegroundColor Green
+Write-Host "RQBBOX MODE & XBOX MODE user-level Gaming Settings installed under HKCU." -ForegroundColor Green
 Write-Host "Capture folder created at: $capturesPath" -ForegroundColor Green

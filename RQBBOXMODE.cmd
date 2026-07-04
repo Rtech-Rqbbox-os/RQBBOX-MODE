@@ -27,8 +27,8 @@ if %errorlevel%==0 (
     goto :open
 )
 
-echo [1/3] Starting RQBBOX MODE server...
-start /B node "%RQBBOX_ROOT%server.js" >nul 2>&1
+echo [1/3] Starting RQBBOX MODE launcher...
+start /B node "%RQBBOX_ROOT%rqbbox-launcher.js" --fullscreen >nul 2>&1
 
 REM Wait for server to be ready
 set retries=0
@@ -45,9 +45,7 @@ exit /b 1
 echo [2/3] Server initialized successfully
 
 :open
-echo [3/3] Launching Xbox Dashboard...
-start "" "%RQBBOX_URL%"
-
+echo [3/3] Launching Xbox-style dashboard in fullscreen...
 echo.
 echo RQBBOX MODE is running!
 echo.

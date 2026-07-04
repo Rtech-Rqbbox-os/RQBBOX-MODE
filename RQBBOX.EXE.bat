@@ -24,7 +24,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-REM Check for server.js
+REM Check for launcher and server
 if not exist "server.js" (
     echo [ERROR] server.js not found
     echo Please make sure all files are in the same directory
@@ -33,14 +33,21 @@ if not exist "server.js" (
     exit /b 1
 )
 
-echo [1/3] Starting RQBBOX MODE server...
-start /b node server.js >nul 2>&1
+if not exist "rqbbox-launcher.js" (
+    echo [ERROR] rqbbox-launcher.js not found
+    echo Please make sure all files are in the same directory
+    echo.
+    pause
+    exit /b 1
+)
 
-echo [2/3] Waiting for server to initialize...
+echo [1/3] Starting RQBBOX MODE launcher...
+start /b node rqbbox-launcher.js --fullscreen >nul 2>&1
+
+echo [2/3] Waiting for RQBBOX MODE to initialize...
 timeout /t 2 /nobreak >nul
 
-echo [3/3] Launching Xbox Dashboard...
-start http://localhost:19778/
+echo [3/3] Launching Xbox-style dashboard in fullscreen...
 
 echo.
 echo RQBBOX MODE is now running!
