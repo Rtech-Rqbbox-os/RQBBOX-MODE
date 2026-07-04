@@ -39,9 +39,8 @@
     "url": "https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE/issues"
   },
   "homepage": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE",
-  "dependencies": {},
   "devDependencies": {
-    "pkg": "^5.8.0"
+    "pkg": "^5.8.1"
   },
   "engines": {
     "node": ">=16.0.0"

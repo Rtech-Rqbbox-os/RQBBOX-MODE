@@ -1,85 +1,65 @@
 {
-  "ok": true,
-  "data": {
-    "ok": true,
-    "data": {
-      "ok": true,
-      "data": {
-        "display": {
-          "rqbboxMode": true,
-          "performanceMode": false,
-          "theme": "default",
-          "background": "dynamic",
-          "uiScale": 100,
-          "showFps": false,
-          "showClock": true,
-          "showHints": true,
-          "backgroundBlur": 20,
-          "transparency": 85
-        },
-        "audio": {
-          "masterVolume": 80,
-          "sfxVolume": 100,
-          "musicVolume": 70,
-          "uiSounds": true,
-          "controllerVibration": true
-        },
-        "controller": {
-          "enabled": true,
-          "vibration": true,
-          "invertY": false,
-          "sensitivity": 50,
-          "layout": "xbox",
-          "deadzone": 15
-        },
-        "performance": {
-          "mode": "balanced",
-          "freeUpMemory": true,
-          "reduceBgProcesses": true,
-          "gameMode": true,
-          "hardwareAcceleration": true,
-          "maxFps": 60,
-          "vSync": true,
-          "gpuPriority": "high"
-        },
-        "quickResume": {
-          "enabled": true,
-          "maxSlots": 3,
-          "autoSave": true
-        },
-        "capture": {
-          "screenshotFormat": "png",
-          "screenshotQuality": 90,
-          "gameDvrEnabled": true,
-          "gameDvrLength": 30,
-          "gameDvrQuality": "high",
-          "autoCapture": false
-        },
-        "social": {
-          "onlineStatus": "online",
-          "showGameActivity": true,
-          "allowFriendRequests": true,
-          "broadcastPresence": true
-        },
-        "startup": {
-          "bootToMode": true,
-          "showBootAnimation": true,
-          "autoLaunchLastGame": false,
-          "checkUpdates": true
-        }
-      },
-      "theme": "default",
-      "audio": {
-        "muted": false
-      }
-    },
+  "display": {
+    "rqbboxMode": true,
+    "performanceMode": false,
     "theme": "default",
-    "audio": {
-      "muted": false
-    }
+    "background": "dynamic",
+    "uiScale": 100,
+    "showFps": false,
+    "showClock": true,
+    "showHints": true,
+    "backgroundBlur": 20,
+    "transparency": 85
   },
-  "theme": "default",
   "audio": {
-    "muted": true
+    "masterVolume": 80,
+    "sfxVolume": 100,
+    "musicVolume": 70,
+    "uiSounds": true,
+    "controllerVibration": true,
+    "muted": false
+  },
+  "controller": {
+    "enabled": true,
+    "vibration": true,
+    "invertY": false,
+    "sensitivity": 50,
+    "layout": "xbox",
+    "deadzone": 15
+  },
+  "performance": {
+    "mode": "balanced",
+    "freeUpMemory": true,
+    "reduceBgProcesses": true,
+    "gameMode": true,
+    "hardwareAcceleration": true,
+    "maxFps": 60,
+    "vSync": true,
+    "gpuPriority": "high"
+  },
+  "quickResume": {
+    "enabled": true,
+    "maxSlots": 3,
+    "autoSave": true
+  },
+  "capture": {
+    "screenshotFormat": "png",
+    "screenshotQuality": 90,
+    "gameDvrEnabled": true,
+    "gameDvrLength": 30,
+    "gameDvrQuality": "high",
+    "autoCapture": false
+  },
+  "social": {
+    "onlineStatus": "online",
+    "showGameActivity": true,
+    "allowFriendRequests": true,
+    "broadcastPresence": true
+  },
+  "startup": {
+    "bootToMode": true,
+    "showBootAnimation": true,
+    "autoLaunchLastGame": false,
+    "checkUpdates": true
   }
 }

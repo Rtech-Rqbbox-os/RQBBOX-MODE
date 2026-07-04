@@ -5,304 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RQBBOX MODE — Launcher</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="apple-touch-icon" href="assets/logo.svg">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#107c10">
-  <meta name="description" content="RQBBOX MODE - Console Gaming Experience for PC">
-  <meta property="og:title" content="RQBBOX MODE">
-  <meta property="og:description" content="Console Gaming Experience for PC">
-  <meta property="og:image" content="assets/social-preview.svg">
+  <meta name="description" content="RQBBOX MODE - Xbox Console Gaming Experience for PC">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
     :root {
       --accent: #107c10;
-      --accent-light: #1db954;
-      --bg: #0a0b0f;
-      --bg-card: rgba(255,255,255,0.03);
-      --border: rgba(255,255,255,0.06);
+      --bg: #0a0a0a;
+      --text: #fff;
+      --text-secondary: rgba(255,255,255,0.6);
+      --border: rgba(255,255,255,0.08);
     }
-    
-    body {
-      background: var(--bg);
-      color: #f0f4ff;
-      font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      overflow: hidden;
-      position: relative;
-    }
-    
-    /* Animated background orbs */
+    html, body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
     .bg-orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.15;
-      animation: float 8s ease-in-out infinite;
+      position: fixed; border-radius: 50%; filter: blur(120px); opacity: 0.06; pointer-events: none;
+      animation: float 20s ease-in-out infinite;
     }
-    .bg-orb-1 { width: 400px; height: 400px; background: #107c10; top: -100px; left: -100px; }
-    .bg-orb-2 { width: 300px; height: 300px; background: #1db954; bottom: -80px; right: -80px; animation-delay: -4s; }
-    .bg-orb-3 { width: 200px; height: 200px; background: #0a5c0a; top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -2s; }
-    
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(20px, -20px) scale(1.05); }
-    }
-    
-    /* Grid pattern */
+    .bg-orb-1 { width: 500px; height: 500px; background: var(--accent); top: -150px; left: -150px; }
+    .bg-orb-2 { width: 400px; height: 400px; background: #ff6b35; bottom: -100px; right: -100px; animation-delay: -7s; }
+    .bg-orb-3 { width: 300px; height: 300px; background: #0066cc; top: 40%; left: 60%; animation-delay: -14s; }
+    @keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(40px, -40px); } }
+
     .grid-pattern {
-      position: fixed;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
+      position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 60px 60px; pointer-events: none; z-index: 0;
     }
-    
-    .launcher {
-      text-align: center;
-      max-width: 700px;
-      padding: 48px;
-      position: relative;
-      z-index: 1;
-    }
-    
-    /* Logo container */
-    .logo-container {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 24px;
-    }
-    .logo-ring {
-      position: absolute;
-      inset: -20px;
-      border: 1px solid rgba(16,124,16,0.2);
-      border-radius: 50%;
-      animation: pulse-ring 3s ease-in-out infinite;
-    }
-    .logo-ring-2 {
-      position: absolute;
-      inset: -40px;
-      border: 1px solid rgba(16,124,16,0.1);
-      border-radius: 50%;
-      animation: pulse-ring 3s ease-in-out infinite 0.5s;
-    }
-    @keyframes pulse-ring {
-      0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(1.02); }
-    }
-    
-    .logo-img {
-      width: 140px;
-      height: 140px;
-      animation: logo-float 4s ease-in-out infinite;
-    }
-    @keyframes logo-float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-    
-    .logo-text {
-      font-size: 3.5rem;
-      font-weight: 800;
-      letter-spacing: 8px;
-      background: linear-gradient(135deg, #fff 0%, var(--accent-light) 50%, #fff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 4px;
-    }
-    
-    .subtitle {
-      font-size: 1rem;
-      font-weight: 300;
-      letter-spacing: 20px;
-      color: rgba(255,255,255,0.4);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    
-    .tagline {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.25);
-      letter-spacing: 6px;
-      margin-bottom: 40px;
-    }
-    
-    /* Buttons */
-    .btn-group {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 16px 40px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
-      box-shadow: 0 4px 20px rgba(16,124,16,0.3);
-    }
-    .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(16,124,16,0.4); background: var(--accent-light); }
-    .btn:active { transform: scale(0.97); }
-    .btn-icon { font-size: 1.2rem; }
-    
-    .btn-outline {
-      background: transparent;
-      color: rgba(255,255,255,0.7);
-      border: 1px solid var(--border);
-      box-shadow: none;
-    }
-    .btn-outline:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
-    
-    /* Feature pills */
-    .pills {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 48px;
-    }
+
+    .launcher { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding: 40px 32px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+
+    .logo-container { position: relative; margin-bottom: 24px; }
+    .logo-ring { position: absolute; inset: -12px; border-radius: 50%; border: 1px solid rgba(16,124,16,0.15); animation: spin 30s linear infinite; }
+    .logo-ring-2 { position: absolute; inset: -24px; border-radius: 50%; border: 1px dashed rgba(16,124,16,0.08); animation: spin 45s linear infinite reverse; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .logo-img { width: 96px; height: 96px; border-radius: 24px; position: relative; z-index: 1; }
+
+    .logo-text { font-size: 3rem; font-weight: 200; letter-spacing: 16px; text-transform: uppercase; color: var(--text); }
+    .subtitle { font-size: 0.95rem; letter-spacing: 12px; color: var(--accent); text-transform: uppercase; margin-top: 2px; }
+    .tagline { font-size: 0.75rem; letter-spacing: 4px; color: var(--text-secondary); margin-top: 16px; }
+
+    .pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 28px; }
     .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.5);
+      padding: 6px 14px; border-radius: 20px; background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border); font-size: 0.75rem; color: var(--text-secondary);
+      display: flex; align-items: center; gap: 5px;
     }
-    .pill-icon { font-size: 0.9rem; }
-    
-    /* Features grid */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 32px;
+    .pill-icon { font-size: 0.85rem; }
+
+    .btn-group { display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap; justify-content: center; }
+    .btn {
+      padding: 14px 36px; border-radius: 4px; font-size: 0.9rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex;
+      align-items: center; gap: 8px; font-family: inherit; letter-spacing: 1px; text-transform: uppercase;
     }
-    .feature {
-      padding: 20px 12px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      transition: all 0.2s;
-    }
-    .feature:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(16,124,16,0.3);
-      transform: translateY(-2px);
-    }
-    .feature-icon {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      display: block;
-    }
-    .feature-title {
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .feature-desc {
-      font-size: 0.65rem;
-      color: rgba(255,255,255,0.3);
-      line-height: 1.4;
-    }
-    
-    /* Game icons row */
-    .games-row {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      margin: 32px 0;
-    }
-    .game-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      transition: all 0.2s;
-    }
-    .game-icon:hover {
-      border-color: var(--accent);
-      transform: scale(1.1);
-    }
-    .game-icon img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    /* Divider */
-    .divider {
-      width: 200px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      margin: 32px auto;
-    }
-    
-    /* Footer */
-    .footer {
-      margin-top: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
-    }
-    .footer-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.2);
-    }
+    .btn { background: var(--accent); color: #fff; border: none; }
+    .btn:hover { background: #1db954; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(16,124,16,0.3); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { border-color: var(--text-secondary); background: rgba(255,255,255,0.03); transform: translateY(-2px); }
+    .btn-icon { font-size: 1rem; }
+
+    .divider { width: 200px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); margin: 32px auto; }
+
+    .games-row { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
+    .game-icon { width: 48px; height: 48px; border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.03); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; }
+    .game-icon img { width: 100%; height: 100%; object-fit: cover; }
+
+    .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 28px; width: 100%; }
+    .feature { padding: 16px 8px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); transition: all 0.2s; cursor: default; }
+    .feature:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.12); transform: translateY(-2px); }
+    .feature-icon { font-size: 1.5rem; display: block; margin-bottom: 8px; }
+    .feature-title { font-size: 0.8rem; font-weight: 500; margin-bottom: 2px; }
+    .feature-desc { font-size: 0.65rem; color: var(--text-secondary); }
+
+    .footer { display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 32px; flex-wrap: wrap; }
+    .footer-item { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; color: rgba(255,255,255,0.2); }
     .footer-icon { font-size: 0.8rem; }
-    
-    .version {
-      position: fixed;
-      bottom: 16px;
-      font-size: 0.6rem;
-      color: rgba(255,255,255,0.1);
-      letter-spacing: 1px;
+
+    .version { margin-top: 24px; font-size: 0.6rem; color: rgba(255,255,255,0.1); letter-spacing: 1px; }
+
+    @media (max-width: 600px) {
+      .features { grid-template-columns: repeat(2, 1fr); }
+      .logo-text { font-size: 2rem; letter-spacing: 10px; }
+      .btn-group { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
 <body>
-  <!-- Background -->
   <div class="bg-orb bg-orb-1"></div>
   <div class="bg-orb bg-orb-2"></div>
   <div class="bg-orb bg-orb-3"></div>
   <div class="grid-pattern"></div>
 
   <div class="launcher">
-    <!-- Logo with rings -->
     <div class="logo-container">
       <div class="logo-ring"></div>
       <div class="logo-ring-2"></div>
       <img src="assets/logo.svg" alt="RQBBOX MODE" class="logo-img">
     </div>
-    
+
     <div class="logo-text">RQBBOX</div>
     <div class="subtitle">Mode</div>
-    <div class="tagline">Plug Into Gaming. ®</div>
-    
-    <!-- Feature pills -->
+    <div class="tagline">Plug Into Gaming. &reg;</div>
+
     <div class="pills">
       <span class="pill"><span class="pill-icon">🎮</span> Controller Nav</span>
       <span class="pill"><span class="pill-icon">⚡</span> Game Mode</span>
@@ -311,8 +118,7 @@
       <span class="pill"><span class="pill-icon">📷</span> Game DVR</span>
       <span class="pill"><span class="pill-icon">☁️</span> Cloud Gaming</span>
     </div>
-    
-    <!-- Buttons -->
+
     <div class="btn-group">
       <a href="/dashboard" class="btn">
         <span class="btn-icon">🎮</span>
@@ -323,10 +129,9 @@
         Settings
       </a>
     </div>
-    
+
     <div class="divider"></div>
-    
-    <!-- Game icons -->
+
     <div class="games-row">
       <div class="game-icon"><img src="games/neon-drift-racing/icon.svg" alt="Neon Drift Racing"></div>
       <div class="game-icon"><img src="games/pixel-quest/icon.svg" alt="Pixel Quest"></div>
@@ -335,8 +140,7 @@
       <div class="game-icon"><img src="games/retro-zone/icon.svg" alt="Retro Zone"></div>
       <div class="game-icon"><img src="games/cube-runner-3d/icon.svg" alt="Cube Runner 3D"></div>
     </div>
-    
-    <!-- Features grid -->
+
     <div class="features">
       <div class="feature">
         <span class="feature-icon">🖥️</span>
@@ -378,49 +182,16 @@
         <div class="feature-title">4 Themes</div>
         <div class="feature-desc">Dark, Neon, Xbox</div>
       </div>
-      <div class="feature">
-        <span class="feature-icon">☁️</span>
-        <div class="feature-title">Cloud Gaming</div>
-        <div class="feature-desc">Xbox Cloud</div>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">🔒</span>
-        <div class="feature-title">Parental Controls</div>
-        <div class="feature-desc">Play time limits</div>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">🚀</span>
-        <div class="feature-title">Auto-Start</div>
-        <div class="feature-desc">Boot to gaming</div>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">🎯</span>
-        <div class="feature-title">6 Games</div>
-        <div class="feature-desc">Built-in HTML5</div>
-      </div>
     </div>
-    
-    <!-- Footer -->
+
     <div class="footer">
-      <div class="footer-item">
-        <span class="footer-icon">📦</span>
-        v1.0.0
-      </div>
-      <div class="footer-item">
-        <span class="footer-icon">💻</span>
-        Windows 10/11
-      </div>
-      <div class="footer-item">
-        <span class="footer-icon">📄</span>
-        MIT License
-      </div>
-      <div class="footer-item">
-        <span class="footer-icon">🐙</span>
-        GitHub
-      </div>
+      <div class="footer-item"><span class="footer-icon">📦</span>v1.0.0</div>
+      <div class="footer-item"><span class="footer-icon">💻</span>Windows 10/11</div>
+      <div class="footer-item"><span class="footer-icon">📄</span>MIT License</div>
+      <div class="footer-item"><span class="footer-icon">🐙</span>GitHub</div>
     </div>
-    
-    <div class="version">RQBBOX MODE v1.0.0 — © 2026 RhysTech — Plug Into Gaming ®</div>
+
+    <div class="version">RQBBOX MODE v1.0.0 — &copy; 2026 RhysTech — Plug Into Gaming &reg;</div>
   </div>
 </body>
 </html>

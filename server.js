@@ -369,6 +369,7 @@ const server = http.createServer(async (req, res) => {
         res.writeHead(200, {
           'Content-Type': 'text/html; charset=utf-8',
           'Content-Length': stat.size,
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Access-Control-Allow-Origin': '*',
         });
         fs.createReadStream(wsPath).pipe(res);
@@ -380,8 +381,8 @@ const server = http.createServer(async (req, res) => {
     else {
       let rel = pathname.replace(/^\//, '');
 
-      // Root paths: serve dashboard
-      if (rel === '' || rel === '/') rel = 'dashboard.html';
+      // Root paths: serve index.html (launcher)
+      if (rel === '' || rel === '/') rel = 'index.html';
       // /dashboard → dashboard.html
       if (rel === 'dashboard') rel = 'dashboard.html';
       // /dashboard.html already fine
@@ -402,7 +403,7 @@ const server = http.createServer(async (req, res) => {
           res.writeHead(200, {
             'Content-Type': 'text/html; charset=utf-8',
             'Content-Length': stat.size,
-            'Cache-Control': 'public, max-age=300',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Access-Control-Allow-Origin': '*',
           });
           fs.createReadStream(indexPath).pipe(res);
@@ -415,10 +416,12 @@ const server = http.createServer(async (req, res) => {
       }
 
       const stat = fs.statSync(resolvedPath);
+      const ext = path.extname(resolvedPath).toLowerCase();
+      const cacheControl = ['.html', '.htm'].includes(ext) ? 'no-cache, no-store, must-revalidate' : 'public, max-age=600';
       res.writeHead(200, {
         'Content-Type': mime(resolvedPath),
         'Content-Length': stat.size,
-        'Cache-Control': 'public, max-age=600',
+        'Cache-Control': cacheControl,
         'Access-Control-Allow-Origin': '*',
       });
       fs.createReadStream(resolvedPath).pipe(res);
