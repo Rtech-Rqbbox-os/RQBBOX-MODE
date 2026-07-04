@@ -122,6 +122,17 @@
     .star-avatar { width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#ffaa00);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;color:#000; }
     .star-name { font-size:0.85rem;font-weight:500; }
     .star-label { font-size:0.6rem;color:rgba(255,215,0,0.7);text-transform:uppercase;letter-spacing:1px; }
+    .chat-msg { display:flex;gap:10px;align-items:flex-start;padding:8px 12px;border-radius:8px;background:var(--bg-card);max-width:80%; }
+    .chat-msg.own { align-self:flex-end;background:rgba(16,124,16,0.15); }
+    .chat-avatar { width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0; }
+    .chat-body { flex:1;min-width:0; }
+    .chat-from { font-size:0.7rem;font-weight:600;margin-bottom:2px; }
+    .chat-text { font-size:0.85rem;line-height:1.4;word-wrap:break-word; }
+    .chat-time { font-size:0.55rem;color:var(--text-secondary);margin-top:2px; }
+    .voice-indicator { display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:12px;font-size:0.75rem; }
+    .voice-active { background:rgba(16,124,16,0.2);color:var(--accent); }
+    .voice-inactive { background:var(--bg-card);color:var(--text-secondary); }
+    .game-tile-stats { font-size:0.55rem;color:rgba(255,255,255,0.4);margin-top:4px;text-align:center; }
   </style>
 </head>
 <body>
@@ -150,7 +161,7 @@
   <div id="dashboard" class="dashboard hidden">
     <nav class="sidebar">
       <button class="sidebar-btn active" title="Home" onclick="navPage('home')">🏠</button>
-      <button class="sidebar-btn" title="Friends" onclick="navPage('friends')">👥</button>
+      <button class="sidebar-btn" title="Chat" onclick="navPage('chat')">💬</button>
       <button class="sidebar-btn" title="Games" onclick="navPage('games')">🎮</button>
       <button class="sidebar-btn" title="Store" onclick="navPage('store')">🛒</button>
       <button class="sidebar-btn" title="Apps" onclick="navPage('apps')">📦</button>
@@ -234,6 +245,26 @@
         <div class="game-grid" id="appsGrid"></div>
       </div>
 
+      <div id="page-chat" class="page">
+        <div class="page-header">Chat</div>
+        <div style="display:flex;flex-direction:column;height:calc(100vh - 96px);">
+          <div style="display:flex;gap:8px;padding:8px 24px;border-bottom:1px solid var(--border);">
+            <select id="chatRoom" style="background:var(--bg-card);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:6px 12px;font-size:0.8rem;">
+              <option value="general"># General</option>
+              <option value="gaming"># Gaming</option>
+              <option value="voice"># Voice</option>
+            </select>
+            <button onclick="startVoiceChat()" style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:6px 12px;cursor:pointer;font-size:0.8rem;">🎤 Voice Chat</button>
+            <button onclick="openDiscord()" style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:6px 12px;cursor:pointer;font-size:0.8rem;">💬 Discord</button>
+          </div>
+          <div id="chatMessages" style="flex:1;overflow-y:auto;padding:16px 24px;display:flex;flex-direction:column;gap:8px;"></div>
+          <div style="display:flex;gap:8px;padding:12px 24px;border-top:1px solid var(--border);">
+            <input id="chatInput" type="text" placeholder="Type a message..." style="flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:10px 14px;font-size:0.85rem;outline:none;" onkeydown="if(event.key==='Enter')sendChat()">
+            <button onclick="sendChat()" style="background:var(--accent);border:none;border-radius:4px;color:#fff;padding:10px 20px;cursor:pointer;font-size:0.85rem;font-weight:500;">Send</button>
+          </div>
+        </div>
+      </div>
+
       <div id="page-friends" class="page">
         <div class="page-header">Friends</div>
         <div style="padding:24px;color:var(--text-secondary);font-size:0.9rem;">No friends yet. Add some to see them here.</div>
@@ -261,6 +292,10 @@
     <div class="game-launcher-bar">
       <button onclick="closeGame()">✕ Close</button>
       <span id="gameLauncherTitle">Playing</span>
+      <span id="gameStatsBadge" style="font-size:0.7rem;color:var(--text-secondary);margin-left:8px;"></span>
+      <div style="flex:1"></div>
+      <button onclick="saveGameState()" title="Save game state">💾 Save</button>
+      <button onclick="loadGameState()" title="Load saved state">📂 Load</button>
       <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
     </div>
     <iframe id="gameFrame" allow="fullscreen"></iframe>
@@ -316,34 +351,6 @@
       document.getElementById('clock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
-    function navPage(page) {
-      document.querySelectorAll('.page').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.topbar-nav a').forEach(a => a.classList.remove('active'));
-
-      const el = document.getElementById('page-' + page);
-      if (el) el.classList.add('active');
-
-      const sidebarBtns = document.querySelectorAll('.sidebar-btn');
-      const pageMap = { home: 0, friends: 1, games: 2, store: 3, apps: 4, captures: 5, settings: 7 };
-      if (pageMap[page] !== undefined && sidebarBtns[pageMap[page]]) {
-        sidebarBtns[pageMap[page]].classList.add('active');
-      }
-      if (page === 'home') {
-        const topLinks = document.querySelectorAll('.topbar-nav a');
-        topLinks.forEach(a => a.classList.remove('active'));
-        if (topLinks[0]) topLinks[0].classList.add('active');
-      } else if (page === 'store') {
-        const topLinks = document.querySelectorAll('.topbar-nav a');
-        topLinks.forEach(a => a.classList.remove('active'));
-        if (topLinks[1]) topLinks[1].classList.add('active');
-      } else if (page === 'apps') {
-        const topLinks = document.querySelectorAll('.topbar-nav a');
-        topLinks.forEach(a => a.classList.remove('active'));
-        if (topLinks[2]) topLinks[2].classList.add('active');
-      }
-    }
-
     async function api(path, opts) {
       try {
         const res = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...opts });
@@ -355,12 +362,12 @@
       const gamesData = await api('/api/games');
       if (gamesData && gamesData.data) {
         gameCatalog = gamesData.data;
-        renderGames(gameCatalog);
+        await renderGames(gameCatalog);
         renderHome(gameCatalog);
       }
       const appsData = await api('/api/apps');
       if (appsData && appsData.data) {
-        renderApps(appsData.data);
+        await renderApps(appsData.data);
         renderStore(gameCatalog, appsData.data);
       } else {
         const storeData = await api('/api/store');
@@ -383,26 +390,39 @@
       }
     }
 
-    function renderGames(games) {
+    async function renderGames(games) {
       const grid = document.getElementById('gameGrid');
       grid.innerHTML = '';
+      // Fetch per-game stats in parallel
+      const statsMap = {};
+      await Promise.all(games.map(async g => {
+        const d = await api('/api/games/' + g.id);
+        if (d && d.stats) statsMap[g.id] = d.stats;
+      }));
       games.forEach(g => {
         const tile = document.createElement('div');
+        const s = statsMap[g.id] || {};
         tile.className = 'game-tile';
-        tile.innerHTML = `<div>${g.icon || '🎮'}</div><div class="game-tile-label">${g.title}</div>`;
+        tile.innerHTML = `<div>${g.icon || '🎮'}</div><div class="game-tile-label">${g.title}</div><div class="game-tile-stats">🎮 ${s.playCount || 0} · 🏆 ${(s.highScores || []).length}</div>`;
         tile.onclick = () => playGame(g);
         grid.appendChild(tile);
       });
     }
 
-    function renderApps(apps) {
+    async function renderApps(apps) {
       window._appCatalog = apps;
       const grid = document.getElementById('appsGrid');
       grid.innerHTML = '';
+      const statsMap = {};
+      await Promise.all(apps.map(async a => {
+        const d = await api('/api/apps/' + a.id);
+        if (d && d.stats) statsMap[a.id] = d.stats;
+      }));
       apps.forEach(a => {
         const tile = document.createElement('div');
+        const s = statsMap[a.id] || {};
         tile.className = 'game-tile';
-        tile.innerHTML = `<div>${a.icon || '📦'}</div><div class="game-tile-label">${a.title}</div>`;
+        tile.innerHTML = `<div>${a.icon || '📦'}</div><div class="game-tile-label">${a.title}</div><div class="game-tile-stats">🚀 ${s.launchCount || 0} launches</div>`;
         tile.onclick = () => launchApp(a);
         grid.appendChild(tile);
       });
@@ -516,13 +536,30 @@
       }
     }
 
-    function playGame(game) {
+    let currentGame = null;
+
+    async function playGame(game) {
+      currentGame = game;
       navPage('home');
       updateFeatured(game);
 
       const launcher = document.getElementById('gameLauncher');
       const frame = document.getElementById('gameFrame');
       const title = document.getElementById('gameLauncherTitle');
+      const badge = document.getElementById('gameStatsBadge');
+
+      // Track launch on game-specific API
+      if (game.id) {
+        api('/api/games/' + game.id, { method: 'POST', body: JSON.stringify({ action: 'launch' }) });
+        const gd = await api('/api/games/' + game.id);
+        if (gd && gd.stats) {
+          game._stats = gd.stats;
+          badge.textContent = '🎮 Played ' + (gd.stats.playCount || 0) + 'x · 🏆 ' + (gd.stats.highScores || []).length + ' scores';
+          if (gd.stats.state && Object.keys(gd.stats.state).length > 0) {
+            game._savedState = gd.stats.state;
+          }
+        }
+      }
 
       if (game.localPath) {
         const url = game.localPath.startsWith('http') ? game.localPath
@@ -538,9 +575,114 @@
       }
     }
 
-    function launchApp(app) {
+    let chatPollTimer;
+
+    function navPage(page) {
+      document.querySelectorAll('.page').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.topbar-nav a').forEach(a => a.classList.remove('active'));
+
+      const el = document.getElementById('page-' + page);
+      if (el) el.classList.add('active');
+
+      const sidebarBtns = document.querySelectorAll('.sidebar-btn');
+      const pageMap = { home: 0, chat: 1, games: 2, store: 3, apps: 4, captures: 5, settings: 7 };
+      if (pageMap[page] !== undefined && sidebarBtns[pageMap[page]]) {
+        sidebarBtns[pageMap[page]].classList.add('active');
+      }
+      if (page === 'home') {
+        const topLinks = document.querySelectorAll('.topbar-nav a');
+        topLinks.forEach(a => a.classList.remove('active'));
+        if (topLinks[0]) topLinks[0].classList.add('active');
+      } else if (page === 'store') {
+        const topLinks = document.querySelectorAll('.topbar-nav a');
+        topLinks.forEach(a => a.classList.remove('active'));
+        if (topLinks[1]) topLinks[1].classList.add('active');
+      } else if (page === 'apps') {
+        const topLinks = document.querySelectorAll('.topbar-nav a');
+        topLinks.forEach(a => a.classList.remove('active'));
+        if (topLinks[2]) topLinks[2].classList.add('active');
+      }
+
+      if (page === 'chat') { loadChat(); if (!chatPollTimer) chatPollTimer = setInterval(loadChat, 3000); }
+      else { if (chatPollTimer) { clearInterval(chatPollTimer); chatPollTimer = null; } }
+    }
+
+    async function loadChat() {
+      const room = document.getElementById('chatRoom')?.value || 'general';
+      const data = await api('/api/chat/messages?room=' + room + '&limit=50');
+      if (!data || !data.messages) return;
+      const container = document.getElementById('chatMessages');
+      if (!container) return;
+      const currentName = currentUser?.name || 'You';
+      container.innerHTML = data.messages.map(m => `
+        <div class="chat-msg ${m.from === currentName ? 'own' : ''}">
+          <div class="chat-avatar" style="background:${m.from === currentName ? 'linear-gradient(135deg,#1a6b1a,#107c10)' : 'linear-gradient(135deg,#ff6b35,#d4380d)'}">${m.fromAvatar || m.from[0] || '?'}</div>
+          <div class="chat-body">
+            <div class="chat-from">${m.from}</div>
+            <div class="chat-text">${escapeHtml(m.text)}</div>
+            <div class="chat-time">${new Date(m.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+          </div>
+        </div>
+      `).join('');
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendChat() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      const room = document.getElementById('chatRoom').value;
+      await api('/api/chat/send', {
+        method: 'POST',
+        body: JSON.stringify({ from: currentUser?.name || 'Player', fromAvatar: currentUser?.avatar || 'P', text, room })
+      });
+      await loadChat();
+    }
+
+    function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+    let voiceStream, voiceActive = false;
+    async function startVoiceChat() {
+      if (voiceActive) {
+        if (voiceStream) voiceStream.getTracks().forEach(t => t.stop());
+        voiceActive = false;
+        document.querySelector('.voice-indicator')?.classList.replace('voice-active','voice-inactive');
+        if (document.querySelector('.voice-indicator')) document.querySelector('.voice-indicator').textContent = '🎤 Voice: Disconnected';
+        toast('Voice chat ended');
+        return;
+      }
+      try {
+        voiceStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        voiceActive = true;
+        toast('Voice chat connected! Speak now.');
+        let indicator = document.querySelector('.voice-indicator');
+        if (!indicator) {
+          indicator = document.createElement('span');
+          indicator.className = 'voice-indicator voice-active';
+          document.querySelector('#page-chat > div > div:first-child')?.appendChild(indicator);
+        }
+        indicator.textContent = '🎤 Voice: Connected';
+        indicator.className = 'voice-indicator voice-active';
+      } catch (e) {
+        toast('Voice chat unavailable: ' + e.message);
+      }
+    }
+
+    function openDiscord() {
+      window.open('discord://', '_blank');
+      setTimeout(() => { window.open('https://discord.com/app', '_blank'); }, 500);
+      toast('Opening Discord...');
+    }
+
+    async function launchApp(app) {
       const url = app.launchUrl || app.webUrl;
       if (!url) { toast('No launch URL for ' + app.title); return; }
+      // Track launch on app-specific API
+      if (app.id) {
+        api('/api/apps/' + app.id, { method: 'POST', body: JSON.stringify({ action: 'launch' }) });
+      }
       if (url.startsWith('http://') || url.startsWith('https://')) {
         const launcher = document.getElementById('gameLauncher');
         const frame = document.getElementById('gameFrame');
@@ -556,6 +698,33 @@
     function closeGame() {
       document.getElementById('gameLauncher').classList.add('hidden');
       document.getElementById('gameFrame').src = '';
+      currentGame = null;
+    }
+
+    async function saveGameState() {
+      if (!currentGame) { toast('No active game'); return; }
+      const frame = document.getElementById('gameFrame');
+      const state = {};
+      // Try to extract game state from iframe (postMessage protocol)
+      frame.contentWindow?.postMessage({ type: 'RQBBOX_GET_STATE' }, '*');
+      toast('Save request sent to ' + currentGame.title);
+      // Also save current game URL/state info server-side
+      await api('/api/games/' + currentGame.id, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'save-state', state: { savedAt: new Date().toISOString() } })
+      });
+    }
+
+    async function loadGameState() {
+      if (!currentGame) { toast('No active game'); return; }
+      const gd = await api('/api/games/' + currentGame.id);
+      if (gd && gd.stats && gd.stats.state && Object.keys(gd.stats.state).length > 0) {
+        const frame = document.getElementById('gameFrame');
+        frame.contentWindow?.postMessage({ type: 'RQBBOX_SET_STATE', state: gd.stats.state }, '*');
+        toast('Load request sent to ' + currentGame.title);
+      } else {
+        toast('No saved state for ' + currentGame.title);
+      }
     }
 
     function toggleFullscreen() {

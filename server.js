@@ -129,10 +129,61 @@ const server = http.createServer(async (req, res) => {
         send(200, JSON.stringify({ ok: true, games: [], total: 0, error: e.message }));
       }
     }
+    // API: Get individual game
+    else if (pathname.startsWith('/api/games/') && pathname !== '/api/games' && pathname !== '/api/games/scan') {
+      const gameId = pathname.split('/')[3];
+      const catalog = readJson('games/catalog.json') || { games: [] };
+      const game = (catalog.games || []).find(g => g.id === gameId);
+      if (!game) { send(404, JSON.stringify({ ok: false, error: 'Game not found' })); return; }
+      const profiles = readJson('profiles.json') || {};
+      if (!profiles.gameData) profiles.gameData = {};
+      if (!profiles.gameData[gameId]) profiles.gameData[gameId] = { playCount: 0, highScores: [], sessions: [], state: {} };
+      if (method === 'POST') {
+        const b = await body(req);
+        if (b.action === 'save-score') {
+          profiles.gameData[gameId].highScores.push({ score: b.score, player: b.player || 'Anonymous', date: new Date().toISOString() });
+        }
+        if (b.action === 'save-state') {
+          profiles.gameData[gameId].state = b.state || {};
+        }
+        if (b.action === 'save-session') {
+          profiles.gameData[gameId].sessions.push({ duration: b.duration || 0, date: new Date().toISOString() });
+        }
+        if (b.action === 'launch') {
+          profiles.gameData[gameId].playCount = (profiles.gameData[gameId].playCount || 0) + 1;
+        }
+        writeJson('profiles.json', profiles);
+      }
+      // Read fresh after potential write
+      const fresh = readJson('profiles.json') || {};
+      const gd = (fresh.gameData && fresh.gameData[gameId]) || profiles.gameData[gameId];
+      send(200, JSON.stringify({ ok: true, game, stats: gd }));
+    }
     // API: Get apps
     else if (pathname === '/api/apps') {
       const catalog = readJson('apps/catalog.json') || { apps: [] };
       send(200, JSON.stringify({ ok: true, data: catalog.apps, total: catalog.apps.length }));
+    }
+    // API: Get individual app
+    else if (pathname.startsWith('/api/apps/') && pathname !== '/api/apps' && pathname !== '/api/apps/launch') {
+      const appId = pathname.split('/')[3];
+      const catalog = readJson('apps/catalog.json') || { apps: [] };
+      const app = (catalog.apps || []).find(a => a.id === appId);
+      if (!app) { send(404, JSON.stringify({ ok: false, error: 'App not found' })); return; }
+      const profiles = readJson('profiles.json') || {};
+      if (!profiles.appData) profiles.appData = {};
+      if (!profiles.appData[appId]) profiles.appData[appId] = { launchCount: 0, lastLaunched: null };
+      if (method === 'POST') {
+        const b = await body(req);
+        if (b.action === 'launch') {
+          profiles.appData[appId].launchCount = (profiles.appData[appId].launchCount || 0) + 1;
+          profiles.appData[appId].lastLaunched = new Date().toISOString();
+        }
+        writeJson('profiles.json', profiles);
+      }
+      const fresh = readJson('profiles.json') || {};
+      const ad = (fresh.appData && fresh.appData[appId]) || profiles.appData[appId];
+      send(200, JSON.stringify({ ok: true, app, stats: ad }));
     }
     // API: Get achievements
     else if (pathname === '/api/achievements') {
@@ -171,6 +222,33 @@ const server = http.createServer(async (req, res) => {
         });
         send(200, JSON.stringify({ ok: true, friends, requests: user.friendRequests || [] }));
       }
+    }
+    // API: Chat - send message
+    else if (pathname === '/api/chat/send' && method === 'POST') {
+      const b = await body(req);
+      const profiles = readJson('profiles.json') || { messages: [] };
+      if (!profiles.messages) profiles.messages = [];
+      const msg = {
+        id: generateId(),
+        from: b.from || 'Anonymous',
+        fromAvatar: b.fromAvatar || '?',
+        text: b.text || '',
+        room: b.room || 'general',
+        timestamp: new Date().toISOString(),
+      };
+      if (msg.text.trim()) {
+        profiles.messages.push(msg);
+        writeJson('profiles.json', profiles);
+      }
+      send(200, JSON.stringify({ ok: true, message: msg }));
+    }
+    // API: Chat - get messages
+    else if (pathname === '/api/chat/messages') {
+      const profiles = readJson('profiles.json') || { messages: [] };
+      const room = params.room || 'general';
+      const limit = Math.min(parseInt(params.limit) || 50, 200);
+      const messages = (profiles.messages || []).filter(m => m.room === room).slice(-limit);
+      send(200, JSON.stringify({ ok: true, messages, total: (profiles.messages || []).filter(m => m.room === room).length }));
     }
     // API: Stars (special users)
     else if (pathname === '/api/stars') {
@@ -279,15 +357,33 @@ const server = http.createServer(async (req, res) => {
       if (!game) { send(404, JSON.stringify({ ok: false, error: 'Game not found' })); return; }
       const profiles = readJson('profiles.json') || { users: [], quickResume: [] };
       const user = (profiles.users || []).find(u => u.token === b.token);
+      if (!profiles.gameData) profiles.gameData = {};
+      if (!profiles.gameData[b.id]) profiles.gameData[b.id] = { playCount: 0, highScores: [], sessions: [], state: {} };
+      profiles.gameData[b.id].playCount = (profiles.gameData[b.id].playCount || 0) + 1;
       if (user) {
         if (!user.stats) user.stats = { gamesLaunched: 0, playTime: 0 };
         user.stats.gamesLaunched = (user.stats.gamesLaunched || 0) + 1;
         user.stats.lastGame = game.title;
         user.stats.lastPlayed = new Date().toISOString();
-        writeJson('profiles.json', profiles);
       }
+      writeJson('profiles.json', profiles);
       const launchUrl = game.localPath ? (game.localPath.startsWith('http') ? game.localPath : 'http://127.0.0.1:' + PORT + game.localPath) : (game.launchUrl || game.path || '');
       send(200, JSON.stringify({ ok: true, game, launchUrl }));
+    }
+    // API: Launch app
+    else if (pathname === '/api/apps/launch') {
+      const b = await body(req);
+      const catalog = readJson('apps/catalog.json') || { apps: [] };
+      const app = (catalog.apps || []).find(a => a.id === b.id);
+      if (!app) { send(404, JSON.stringify({ ok: false, error: 'App not found' })); return; }
+      const profiles = readJson('profiles.json') || { users: [], quickResume: [] };
+      if (!profiles.appData) profiles.appData = {};
+      if (!profiles.appData[b.id]) profiles.appData[b.id] = { launchCount: 0, lastLaunched: null };
+      profiles.appData[b.id].launchCount = (profiles.appData[b.id].launchCount || 0) + 1;
+      profiles.appData[b.id].lastLaunched = new Date().toISOString();
+      writeJson('profiles.json', profiles);
+      const launchUrl = app.launchUrl || app.webUrl || '';
+      send(200, JSON.stringify({ ok: true, app, launchUrl }));
     }
     // API: Auth
     else if (pathname === '/api/auth') {

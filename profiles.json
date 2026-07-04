@@ -10,8 +10,13 @@
       "achievements": [],
       "friends": [],
       "friendRequests": [],
-      "stats": { "gamesLaunched": 0, "playTime": 0, "captures": 0 },
-      "createdAt": "2026-07-04T00:00:00.000Z"
+      "stats": {
+        "gamesLaunched": 0,
+        "playTime": 0,
+        "captures": 0
+      },
+      "createdAt": "2026-07-04T00:00:00.000Z",
+      "token": "975fe9d5274146f88682140d8d7c2953a7e874063411007d9665c72e660c1b10"
     }
   ],
   "achievements": [],
@@ -19,6 +24,65 @@
   "captures": [],
   "settings": {},
   "stars": [
-    { "id": "than0s230", "name": "than0s230", "avatar": "T", "addedAt": "2026-07-04T00:00:00.000Z" }
-  ]
+    {
+      "id": "than0s230",
+      "name": "than0s230",
+      "avatar": "T",
+      "addedAt": "2026-07-04T00:00:00.000Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "mr5on2yf0eqb6y",
+      "from": "thanos230",
+      "fromAvatar": "T",
+      "text": "Hello World!",
+      "room": "general",
+      "timestamp": "2026-07-04T01:27:31.767Z"
+    },
+    {
+      "id": "mr5oongffhz5rc",
+      "from": "than0s230",
+      "fromAvatar": "T",
+      "text": "Hello from the command line!",
+      "room": "general",
+      "timestamp": "2026-07-04T01:28:44.991Z"
+    },
+    {
+      "id": "mr5p5kn8kwj1lg",
+      "from": "RQBBOX",
+      "fromAvatar": "R",
+      "text": "HI",
+      "room": "general",
+      "timestamp": "2026-07-04T01:41:54.500Z"
+    }
+  ],
+  "gameData": {
+    "neon-drift-racing": {
+      "playCount": 1,
+      "highScores": [
+        {
+          "score": 9999,
+          "player": "than0s230",
+          "date": "2026-07-04T01:37:12.811Z"
+        }
+      ],
+      "sessions": [],
+      "state": {}
+    }
+  },
+  "appData": {
+    "steam": {
+      "launchCount": 2,
+      "lastLaunched": "2026-07-04T01:38:52.478Z"
+    },
+    "google-play-games": {
+      "launchCount": 1,
+      "lastLaunched": "2026-07-04T01:40:47.956Z"
+    },
+    "netflix": {
+      "launchCount": 1,
+      "lastLaunched": "2026-07-04T01:41:03.307Z"
+    }
+  }
 }
