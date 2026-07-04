@@ -153,6 +153,7 @@
       <button class="sidebar-btn" title="Friends" onclick="navPage('friends')">👥</button>
       <button class="sidebar-btn" title="Games" onclick="navPage('games')">🎮</button>
       <button class="sidebar-btn" title="Store" onclick="navPage('store')">🛒</button>
+      <button class="sidebar-btn" title="Apps" onclick="navPage('apps')">📦</button>
       <button class="sidebar-btn" title="Captures" onclick="navPage('captures')">📸</button>
       <div class="sidebar-spacer"></div>
       <button class="sidebar-btn" title="Settings" onclick="navPage('settings')">⚙️</button>
@@ -224,6 +225,12 @@
       <div id="page-store" class="page">
         <div class="page-header">Store</div>
         <div class="store-grid" id="storeGrid"></div>
+      </div>
+
+      <div id="page-apps" class="page">
+        <div class="page-header">Apps & Launchers</div>
+        <div style="padding:8px 24px 0;font-size:0.8rem;color:var(--text-secondary);">Launch your favorite gaming platforms and apps</div>
+        <div class="game-grid" id="appsGrid"></div>
       </div>
 
       <div id="page-friends" class="page">
@@ -317,7 +324,7 @@
       if (el) el.classList.add('active');
 
       const sidebarBtns = document.querySelectorAll('.sidebar-btn');
-      const pageMap = { home: 0, friends: 1, games: 2, store: 3, captures: 4, settings: 6 };
+      const pageMap = { home: 0, friends: 1, games: 2, store: 3, apps: 4, captures: 5, settings: 7 };
       if (pageMap[page] !== undefined && sidebarBtns[pageMap[page]]) {
         sidebarBtns[pageMap[page]].classList.add('active');
       }
@@ -344,10 +351,16 @@
         renderGames(gameCatalog);
         renderHome(gameCatalog);
       }
-      const storeData = await api('/api/store');
-      if (storeData && storeData.data && storeData.data.games) {
-        storeApps = storeData.data.games;
-        renderStore(storeApps);
+      const appsData = await api('/api/apps');
+      if (appsData && appsData.data) {
+        renderApps(appsData.data);
+        renderStore(gameCatalog, appsData.data);
+      } else {
+        const storeData = await api('/api/store');
+        if (storeData && storeData.data && storeData.data.games) {
+          storeApps = storeData.data.games;
+          renderStore(storeApps, []);
+        }
       }
       const capturesData = await api('/api/captures');
       if (capturesData && capturesData.captures) {
@@ -375,6 +388,19 @@
       });
     }
 
+    function renderApps(apps) {
+      window._appCatalog = apps;
+      const grid = document.getElementById('appsGrid');
+      grid.innerHTML = '';
+      apps.forEach(a => {
+        const tile = document.createElement('div');
+        tile.className = 'game-tile';
+        tile.innerHTML = `<div>${a.icon || '📦'}</div><div class="game-tile-label">${a.title}</div>`;
+        tile.onclick = () => launchApp(a);
+        grid.appendChild(tile);
+      });
+    }
+
     function renderHome(games) {
       const feed = document.getElementById('feed');
       feed.innerHTML = '';
@@ -398,11 +424,13 @@
 
       const right = document.getElementById('rightSidebar');
       right.innerHTML = '';
-      games.slice(0, 3).forEach(g => {
+      const gameCards = games.slice(0, 2).map(g => ({ title: g.title, icon: g.icon || '🎮', onclick: () => playGame(g) }));
+      const appCards = (window._appCatalog || []).slice(0, 2).map(a => ({ title: a.title, icon: a.icon || '📦', onclick: () => launchApp(a) }));
+      [...gameCards, ...appCards].forEach(item => {
         const card = document.createElement('div');
         card.className = 'game-card';
-        card.onclick = () => playGame(g);
-        card.innerHTML = `<div class="game-name">${g.title}</div>`;
+        card.onclick = item.onclick;
+        card.innerHTML = `<div class="game-name">${item.icon} ${item.title}</div>`;
         right.appendChild(card);
       });
     }
@@ -415,17 +443,22 @@
       document.getElementById('playFeaturedBtn').onclick = () => playGame(game);
     }
 
-    function renderStore(games) {
+    function renderStore(games, apps) {
       const grid = document.getElementById('storeGrid');
       grid.innerHTML = '';
-      games.forEach(g => {
+      const all = [
+        ...(games || []).map(g => ({ ...g, _type: 'game' })),
+        ...(apps || []).map(a => ({ ...a, _type: 'app' }))
+      ];
+      all.forEach(item => {
         const card = document.createElement('div');
         card.className = 'store-card';
         card.innerHTML = `
-          <div class="store-icon">${g.icon || '🎮'}</div>
-          <div class="store-title">${g.title}</div>
-          <div class="store-desc">${g.desc || g.category || ''}</div>`;
-        card.onclick = () => playGame(g);
+          <div style="font-size:0.55rem;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;">${item._type === 'game' ? '🎮 Game' : '📦 App'}</div>
+          <div class="store-icon">${item.icon || (item._type === 'game' ? '🎮' : '📦')}</div>
+          <div class="store-title">${item.title}</div>
+          <div class="store-desc">${item.desc || item.category || ''}</div>`;
+        card.onclick = () => item._type === 'game' ? playGame(item) : launchApp(item);
         grid.appendChild(card);
       });
     }
@@ -495,6 +528,21 @@
         toast('Opening ' + game.title + ' in a new tab');
       } else {
         toast('No launch path for ' + game.title);
+      }
+    }
+
+    function launchApp(app) {
+      const url = app.launchUrl || app.webUrl;
+      if (!url) { toast('No launch URL for ' + app.title); return; }
+      if (url.startsWith('http://') || url.startsWith('https://')) {
+        const launcher = document.getElementById('gameLauncher');
+        const frame = document.getElementById('gameFrame');
+        document.getElementById('gameLauncherTitle').textContent = app.title;
+        frame.src = url;
+        launcher.classList.remove('hidden');
+      } else {
+        try { window.open(url); toast('Launching ' + app.title); }
+        catch { window.open(app.webUrl || url, '_blank'); toast('Opening ' + app.title + ' in browser'); }
       }
     }
 

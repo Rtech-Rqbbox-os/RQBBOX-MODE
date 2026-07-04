@@ -1,12 +1,20 @@
 {
   "apps": [
-    { "id": "youtube", "title": "YouTube", "icon": "▶️", "category": "Media", "launchUrl": "https://youtube.com" },
-    { "id": "spotify", "title": "Spotify", "icon": "🎵", "category": "Music", "launchUrl": "https://open.spotify.com" },
-    { "id": "twitch", "title": "Twitch", "icon": "📺", "category": "Streaming", "launchUrl": "https://twitch.tv" },
-    { "id": "netflix", "title": "Netflix", "icon": "🎬", "category": "Media", "launchUrl": "https://netflix.com" },
-    { "id": "discord", "title": "Discord", "icon": "💬", "category": "Social", "launchUrl": "https://discord.com/app" },
-    { "id": "reddit", "title": "Reddit", "icon": "👽", "category": "Social", "launchUrl": "https://reddit.com" },
-    { "id": "x-twitter", "title": "X / Twitter", "icon": "🐦", "category": "Social", "launchUrl": "https://x.com" },
-    { "id": "github", "title": "GitHub", "icon": "💻", "category": "Dev", "launchUrl": "https://github.com" }
+    { "id": "steam", "title": "Steam", "icon": "🎮", "category": "Gaming", "launchUrl": "steam://open", "webUrl": "https://store.steampowered.com", "desc": "PC gaming store and library" },
+    { "id": "xbox", "title": "Xbox", "icon": "🎯", "category": "Gaming", "launchUrl": "xbox://", "webUrl": "https://xbox.com/play", "desc": "Xbox Cloud Gaming and Game Pass" },
+    { "id": "google-play-games", "title": "Google Play Games", "icon": "📱", "category": "Gaming", "launchUrl": "https://play.google.com/googleplaygames", "desc": "Play Android games on PC" },
+    { "id": "spotify", "title": "Spotify", "icon": "🎵", "category": "Music", "launchUrl": "spotify://", "webUrl": "https://open.spotify.com", "desc": "Music streaming" },
+    { "id": "youtube", "title": "YouTube", "icon": "▶️", "category": "Media", "launchUrl": "https://youtube.com", "desc": "Video streaming" },
+    { "id": "twitch", "title": "Twitch", "icon": "📺", "category": "Streaming", "launchUrl": "https://twitch.tv", "desc": "Live game streaming" },
+    { "id": "netflix", "title": "Netflix", "icon": "🎬", "category": "Media", "launchUrl": "https://netflix.com", "desc": "Movies and TV shows" },
+    { "id": "discord", "title": "Discord", "icon": "💬", "category": "Social", "launchUrl": "discord://", "webUrl": "https://discord.com/app", "desc": "Voice and text chat" },
+    { "id": "epic-games", "title": "Epic Games", "icon": "🛡️", "category": "Gaming", "launchUrl": "com.epicgames.launcher://", "webUrl": "https://store.epicgames.com", "desc": "Epic Games Store" },
+    { "id": "battlenet", "title": "Battle.net", "icon": "⚔️", "category": "Gaming", "launchUrl": "battlenet://", "desc": "Blizzard games launcher" },
+    { "id": "reddit", "title": "Reddit", "icon": "👽", "category": "Social", "launchUrl": "https://reddit.com", "desc": "Communities and discussions" },
+    { "id": "x-twitter", "title": "X / Twitter", "icon": "🐦", "category": "Social", "launchUrl": "https://x.com", "desc": "Social network" },
+    { "id": "github", "title": "GitHub", "icon": "💻", "category": "Dev", "launchUrl": "https://github.com", "desc": "Code hosting and collaboration" },
+    { "id": "prime-gaming", "title": "Amazon Prime Gaming", "icon": "📦", "category": "Gaming", "launchUrl": "https://gaming.amazon.com", "desc": "Free games with Prime" },
+    { "id": "gog-galaxy", "title": "GOG Galaxy", "icon": "⭐", "category": "Gaming", "launchUrl": "goggalaxy://", "webUrl": "https://gog.com", "desc": "DRM-free game store" },
+    { "id": "itch-io", "title": "itch.io", "icon": "🎨", "category": "Gaming", "launchUrl": "https://itch.io", "desc": "Indie game marketplace" }
   ]
 }
