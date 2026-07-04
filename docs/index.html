@@ -383,6 +383,60 @@
     </div>
   </section>
 
+  <!-- Brand Assets -->
+  <section class="features" style="background:var(--bg-card);">
+    <div class="section-header">
+      <span class="section-icon">🎨</span>
+      <h2>Brand Assets</h2>
+      <p>Logos and icons for every purpose</p>
+    </div>
+    <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;">
+      <div class="brand-card"><img src="assets/logo.svg" alt="RQBBOX MODE Logo" style="height:120px;"><div style="font-size:0.7rem;color:var(--text-muted);margin-top:8px;">Full Logo</div></div>
+      <div class="brand-card"><img src="assets/logo-horizontal.svg" alt="RQBBOX MODE Horizontal" style="height:80px;margin-top:20px;"><div style="font-size:0.7rem;color:var(--text-muted);margin-top:8px;">Horizontal</div></div>
+      <div class="brand-card"><img src="assets/logo-mark.svg" alt="RQBBOX MODE Mark" style="height:100px;"><div style="font-size:0.7rem;color:var(--text-muted);margin-top:8px;">Icon Mark</div></div>
+    </div>
+    <div style="text-align:center;margin-bottom:24px;">
+      <h3 style="font-size:1rem;font-weight:500;margin-bottom:16px;">Platform Icons</h3>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <div class="brand-icon"><img src="assets/icons/xbox.svg" alt="Xbox"><span>Xbox</span></div>
+        <div class="brand-icon"><img src="assets/icons/discord.svg" alt="Discord"><span>Discord</span></div>
+        <div class="brand-icon"><img src="assets/icons/steam.svg" alt="Steam"><span>Steam</span></div>
+        <div class="brand-icon"><img src="assets/icons/github.svg" alt="GitHub"><span>GitHub</span></div>
+        <div class="brand-icon"><img src="assets/icons/windows.svg" alt="Windows"><span>Windows</span></div>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <h3 style="font-size:1rem;font-weight:500;margin-bottom:16px;">Full Icon Set (56 SVGs)</h3>
+      <div class="icons-grid" id="iconsGrid"></div>
+    </div>
+  </section>
+  <style>
+    .brand-card { background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:32px;text-align:center;min-width:200px;transition:all 0.2s; }
+    .brand-card:hover { border-color:var(--accent);transform:translateY(-4px); }
+    .brand-icon { display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:12px;width:80px;transition:all 0.2s;cursor:default; }
+    .brand-icon:hover { border-color:var(--accent);transform:translateY(-2px); }
+    .brand-icon img { width:40px;height:40px; }
+    .brand-icon span { font-size:0.6rem;color:var(--text-muted); }
+    .icons-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px;padding:0 24px;max-width:800px;margin:0 auto; }
+    .icon-cell { display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;transition:all 0.15s; }
+    .icon-cell:hover { border-color:var(--accent);background:var(--bg-card-hover); }
+    .icon-cell img { width:32px;height:32px; }
+    .icon-cell span { font-size:0.5rem;color:var(--text-muted);text-align:center;overflow:hidden;text-overflow:ellipsis;max-width:56px;white-space:nowrap; }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const icons = ['about','achievements','actions','audio','back','branches','captures-settings','captures','close','cloud','commits','contributors','controller-settings','controller','discord','discussions','display','download','forks','forward','friends','fullscreen','games','gaming','github','home','icon-192','icon-512','insights','issues','license','maximize','minimize','nodejs','notifications','npm','packages','parental','performance','projects','releases','resume','security','settings','social','sponsor','stars','startup','steam','store','tags','themes','watch','wiki','windows','xbox'];
+      const grid = document.getElementById('iconsGrid');
+      if (!grid) return;
+      icons.forEach(name => {
+        const cell = document.createElement('div');
+        cell.className = 'icon-cell';
+        cell.innerHTML = `<img src="assets/icons/${name}.svg" alt="${name}" loading="lazy"><span>${name}</span>`;
+        grid.appendChild(cell);
+      });
+    });
+  </script>
+
   <!-- Download -->
   <section class="download">
     <span class="section-icon">🚀</span>
