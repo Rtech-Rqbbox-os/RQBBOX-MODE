@@ -118,6 +118,10 @@
     .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); }
     .settings-label { font-size: 0.9rem; }
     .settings-value { font-size: 0.8rem; color: var(--accent); cursor: pointer; }
+    .star-card { display:flex;align-items:center;gap:10px;padding:10px 16px;background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(255,215,0,0.02));border:1px solid rgba(255,215,0,0.2);border-radius:8px; }
+    .star-avatar { width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#ffd700,#ffaa00);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;color:#000; }
+    .star-name { font-size:0.85rem;font-weight:500; }
+    .star-label { font-size:0.6rem;color:rgba(255,215,0,0.7);text-transform:uppercase;letter-spacing:1px; }
   </style>
 </head>
 <body>
@@ -205,6 +209,10 @@
               <div class="sponsored-art">🎮</div>
             </div>
           </div>
+        </div>
+        <div id="starsSection" style="border-top:1px solid var(--border);padding:20px 24px;display:none;">
+          <div style="font-size:0.75rem;color:var(--accent);font-weight:500;margin-bottom:12px;">⭐ RQBBOX MODE STARS</div>
+          <div id="starsList" style="display:flex;gap:12px;flex-wrap:wrap;"></div>
         </div>
       </div>
 
@@ -349,6 +357,10 @@
       if (configData && configData.data) {
         applyConfig(configData.data);
       }
+      const starsData = await api('/api/stars');
+      if (starsData && (starsData.users.length > 0 || starsData.stars.length > 0)) {
+        renderStars(starsData.users.length ? starsData.users : starsData.stars);
+      }
     }
 
     function renderGames(games) {
@@ -415,6 +427,20 @@
           <div class="store-desc">${g.desc || g.category || ''}</div>`;
         card.onclick = () => playGame(g);
         grid.appendChild(card);
+      });
+    }
+
+    function renderStars(stars) {
+      const section = document.getElementById('starsSection');
+      const list = document.getElementById('starsList');
+      if (!section || !list || !stars.length) return;
+      section.style.display = 'block';
+      list.innerHTML = '';
+      stars.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'star-card';
+        card.innerHTML = `<div class="star-avatar">${s.avatar || s.name[0] || '⭐'}</div><div><div class="star-name">${s.name}</div><div class="star-label">RQBBOX MODE STAR</div></div>`;
+        list.appendChild(card);
       });
     }
 

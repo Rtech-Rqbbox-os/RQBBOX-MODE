@@ -172,6 +172,13 @@ const server = http.createServer(async (req, res) => {
         send(200, JSON.stringify({ ok: true, friends, requests: user.friendRequests || [] }));
       }
     }
+    // API: Stars (special users)
+    else if (pathname === '/api/stars') {
+      const profiles = readJson('profiles.json') || {};
+      const stars = profiles.stars || [];
+      const users = (profiles.users || []).filter(u => u.role === 'star');
+      send(200, JSON.stringify({ ok: true, stars, users }));
+    }
     // API: Store catalog
     else if (pathname === '/api/store') {
       const store = readJson('games/catalog.json') || { games: [] };

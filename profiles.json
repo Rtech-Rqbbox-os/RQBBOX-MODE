@@ -1,7 +1,24 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "than0s230",
+      "name": "than0s230",
+      "username": "than0s230",
+      "avatar": "T",
+      "role": "star",
+      "theme": "default",
+      "achievements": [],
+      "friends": [],
+      "friendRequests": [],
+      "stats": { "gamesLaunched": 0, "playTime": 0, "captures": 0 },
+      "createdAt": "2026-07-04T00:00:00.000Z"
+    }
+  ],
   "achievements": [],
   "quickResume": [],
   "captures": [],
-  "settings": {}
+  "settings": {},
+  "stars": [
+    { "id": "than0s230", "name": "than0s230", "avatar": "T", "addedAt": "2026-07-04T00:00:00.000Z" }
+  ]
 }
