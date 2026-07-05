@@ -306,9 +306,9 @@ Built as a standalone project that integrates with RQBBOX OS.
 
 ## 📄 License
 
-MIT License — © 2026 RhysTech
+**© 2026 RhysTech. All rights reserved.**
 
-RQBBOX® is a trademark of RhysTech. All rights reserved.
+RQBBOX® is a registered trademark of RhysTech. RQBBOX MODE™, RBOWS™, and RQBBOX LIFE™ are trademarks of RhysTech.
 
 ---
 
