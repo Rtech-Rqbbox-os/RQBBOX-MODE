@@ -349,6 +349,8 @@
         <button class="guide-btn" onclick="togglePerformanceOverlay(); hideGuideOverlay();">⚡ Performance</button>
         <button class="guide-btn" onclick="navPage('captures'); hideGuideOverlay();">📸 Captures</button>
         <button class="guide-btn" onclick="navPage('settings'); hideGuideOverlay();">⚙️ Settings</button>
+        <button class="guide-btn" onclick="hideGuideOverlay(); suppressNotifications(false); toast('Notifications restored');" style="border-color:rgba(96,205,255,0.3);">🔔 Toggle Notifications</button>
+        <button class="guide-btn" onclick="hideGuideOverlay(); exitRqbboxMode();" style="border-color:rgba(248,113,113,0.3);">🚪 Exit RQBBOX MODE</button>
       </div>
     </div>
   </div>
@@ -361,6 +363,8 @@
         <button class="game-bar-btn" onclick="gameBarAction('capture')">📸 Capture</button>
         <button class="game-bar-btn" onclick="gameBarAction('resume')">⏸️ Quick Resume</button>
         <button class="game-bar-btn" onclick="gameBarAction('performance')">⚡ Performance</button>
+        <button class="game-bar-btn" onclick="gameBarAction('notifications')" style="border-color:rgba(96,205,255,0.3);">🔔 Notifications</button>
+        <button class="game-bar-btn" onclick="gameBarAction('exit')" style="border-color:rgba(248,113,113,0.3);">🚪 Exit Mode</button>
       </div>
     </div>
   </div>
@@ -407,8 +411,14 @@
       document.getElementById('dashboard').classList.remove('hidden');
       loadDashboard();
       updateClock();
-      enterFullscreenIfAllowed();
-      setTimeout(enterFullscreenIfAllowed, 500);
+      // Enter fullscreen with retries (like Xbox Mode auto-fullscreen)
+      enterFullscreen(5).then(ok => {
+        if (ok) {
+          // Also suppress notifications and optimize system when entering fullscreen
+          suppressNotifications(true);
+          api('/api/system/optimize', { method: 'POST', body: JSON.stringify({ action: 'enable' }) });
+        }
+      });
       setInterval(updateClock, 60000);
     }
 
@@ -847,18 +857,74 @@
       }
     }
 
-    function enterFullscreenIfAllowed() {
-      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
+    let _isInRqbboxMode = false;
+    let _notificationStateRestore = null;
+
+    // Reliable fullscreen entry with retries (like Xbox Mode auto-fullscreen)
+    function enterFullscreen(retries = 3) {
+      if (document.fullscreenElement) return Promise.resolve(true);
+      if (!document.documentElement.requestFullscreen) return Promise.resolve(false);
+      return document.documentElement.requestFullscreen().then(() => {
+        _isInRqbboxMode = true;
+        return true;
+      }).catch(() => {
+        if (retries > 0) {
+          return new Promise(r => setTimeout(r, 300)).then(() => enterFullscreen(retries - 1));
+        }
+        return false;
+      });
+    }
+
+    function exitFullscreen() {
+      if (document.fullscreenElement && document.exitFullscreen) {
+        return document.exitFullscreen().catch(() => {});
       }
     }
 
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {});
+        enterFullscreen().then(ok => {
+          if (ok) toast('Entered Full Screen Mode');
+        });
       } else {
-        document.exitFullscreen().catch(() => {});
+        exitFullscreen();
+        toast('Exited Full Screen Mode');
       }
+    }
+
+    // Suppress Windows notifications (Focus Assist) via API
+    async function suppressNotifications(suppress = true) {
+      const res = await api('/api/system/notifications', {
+        method: 'POST',
+        body: JSON.stringify({ action: suppress ? 'suppress' : 'restore' })
+      });
+      if (res && res.ok) {
+        _notificationStateRestore = !suppress;
+        toast(suppress ? '🔔 Notifications suppressed for gaming' : '🔔 Notifications restored');
+      }
+      return res?.ok;
+    }
+
+    // Restore notifications on exit
+    async function restoreNotifications() {
+      if (_notificationStateRestore !== null) {
+        await api('/api/system/notifications', {
+          method: 'POST',
+          body: JSON.stringify({ action: 'restore' })
+        });
+        _notificationStateRestore = null;
+      }
+    }
+
+    // Exit RQBBOX MODE — like Xbox Mode's "Return to Desktop"
+    function exitRqbboxMode() {
+      restoreNotifications();
+      exitFullscreen();
+      _isInRqbboxMode = false;
+      toast('Exiting RQBBOX MODE — returning to desktop');
+      setTimeout(() => {
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000;color:rgba(255,255,255,0.3);font-family:sans-serif;font-size:0.85rem;letter-spacing:2px;">RQBBOX MODE — Return to Desktop</div>';
+      }, 800);
     }
 
     function showGuideOverlay() {
@@ -927,58 +993,120 @@
         case 'capture': navPage('captures'); break;
         case 'resume': saveCurrentQuickResume(); break;
         case 'performance': togglePerformanceOverlay(); break;
+        case 'notifications':
+          suppressNotifications(false);
+          toast('Notifications restored');
+          break;
+        case 'exit':
+          exitRqbboxMode();
+          break;
         default: break;
       }
     }
 
     window.addEventListener('load', () => {
-      setTimeout(enterFullscreenIfAllowed, 300);
+      // Check for fullscreen parameter in URL (passed by launcher)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('fullscreen') === '1') {
+        setTimeout(() => enterFullscreen(5), 500);
+      }
     });
 
     document.addEventListener('keydown', e => {
+      // Game launcher escape
       if (e.key === 'Escape' && !document.getElementById('gameLauncher').classList.contains('hidden')) {
         closeGame();
+        e.preventDefault();
+        return;
       }
+      // Game bar overlay escape
       if (e.key === 'Escape' && !document.getElementById('gameBarOverlay').classList.contains('hidden')) {
         hideGameBarOverlay();
         e.preventDefault();
         return;
       }
+      // Guide overlay escape
       if (e.key === 'Escape' && !document.getElementById('guideOverlay').classList.contains('hidden')) {
         hideGuideOverlay();
         e.preventDefault();
         return;
       }
+      // Win+G — Game Bar overlay (like Xbox Game Bar)
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'g') {
         e.preventDefault();
         showGameBarOverlay();
         return;
       }
+      // F1 — Guide overlay
       if (e.key === 'F1') {
         e.preventDefault();
         showGuideOverlay();
         return;
       }
+      // Ctrl+Shift+P — Performance overlay
       if (e.key === 'p' && e.ctrlKey && e.shiftKey) {
         e.preventDefault();
         togglePerformanceOverlay();
         return;
       }
-      if (e.key === 'F11') {
+      // Win+F11 — Xbox Mode style toggle (enter/exit RQBBOX MODE)
+      if (e.key === 'F11' && e.metaKey) {
+        e.preventDefault();
+        if (_isInRqbboxMode) {
+          exitRqbboxMode();
+        } else {
+          enterFullscreen(3).then(ok => {
+            if (ok) {
+              _isInRqbboxMode = true;
+              suppressNotifications(true);
+              api('/api/system/optimize', { method: 'POST', body: JSON.stringify({ action: 'enable' }) });
+              toast('Entered RQBBOX MODE');
+            }
+          });
+        }
+        return;
+      }
+      // F11 — Toggle fullscreen (standard)
+      if (e.key === 'F11' && !e.metaKey && !e.ctrlKey) {
         e.preventDefault();
         toggleFullscreen();
+        return;
       }
+      // Ctrl+Shift+S — Screenshot
       if (e.key === 's' && e.ctrlKey && e.shiftKey) {
         e.preventDefault();
-        toast('Screenshot captured!');
+        toast('📸 Screenshot captured!');
+        return;
       }
-      if (e.altKey && e.key.toLowerCase() === 'r') {
+      // Win+Alt+R or Alt+R — Start/stop recording (like Xbox Game Bar)
+      if ((e.altKey || (e.metaKey && e.altKey)) && e.key.toLowerCase() === 'r') {
         e.preventDefault();
         toast('🎬 Recording ready');
+        return;
       }
+      // Win+Alt+PrtSc — Screenshot (like Xbox Game Bar)
+      if (e.metaKey && e.altKey && e.key === 'PrintScreen') {
+        e.preventDefault();
+        toast('📸 Screenshot captured!');
+        return;
+      }
+      // Win+Alt+G — Save last 30s replay (like Xbox Game Bar)
+      if (e.metaKey && e.altKey && e.key.toLowerCase() === 'g') {
+        e.preventDefault();
+        toast('⏪ Last 30s replay saved!');
+        return;
+      }
+      // Alt+Tab or Meta+Tab — Task switcher
       if ((e.altKey || e.metaKey) && e.key === 'Tab') {
         e.preventDefault();
         toast('Task switcher ready');
+        return;
+      }
+      // Win key — Show hint like Xbox Mode ("Press Win+F11 to return")
+      if (e.key === 'Meta' || e.key === 'OS') {
+        if (_isInRqbboxMode) {
+          toast('Press Win+F11 to exit RQBBOX MODE');
+        }
       }
     });
   </script>

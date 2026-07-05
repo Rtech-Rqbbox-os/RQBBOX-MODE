@@ -450,6 +450,63 @@ const server = http.createServer(async (req, res) => {
       }
       send(200, JSON.stringify(result));
     }
+    // API: Scan Windows for installed games (Steam, Epic, Xbox, Battle.net)
+    else if (pathname === '/api/games/scan-windows') {
+      const { execSync } = require('child_process');
+      let installed = [];
+      try {
+        const psScript = `
+          $games = @();
+          # Steam
+          try {
+            $steamPath = (Get-ItemProperty -Path "HKCU:\\Software\\Valve\\Steam" -Name "SteamPath" -ErrorAction SilentlyContinue).SteamPath;
+            if ($steamPath) {
+              $libFile = Join-Path $steamPath "steamapps\\libraryfolders.vdf";
+              $acfFiles = Get-ChildItem -Path (Join-Path $steamPath "steamapps") -Filter "*.acf" -ErrorAction SilentlyContinue;
+              $acfFiles | ForEach-Object {
+                $content = Get-Content $_.FullName -Raw;
+                if ($content -match '"appid"\\s+"(\\d+)"') { $appId = $matches[1] }
+                if ($content -match '"name"\\s+"([^"]+)"') { $name = $matches[1] }
+                if ($appId -and $name) {
+                  $games += @{ id = "steam-$appId"; title = $name; source = "Steam"; icon = "🎮"; launchUrl = "steam://rungameid/$appId" }
+                }
+              }
+            }
+          } catch {}
+          # Return
+          $games | ConvertTo-Json -Compress
+        `;
+        const output = execSync(`powershell -NoProfile -NonInteractive -Command "${psScript.replace(/"/g, '\\"')}"`, { timeout: 8000, encoding: 'utf-8', stdio: ['ignore', 'pipe', 'ignore'] });
+        try { installed = JSON.parse(output.trim() || '[]'); } catch {}
+      } catch {}
+      send(200, JSON.stringify({ ok: true, games: installed, total: installed.length }));
+    }
+    // API: System optimization (like Xbox Mode — suppress backgrounds, free memory)
+    else if (pathname === '/api/system/optimize') {
+      const b = method === 'POST' ? await body(req) : {};
+      const { execSync } = require('child_process');
+      let result = { ok: true, actions: [] };
+      try {
+        if (b.action === 'enable' || b.action === 'gaming') {
+          execSync('reg add "HKCU\\Software\\Microsoft\\GameBar" /v AutoGameModeEnabled /t REG_DWORD /d 1 /f 2>nul', { timeout: 2000 });
+          execSync('reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\RQBBOXMode" /v "GPU Priority" /t REG_DWORD /d 8 /f 2>nul', { timeout: 2000 });
+          execSync('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f 2>nul', { timeout: 2000 });
+          result.mode = 'gaming';
+          result.message = 'System optimized for gaming — background tasks suppressed, GPU priority high';
+        } else if (b.action === 'disable' || b.action === 'restore') {
+          execSync('reg add "HKCU\\Software\\Microsoft\\GameBar" /v AutoGameModeEnabled /t REG_DWORD /d 0 /f 2>nul', { timeout: 2000 });
+          result.mode = 'restored';
+          result.message = 'System restored to default';
+        } else {
+          const out = execSync('reg query "HKCU\\Software\\Microsoft\\GameBar" /v AutoGameModeEnabled 2>nul', { timeout: 2000, encoding: 'utf-8' });
+          result.mode = out.includes('0x1') ? 'gaming' : 'default';
+        }
+      } catch (e) {
+        result.mode = 'unknown';
+        result.error = e.message;
+      }
+      send(200, JSON.stringify(result));
+    }
     // API: Xbox Mode toggle
     else if (pathname === '/api/xboxmode') {
       const b = method === 'POST' ? await body(req) : {};
@@ -477,23 +534,54 @@ const server = http.createServer(async (req, res) => {
       }
       send(200, JSON.stringify(result));
     }
+    // API: Windows notification suppression (Focus Assist / Quiet Hours)
+    else if (pathname === '/api/system/notifications') {
+      const b = method === 'POST' ? await body(req) : {};
+      const { execSync } = require('child_process');
+      let result = { ok: true };
+      try {
+        if (b.action === 'suppress') {
+          execSync('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings" /v "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND" /t REG_DWORD /d 0 /f 2>nul', { timeout: 2000 });
+          execSync('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings" /v "NOC_GLOBAL_SETTING_TOASTS_ENABLED" /t REG_DWORD /d 0 /f 2>nul', { timeout: 2000 });
+          execSync('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR" /v "AppCaptureEnabled" /t REG_DWORD /d 1 /f 2>nul', { timeout: 2000 });
+          result.mode = 'suppressed';
+          result.message = 'Windows notifications suppressed for gaming';
+        } else if (b.action === 'restore') {
+          execSync('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings" /v "NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND" /t REG_DWORD /d 1 /f 2>nul', { timeout: 2000 });
+          execSync('reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings" /v "NOC_GLOBAL_SETTING_TOASTS_ENABLED" /t REG_DWORD /d 1 /f 2>nul', { timeout: 2000 });
+          result.mode = 'restored';
+          result.message = 'Notifications restored';
+        } else {
+          const out = execSync('reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings" /v "NOC_GLOBAL_SETTING_TOASTS_ENABLED" 2>nul', { timeout: 2000, encoding: 'utf-8' });
+          result.mode = out.includes('0x1') ? 'enabled' : 'suppressed';
+        }
+      } catch (e) {
+        result.mode = 'unknown';
+        result.error = e.message;
+      }
+      send(200, JSON.stringify(result));
+    }
     // API: Windows status
     else if (pathname === '/api/windows-status') {
       const { execSync } = require('child_process');
-      let gameMode = 'unknown', gameBar = 'unknown', xboxMode = 'unknown';
+      let gameMode = 'unknown', gameBar = 'unknown', xboxMode = 'unknown', notifications = 'unknown';
       try {
         const gm = execSync('reg query "HKCU\\Software\\Microsoft\\GameBar" /v AutoGameModeEnabled 2>nul', { timeout: 2000, encoding: 'utf-8' });
         gameMode = gm.includes('0x1') ? 'enabled' : 'disabled';
       } catch {}
       try {
-        const gb = execSync('reg query "HKCU\\Software\\Microsoft\GameBar" /v UseNexusForGameBarEnabled 2>nul', { timeout: 2000, encoding: 'utf-8' });
+        const gb = execSync('reg query "HKCU\\Software\\Microsoft\\GameBar" /v UseNexusForGameBarEnabled 2>nul', { timeout: 2000, encoding: 'utf-8' });
         gameBar = gb.includes('0x1') ? 'enabled' : 'disabled';
       } catch {}
       try {
         const xb = execSync('reg query "HKCU\\Software\\Microsoft\\GameBar\\ContentSources\\XBOX" /v Enabled 2>nul', { timeout: 2000, encoding: 'utf-8' });
         xboxMode = xb.includes('0x1') ? 'enabled' : 'disabled';
       } catch {}
-      send(200, JSON.stringify({ ok: true, gameMode, gameBar, xboxMode, platform: process.platform }));
+      try {
+        const nf = execSync('reg query "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings" /v "NOC_GLOBAL_SETTING_TOASTS_ENABLED" 2>nul', { timeout: 2000, encoding: 'utf-8' });
+        notifications = nf.includes('0x1') ? 'enabled' : 'suppressed';
+      } catch {}
+      send(200, JSON.stringify({ ok: true, gameMode, gameBar, xboxMode, notifications, platform: process.platform }));
     }
     // Windows Settings page
     else if (pathname === '/windows-settings' || pathname === '/windows-settings.html') {

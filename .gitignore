@@ -13,6 +13,4 @@ build/
 .idea/
 RQBBOX.exe
 captures/screenshot-*.png
-windows/scripts/Install-RQBBOXGamingSettings.ps1
-windows/scripts/install-gaming-settings.bat
-windows/scripts/install-gaming-settings.ps1
+windows/scripts/install-gaming-settings.*

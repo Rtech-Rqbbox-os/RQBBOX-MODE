@@ -122,17 +122,29 @@ document.addEventListener('DOMContentLoaded', async () => {
       e.preventDefault();
       PerformanceOverlay.toggle();
     }
-    // Windows key to exit to desktop (like Xbox Mode)
+    // Windows key — Like Xbox Mode, show hint without blocking
     if (e.key === 'Meta' || e.key === 'OS') {
-      RQBOX.toast('Press Win+F11 to return to RQBBOX MODE');
+      if (document.fullscreenElement) {
+        RQBOX.toast('Press Win+F11 to return to RQBBOX MODE');
+      }
     }
   });
 
-  // Fullscreen toggle function
+  // Fullscreen toggle function with retry logic (Xbox Mode style)
   function toggleFullScreen() {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-      RQBOX.toast('Entered Full Screen Mode');
+      (async () => {
+        for (let i = 0; i < 3; i++) {
+          if (document.fullscreenElement) break;
+          try {
+            await document.documentElement.requestFullscreen();
+            RQBOX.toast('Entered Full Screen Mode');
+            break;
+          } catch {
+            await new Promise(r => setTimeout(r, 300));
+          }
+        }
+      })();
     } else {
       document.exitFullscreen().catch(() => {});
       RQBOX.toast('Exited Full Screen Mode');
@@ -193,9 +205,34 @@ async function bootSequence() {
   const dashboard = RQBOX.id('dashboard');
   if (dashboard) dashboard.style.display = 'flex';
 
-  // Auto-enter fullscreen
-  setTimeout(() => {
-    document.documentElement.requestFullscreen().catch(() => {});
+  // Auto-enter fullscreen with retries (Xbox Mode style)
+  setTimeout(async () => {
+    for (let i = 0; i < 5; i++) {
+      if (document.fullscreenElement) break;
+      try {
+        await document.documentElement.requestFullscreen();
+        break;
+      } catch {
+        await new Promise(r => setTimeout(r, 300));
+      }
+    }
+    // Optimize system for gaming after entering fullscreen
+    if (document.fullscreenElement) {
+      try {
+        await fetch('/api/system/optimize', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'enable' })
+        });
+      } catch {}
+      try {
+        await fetch('/api/system/notifications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'suppress' })
+        });
+      } catch {}
+    }
   }, 500);
 
   setTimeout(() => {

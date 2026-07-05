@@ -1,5 +1,5 @@
 @echo off
-title RQBBOX MODE - Xbox Dashboard
+title RQBBOX MODE
 cd /d "%~dp0"
 setlocal enabledelayedexpansion
 
@@ -23,10 +23,11 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo [INFO] Starting RQBBOX MODE launcher...
+echo [INFO] Starting RQBBOX MODE...
+echo [INFO] Native fullscreen app - no browser needed
 echo.
 
-REM Start the shared fullscreen-aware launcher
-node rqbbox-launcher.js --fullscreen
+REM Start as Electron native app (fullscreen, no chrome)
+npm start
 
 pause

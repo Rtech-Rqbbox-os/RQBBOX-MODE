@@ -1,14 +1,13 @@
 @echo off
-title RQBBOX MODE - Xbox Dashboard
+title RQBBOX MODE
 color 0B
 setlocal enabledelayedexpansion
 
-REM RQBBOX MODE - Xbox Console Gaming Experience
-REM Starts server and opens dashboard in fullscreen
+REM RQBBOX MODE - Console Gaming Experience
+REM Native Electron app - no browser needed
 
 set RQBBOX_ROOT=%~dp0
 set RQBBOX_PORT=19778
-set RQBBOX_URL=http://127.0.0.1:%RQBBOX_PORT%
 
 cls
 echo.
@@ -20,33 +19,26 @@ echo  ║  🎮  All Your Games in One Place      ║
 echo  ╚═══════════════════════════════════════════╝
 echo.
 
-REM Check if server is already running
-netstat -an | findstr ":%RQBBOX_PORT% " | findstr "LISTENING" >nul 2>&1
+REM Check if server port is already in use (from a previous session)
+netstat -an 2>nul | findstr ":%RQBBOX_PORT% " | findstr "LISTENING" >nul 2>&1
 if %errorlevel%==0 (
-    echo [OK] Server already running
-    goto :open
+    echo [OK] Previous session detected - cleaning up...
+    REM Kill old server if orphaned
+    for /f "tokens=2" %%a in ('tasklist /fi "imagename eq node.exe" /fo csv /nh 2^>nul') do (
+        taskkill /f /im node.exe >nul 2>&1
+    )
+    timeout /t 1 /nobreak >nul
 )
 
-echo [1/3] Starting RQBBOX MODE launcher...
-start /B node "%RQBBOX_ROOT%rqbbox-launcher.js" --fullscreen >nul 2>&1
+echo [1/2] Starting RQBBOX MODE native app...
+echo [INFO] Launching fullscreen gaming dashboard
+echo [INFO] No browser required - native window
 
-REM Wait for server to be ready
-set retries=0
-:wait
-timeout /t 1 /nobreak >nul
-netstat -an | findstr ":%RQBBOX_PORT% " | findstr "LISTENING" >nul 2>&1
-if %errorlevel%==0 goto :ready
-set /a retries+=1
-if !retries! lss 30 goto :wait
-echo [ERROR] Server failed to start
-exit /b 1
+REM Launch as Electron app
+start /B cmd /c "cd /d "%RQBBOX_ROOT%" && npm start" >nul 2>&1
 
-:ready
-echo [2/3] Server initialized successfully
-
-:open
-echo [3/3] Launching Xbox-style dashboard in fullscreen...
+echo [2/2] RQBBOX MODE is running!
 echo.
-echo RQBBOX MODE is running!
+echo  RQBBOX MODE - Plug Into Gaming
+echo  Press F11 for fullscreen toggle
 echo.
-pause

@@ -21,7 +21,11 @@ function buildLaunchCommand(url, options = {}) {
     const lower = browser.toLowerCase();
     if (lower.includes('msedge') || lower.includes('chrome') || lower.includes('brave')) {
       const args = [`--app=${url}`];
-      if (fullscreen) args.push('--start-fullscreen');
+      if (fullscreen) {
+        args.push('--start-fullscreen');
+        args.push('--no-first-run');
+        args.push('--no-default-browser-check');
+      }
       return { command: browser, args, useSpawn: true };
     }
   }

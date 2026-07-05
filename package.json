@@ -3,15 +3,18 @@
   "version": "1.0.0",
   "description": "RQBBOX MODE — Full-screen console gaming dashboard for Windows. Xbox-like UI, controller navigation, Game Mode integration, Quick Resume, achievements, captures, cloud gaming, and 6 built-in games.",
   "private": false,
-  "main": "server.js",
+  "main": "electron-main.js",
   "bin": {
     "rqbbox-mode": "rqbbox-launcher.js"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "electron .",
     "dev": "node server.js --dev",
-    "build:exe": "pkg rqbbox-launcher.js --targets node18-win-x64 --output RQBBOX.exe",
-    "build:all": "npm run build:exe"
+    "server": "node server.js",
+    "build:exe": "npm run build:electron",
+    "build:electron": "electron-builder --win --config",
+    "build:pkg": "pkg rqbbox-launcher.js --targets node18-win-x64 --output RQBBOX.exe",
+    "build:all": "npm run build:electron"
   },
   "repository": {
     "type": "git",
@@ -31,7 +34,8 @@
     "cloud-gaming",
     "game-dvr",
     "achievements",
-    "parental-controls"
+    "parental-controls",
+    "electron"
   ],
   "author": "Rtech-Rqbbox-os",
   "license": "MIT",
@@ -39,7 +43,55 @@
     "url": "https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE/issues"
   },
   "homepage": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE",
+  "build": {
+    "appId": "com.rqbbox.mode",
+    "productName": "RQBBOX MODE",
+    "directories": {
+      "output": "dist"
+    },
+    "artifactName": "RQBBOX-MODE-Setup-${version}.${ext}",
+    "files": [
+      "**/*",
+      "!dist",
+      "!windows/scripts",
+      "!node_modules/electron",
+      "!node_modules/electron-builder",
+      "!node_modules/pkg",
+      "!node_modules/nexe",
+      "!*.bat",
+      "!*.cmd"
+    ],
+    "extraMetadata": {
+      "main": "electron-main.js"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        "portable"
+      ],
+      "icon": "build/icon.png",
+      "artifactName": "RQBBOX-MODE-Setup-${version}.${ext}",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "RQBBOX MODE"
+    },
+    "extraResources": []
+  },
   "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0",
+    "nexe": "^5.0.0-beta.4",
     "pkg": "^5.8.1"
   },
   "engines": {

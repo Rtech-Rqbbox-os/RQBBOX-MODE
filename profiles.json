@@ -59,7 +59,7 @@
   ],
   "gameData": {
     "neon-drift-racing": {
-      "playCount": 1,
+      "playCount": 2,
       "highScores": [
         {
           "score": 9999,
@@ -71,7 +71,7 @@
       "state": {}
     },
     "rqbbox-life": {
-      "playCount": 1,
+      "playCount": 3,
       "highScores": [],
       "sessions": [],
       "state": {}
