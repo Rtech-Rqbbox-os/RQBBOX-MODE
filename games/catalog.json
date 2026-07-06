@@ -90,6 +90,19 @@
       "localPath": "/games/rqbbox-life/",
       "featured": true,
       "controls": "Mouse click to select • ESC to pause • Ctrl+Shift+S to screenshot"
+    },
+    {
+      "id": "playtree-c1s1",
+      "title": "PlayTree Chapter 1 Season 1",
+      "category": "Platformer",
+      "icon": "🌳",
+      "iconSvg": "/games/playtree-c1s1/icon.svg",
+      "desc": "Climb the magical tree, collect ancient leaves, and reach the nest across 5 levels",
+      "price": "Free",
+      "type": "web",
+      "localPath": "/games/playtree-c1s1/",
+      "featured": true,
+      "controls": "← → to move • ↑ or Space to jump • Collect all leaves to complete the level"
     }
   ]
 }
