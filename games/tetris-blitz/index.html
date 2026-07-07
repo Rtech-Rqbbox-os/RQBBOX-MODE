@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html><head><title>Tetris Blitz</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#050810;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px}h1{font-weight:300;letter-spacing:4px;color:#ff6600;font-size:1.5rem}button{padding:8px 20px;background:#ff6600;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}.score{font-size:1rem;font-weight:200;color:rgba(255,255,255,.4)}</style></head><body>
+<h1>TETRIS BLITZ</h1><div class="score" id="score">Score: 0</div>
+<canvas id="game" width="300" height="600"></canvas>
+<button onclick="startGame()">New Game</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+const COLS=10,ROWS=20,BLOCK=30;
+const SHAPES=[[[1,1,1,1]],[[1,1],[1,1]],[[1,1,1],[0,1,0]],[[1,1,1],[1,0,0]],[[1,1,1],[0,0,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]];
+const COLORS=['#00ffff','#ffff00','#ff00ff','#ff6600','#00ff00','#ff0000','#0000ff'];
+let board=[],currentPiece={},score=0,gameOver=false;
+function startGame(){board=Array(ROWS).fill().map(()=>Array(COLS).fill(0));score=0;gameOver=false;spawnPiece();requestAnimationFrame(gameLoop)}
+function spawnPiece(){const i=Math.floor(Math.random()*SHAPES.length);currentPiece={shape:SHAPES[i],color:COLORS[i],x:4,y:0};if(collides())gameOver=true}
+function collides(offsetX=0,offsetY=0){return currentPiece.shape.some((row,dy)=>row.some((val,dx)=>val&&(board[currentPiece.y+dy+offsetY]?.[currentPiece.x+dx+offsetX]||currentPiece.y+dy+offsetY>=ROWS)))}
+function merge(){currentPiece.shape.forEach((row,dy)=>row.forEach((val,dx)=>{if(val)board[currentPiece.y+dy][currentPiece.x+dx]=currentPiece.color}));clearLines();spawnPiece()}
+function clearLines(){let lines=0;for(let y=ROWS-1;y>=0;y--){if(board[y].every(cell=>cell)){board.splice(y,1);board.unshift(Array(COLS).fill(0));lines++;y++}}score+=lines*100;document.getElementById('score').textContent='Score: '+score}
+function rotate(){const rotated=currentPiece.shape[0].map((_,i)=>currentPiece.shape.map(row=>row[i]).reverse());const old=currentPiece.shape;currentPiece.shape=rotated;if(collides())currentPiece.shape=old}
+function gameLoop(){if(gameOver){ctx.fillStyle='rgba(0,0,0,.9)';ctx.fillRect(0,0,300,600);ctx.fillStyle='#ff6600';ctx.font='28px system-ui';ctx.textAlign='center';ctx.fillText('GAME OVER',150,280);ctx.font='14px system-ui';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText('Score: '+score,150,310);return}
+draw()}
+function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,300,600)
+board.forEach((row,y)=>row.forEach((color,x)=>{if(color){ctx.fillStyle=color;ctx.shadowColor=color;ctx.shadowBlur=10;ctx.fillRect(x*BLOCK,y*BLOCK,BLOCK-1,BLOCK-1);ctx.shadowBlur=0}}))
+if(!gameOver){currentPiece.shape.forEach((row,dy)=>row.forEach((val,dx)=>{if(val){ctx.fillStyle=currentPiece.color;ctx.shadowColor=currentPiece.color;ctx.shadowBlur=10;ctx.fillRect((currentPiece.x+dx)*BLOCK,(currentPiece.y+dy)*BLOCK,BLOCK-1,BLOCK-1);ctx.shadowBlur=0}})}}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'&&!collides(-1,0))currentPiece.x--
+if(e.key==='ArrowRight'&&!collides(1,0))currentPiece.x++
+if(e.key==='ArrowDown'&&!collides(0,1)){currentPiece.y++;score+=1;document.getElementById('score').textContent='Score: '+score}
+if(e.key==='ArrowUp')rotate()
+if(e.key===' '){while(!collides(0,1)){currentPiece.y++;score+=2}merge()}})
+setInterval(()=>{if(!gameOver){if(!collides(0,1))currentPiece.y++;else merge();draw()}},500)
+startGame()
+</script></body></html>

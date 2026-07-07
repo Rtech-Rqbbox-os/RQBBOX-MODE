@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html><head><title>Whack a Mole</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#050810;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px;cursor:pointer}h1{font-weight:300;letter-spacing:4px;color:#ff6600;font-size:1.5rem}button{padding:8px 20px;background:#ff6600;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}.score{font-size:1rem;font-weight:200;color:rgba(255,255,255,.4)}</style></head><body>
+<h1>WHACK A MOLE</h1><div class="score" id="score">Score: 0</div>
+<canvas id="game" width="400" height="400"></canvas>
+<button onclick="startGame()">New Game</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+const HOLES=9,SIZE=3,CELL=120,GAP=20;
+let moles=[],score=0,gameOver=false;
+function startGame(){moles=Array(HOLES).fill(false);score=0;gameOver=false;document.getElementById('score').textContent='Score: '+score;spawnMole();requestAnimationFrame(gameLoop)}
+function spawnMole(){if(gameOver)return;moles=moles.map(()=>false);const idx=Math.floor(Math.random()*HOLES);moles[idx]=true;setTimeout(spawnMole,800)}
+function gameLoop(){draw();requestAnimationFrame(gameLoop)}
+function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,400,400)
+for(let i=0;i<HOLES;i++){const x=(i%SIZE)*(CELL+GAP)+GAP,y=Math.floor(i/SIZE)*(CELL+GAP)+GAP;ctx.fillStyle='#1a1a2e';ctx.beginPath();ctx.arc(x+CELL/2,y+CELL/2,40,0,Math.PI*2);ctx.fill()
+if(moles[i]){ctx.fillStyle='#ff6600';ctx.shadowColor='#ff6600';ctx.shadowBlur=20;ctx.beginPath();ctx.arc(x+CELL/2,y+CELL/2,30,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0
+ctx.fillStyle='#000';ctx.font='20px system-ui';ctx.textAlign='center';ctx.fillText('🐹',x+CELL/2,y+CELL/2+7)}}}
+c.addEventListener('click',e=>{const x=e.offsetX,y=e.offsetY;for(let i=0;i<HOLES;i++){const hx=(i%SIZE)*(CELL+GAP)+GAP+CELL/2,hy=Math.floor(i/SIZE)*(CELL+GAP)+GAP+CELL/2;if(Math.hypot(x-hx,y-hy)<40&&moles[i]){moles[i]=false;score+=10;document.getElementById('score').textContent='Score: '+score}}})
+startGame()
+</script></body></html>

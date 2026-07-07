@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><head><title>Air Hockey</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#050810;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px;cursor:none}h1{font-weight:300;letter-spacing:4px;color:#00d4ff;font-size:1.5rem}button{padding:8px 20px;background:#00d4ff;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}.score{font-size:1rem;font-weight:200;color:rgba(255,255,255,.4)}</style></head><body>
+<h1>AIR HOCKEY</h1><div class="score" id="score">Player: 0 | AI: 0</div>
+<canvas id="game" width="400" height="600"></canvas>
+<button onclick="startGame()">New Game</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+let puck={x:200,y:300,vx:0,vy:0},player={x:200,y:550},ai={x:200,y:50},playerScore=0,aiScore=0;
+function startGame(){puck={x:200,y:300,vx:3,vy:2};player={x:200,y:550};ai={x:200,y:50};playerScore=0;aiScore=0;document.getElementById('score').textContent='Player: 0 | AI: 0';requestAnimationFrame(gameLoop)}
+function gameLoop(){puck.x+=puck.vx;puck.y+=puck.vy
+if(puck.x<20||puck.x>380)puck.vx*=-1
+if(puck.y<20||puck.y>580)puck.vy*=-1
+if(puck.y<30){aiScore++;document.getElementById('score').textContent='Player: '+playerScore+' | AI: '+aiScore;puck={x:200,y:300,vx:3,vy:2}}
+if(puck.y>570){playerScore++;document.getElementById('score').textContent='Player: '+playerScore+' | AI: '+aiScore;puck={x:200,y:300,vx:3,vy:-2}}
+ai.x+=(puck.x-ai.x)*0.08;ai.x=Math.max(30,Math.min(370,ai.x))
+const dist=Math.hypot(puck.x-player.x,puck.y-player.y);if(dist<40){puck.vy=-Math.abs(puck.vy);puck.vx+=(puck.x-player.x)*0.1}
+const aiDist=Math.hypot(puck.x-ai.x,puck.y-ai.y);if(aiDist<40){puck.vy=Math.abs(puck.vy);puck.vx+=(puck.x-ai.x)*0.1}
+draw();requestAnimationFrame(gameLoop)}
+function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,400,600)
+ctx.strokeStyle='#00d4ff';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,300);ctx.lineTo(400,300);ctx.stroke()
+ctx.fillStyle='#00d4ff';ctx.shadowColor='#00d4ff';ctx.shadowBlur=15;ctx.beginPath();ctx.arc(puck.x,puck.y,15,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0
+ctx.fillStyle='#ff00ff';ctx.shadowColor='#ff00ff';ctx.shadowBlur=15;ctx.beginPath();ctx.arc(player.x,player.y,25,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0
+ctx.fillStyle='#ffff00';ctx.shadowColor='#ffff00';ctx.shadowBlur=15;ctx.beginPath();ctx.arc(ai.x,ai.y,25,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+c.addEventListener('mousemove',e=>{player.x=e.offsetX;player.x=Math.max(30,Math.min(370,player.x))})
+startGame()
+</script></body></html>

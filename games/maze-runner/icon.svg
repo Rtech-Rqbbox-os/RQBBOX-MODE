@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a2e2e"/>
+      <stop offset="100%" style="stop-color:#051515"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="20" fill="url(#bg)"/>
+  <rect x="25" y="25" width="20" height="20" fill="#1a1a2e" rx="2"/>
+  <rect x="50" y="25" width="20" height="20" fill="#1a1a2e" rx="2"/>
+  <rect x="75" y="25" width="20" height="20" fill="#1a1a2e" rx="2"/>
+  <rect x="25" y="50" width="20" height="20" fill="#1a1a2e" rx="2"/>
+  <rect x="50" y="50" width="20" height="20" fill="#00ffcc" rx="2"/>
+  <rect x="75" y="50" width="20" height="20" fill="#1a1a2e" rx="2"/>
+  <rect x="25" y="75" width="20" height="20" fill="#1a1a2e" rx="2"/>
+  <rect x="50" y="75" width="20" height="20" fill="#1a1a2e" rx="2"/>
+  <rect x="75" y="75" width="20" height="20" fill="#00ff00" rx="2"/>
+  <text x="64" y="118" text-anchor="middle" font-family="sans-serif" font-size="8" font-weight="bold" fill="#00ffcc">MAZE</text>
+</svg>

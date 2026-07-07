@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RhysTech/RQBBOX-Experience.git"
+    "url": "git+https://github.com/rtech-rqbbox-os/RQBBOX-Experience.git"
   },
   "keywords": [
     "gaming",
@@ -37,7 +37,7 @@
   "author": "RhysTech",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/RhysTech/RQBBOX-Experience/issues"
+    "url": "https://github.com/rtech-rqbbox-os/RQBBOX-Experience/issues"
   },
   "homepage": "https://rhystech.io/rqbbox-experience",
   "build": {

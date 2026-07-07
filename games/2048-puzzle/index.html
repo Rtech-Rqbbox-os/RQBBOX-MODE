@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html><head><title>2048 Neon</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#050810;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px}h1{font-weight:300;letter-spacing:4px;color:#ffcc00;font-size:1.5rem}button{padding:8px 20px;background:#ffcc00;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}.score{font-size:1rem;font-weight:200;color:rgba(255,255,255,.4)}</style></head><body>
+<h1>2048 NEON</h1><div class="score" id="score">Score: 0</div>
+<canvas id="game" width="400" height="400"></canvas>
+<button onclick="startGame()">New Game</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+const SIZE=4,CELL=90,GAP=10;
+let board=[],score=0;
+function startGame(){board=Array(SIZE).fill().map(()=>Array(SIZE).fill(0));score=0;addTile();addTile();draw()}
+function addTile(){const empty=[];for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++)if(!board[y][x])empty.push({x,y});if(empty.length){const t=empty[Math.floor(Math.random()*empty.length)];board[t.y][t.x]=Math.random()<.9?2:4}}
+function slide(row){let arr=row.filter(v=>v);for(let i=0;i<arr.length-1;i++){if(arr[i]===arr[i+1]){arr[i]*=2;score+=arr[i];arr[i+1]=0}}arr=arr.filter(v=>v);while(arr.length<SIZE)arr.push(0);return arr}
+function move(dir){let rotated=board;for(let i=0;i<dir;i++)rotated=rotate(rotated);rotated=rotated.map(slide);for(let i=0;i<(4-dir)%4;i++)rotated=rotate(rotated);board=rotated;document.getElementById('score').textContent='Score: '+score;addTile();draw()}
+function rotate(b){return b[0].map((_,i)=>b.map(row=>row[i]).reverse())}
+function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,400,400)
+for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++){const val=board[y][x];const colors={0:'#1a1a2e',2:'#ffcc00',4:'#ff9900',8:'#ff6600',16:'#ff3300',32:'#ff0000',64:'#ff0066',128:'#ff00ff',256:'#cc00ff',512:'#9900ff',1024:'#6600ff',2048:'#3300ff'};ctx.fillStyle=colors[val]||'#000';ctx.shadowColor=colors[val]||'#000';ctx.shadowBlur=val?15:0;ctx.fillRect(x*(CELL+GAP)+GAP,y*(CELL+GAP)+GAP,CELL,CELL);ctx.shadowBlur=0;if(val){ctx.fillStyle='#000';ctx.font='bold 24px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(val,x*(CELL+GAP)+GAP+CELL/2,y*(CELL+GAP)+GAP+CELL/2)}}}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')move(3)
+if(e.key==='ArrowRight')move(1)
+if(e.key==='ArrowUp')move(0)
+if(e.key==='ArrowDown')move(2)})
+startGame()
+</script></body></html>

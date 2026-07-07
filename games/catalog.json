@@ -8,7 +8,7 @@
       "desc": "High-speed neon racing through cyberpunk streets",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/neon-drift-racing/",
+      "launchUrl": "games/neon-drift-racing/",
       "featured": true,
       "controls": "Left/Right arrows to steer"
     },
@@ -20,7 +20,7 @@
       "desc": "Retro pixel-art adventure through mystical lands",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/pixel-quest/",
+      "launchUrl": "games/pixel-quest/",
       "featured": true,
       "controls": "Arrow keys to move • Collect gems"
     },
@@ -32,7 +32,7 @@
       "desc": "Space combat simulator with intense dogfights",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/star-fighter-x/",
+      "launchUrl": "games/star-fighter-x/",
       "featured": true,
       "controls": "Arrow keys to move • Space to shoot"
     },
@@ -44,7 +44,7 @@
       "desc": "Build and explore in an infinite void world",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/void-craft-sandbox/",
+      "launchUrl": "games/void-craft-sandbox/",
       "featured": false,
       "controls": "Left-click to place • Right-click to remove"
     },
@@ -56,7 +56,7 @@
       "desc": "Classic arcade breakout game",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/retro-zone/",
+      "launchUrl": "games/retro-zone/",
       "featured": true,
       "controls": "Arrow keys to move paddle"
     },
@@ -68,7 +68,7 @@
       "desc": "Endless runner in a 3D cubic world",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/cube-runner-3d/",
+      "launchUrl": "games/cube-runner-3d/",
       "featured": false,
       "controls": "Arrow keys to dodge obstacles"
     },
@@ -80,7 +80,7 @@
       "desc": "Live a neon life in RQBBOX City",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/rqbbox-life/game/index.html",
+      "launchUrl": "games/rqbbox-life/",
       "featured": true,
       "controls": "Mouse click to select • ESC to pause"
     },
@@ -92,7 +92,7 @@
       "desc": "Climb the magical tree, collect leaves, reach the nest",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/playtree-c1s1/",
+      "launchUrl": "games/playtree-c1s1/",
       "featured": true,
       "controls": "← → to move • ↑ or Space to jump"
     },
@@ -116,7 +116,7 @@
       "desc": "Classic snake game with neon glow effects",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/retro-zone/",
+      "launchUrl": "games/snake-neon/",
       "featured": false,
       "controls": "Arrow keys to move"
     },
@@ -128,7 +128,7 @@
       "desc": "Fast-paced tetris with power-ups",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/retro-zone/",
+      "launchUrl": "games/tetris-blitz/",
       "featured": false,
       "controls": "Arrow keys to rotate and move"
     },
@@ -140,7 +140,7 @@
       "desc": "Classic space shooter remastered",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/star-fighter-x/",
+      "launchUrl": "games/space-invaders/",
       "featured": false,
       "controls": "Arrow keys + Space to shoot"
     },
@@ -152,7 +152,7 @@
       "desc": "Tap to fly through neon pipes",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/cube-runner-3d/",
+      "launchUrl": "games/flappy-bird/",
       "featured": false,
       "controls": "Space or Click to flap"
     },
@@ -164,7 +164,7 @@
       "desc": "Merge numbers to reach 2048",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/retro-zone/",
+      "launchUrl": "games/2048-puzzle/",
       "featured": false,
       "controls": "Arrow keys to slide tiles"
     },
@@ -176,7 +176,7 @@
       "desc": "Play chess against an AI opponent",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/retro-zone/",
+      "launchUrl": "games/chess-ai/",
       "featured": false,
       "controls": "Click to select and move pieces"
     },
@@ -188,7 +188,7 @@
       "desc": "Hit the moles before they hide!",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/retro-zone/",
+      "launchUrl": "games/whack-a-mole/",
       "featured": false,
       "controls": "Click on moles"
     },
@@ -200,7 +200,7 @@
       "desc": "Find matching pairs of cards",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/retro-zone/",
+      "launchUrl": "games/memory-match/",
       "featured": false,
       "controls": "Click cards to flip"
     },
@@ -212,7 +212,7 @@
       "desc": "Navigate through procedurally generated mazes",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/pixel-quest/",
+      "launchUrl": "games/maze-runner/",
       "featured": false,
       "controls": "Arrow keys to navigate"
     },
@@ -224,7 +224,7 @@
       "desc": "Score hoops with perfect timing",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/retro-zone/",
+      "launchUrl": "games/basketball-shots/",
       "featured": false,
       "controls": "Click and drag to shoot"
     },
@@ -236,9 +236,9 @@
       "desc": "Defend your base against zombie hordes",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/star-fighter-x/",
+      "launchUrl": "games/zombie-defense/",
       "featured": false,
-      "controls": "Click to shoot • WASD to move"
+      "controls": "Click to shoot • Arrow keys to move"
     },
     {
       "id": "dungeon-crawler",
@@ -248,7 +248,7 @@
       "desc": "Explore procedurally generated dungeons",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/pixel-quest/",
+      "launchUrl": "games/dungeon-crawler/",
       "featured": false,
       "controls": "WASD to move • Click to attack"
     },
@@ -260,19 +260,19 @@
       "desc": "Fast-paced 2-player air hockey",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/retro-zone/",
+      "launchUrl": "games/air-hockey/",
       "featured": false,
       "controls": "Mouse to move paddle"
     },
     {
-      "id": " breakout-neon",
+      "id": "breakout-neon",
       "title": "Breakout Neon",
       "category": "Arcade",
       "icon": "🎯",
       "desc": "Neon-style breakout with power-ups",
       "price": "Free",
       "type": "web",
-      "launchUrl": "https://rtech-rqbbox-os.github.io/RQBBOX-MODE/games/retro-zone/",
+      "launchUrl": "games/breakout-neon/",
       "featured": false,
       "controls": "Arrow keys to move paddle"
     }

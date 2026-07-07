@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2e1a0a"/>
+      <stop offset="100%" style="stop-color:#150d05"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="20" fill="url(#bg)"/>
+  <rect x="30" y="30" width="20" height="20" fill="#ff6600" rx="3"/>
+  <rect x="55" y="30" width="20" height="20" fill="#ff9900" rx="3"/>
+  <rect x="80" y="30" width="20" height="20" fill="#ffcc00" rx="3"/>
+  <rect x="30" y="55" width="20" height="20" fill="#ff3300" rx="3"/>
+  <rect x="55" y="55" width="20" height="20" fill="#ff6600" rx="3"/>
+  <rect x="30" y="80" width="20" height="20" fill="#ff9900" rx="3"/>
+  <text x="64" y="118" text-anchor="middle" font-family="sans-serif" font-size="8" font-weight="bold" fill="#ff6600">TETRIS</text>
+</svg>

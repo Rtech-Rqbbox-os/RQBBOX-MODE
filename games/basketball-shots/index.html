@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html><head><title>Basketball Shots</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#050810;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px;cursor:pointer}h1{font-weight:300;letter-spacing:4px;color:#ff6600;font-size:1.5rem}button{padding:8px 20px;background:#ff6600;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}.score{font-size:1rem;font-weight:200;color:rgba(255,255,255,.4)}</style></head><body>
+<h1>BASKETBALL</h1><div class="score" id="score">Score: 0</div>
+<canvas id="game" width="500" height="400"></canvas>
+<button onclick="startGame()">New Game</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+let ball={x:250,y:350,vx:0,vy:0},hoop={x:400,y:100,r:30},score=0,dragging=false;
+function startGame(){ball={x:250,y:350,vx:0,vy:0};score=0;document.getElementById('score').textContent='Score: '+score;draw()}
+function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,500,400)
+ctx.fillStyle='#ff6600';ctx.shadowColor='#ff6600';ctx.shadowBlur=20;ctx.beginPath();ctx.arc(ball.x,ball.y,15,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0
+ctx.strokeStyle='#fff';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(hoop.x,hoop.y);ctx.lineTo(hoop.x,hoop.y+60);ctx.stroke()
+ctx.fillStyle='#ff0000';ctx.shadowColor='#ff0000';ctx.shadowBlur=15;ctx.beginPath();ctx.arc(hoop.x,hoop.y,hoop.r,0,Math.PI);ctx.stroke();ctx.shadowBlur=0}
+function update(){ball.vy+=0.5;ball.x+=ball.vx;ball.y+=ball.vy
+if(ball.y>380||ball.x<0||ball.x>500){ball={x:250,y:350,vx:0,vy:0}}
+const dist=Math.hypot(ball.x-hoop.x,ball.y-hoop.y);if(dist<hoop.r&&ball.vy>0){score+=10;document.getElementById('score').textContent='Score: '+score;ball={x:250,y:350,vx:0,vy:0}}
+requestAnimationFrame(()=>{update();draw()})}
+c.addEventListener('mousedown',e=>{const dist=Math.hypot(e.offsetX-ball.x,e.offsetY-ball.y);if(dist<30)dragging=true})
+c.addEventListener('mousemove',e=>{if(dragging){ball.x=e.offsetX;ball.y=e.offsetY;draw()}})
+c.addEventListener('mouseup',e=>{if(dragging){dragging=false;ball.vx=(ball.x-250)*0.1;ball.vy=(ball.y-350)*0.1-10;update()}})
+startGame()
+</script></body></html>

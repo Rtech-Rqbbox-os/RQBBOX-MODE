@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html><head><title>Maze Runner</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#050810;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px}h1{font-weight:300;letter-spacing:4px;color:#00ffcc;font-size:1.5rem}button{padding:8px 20px;background:#00ffcc;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}.info{font-size:.8rem;color:rgba(255,255,255,.4)}</style></head><body>
+<h1>MAZE RUNNER</h1><canvas id="game" width="400" height="400"></canvas>
+<div class="info">Arrow keys to navigate • Reach the green exit</div>
+<button onclick="startGame()">New Maze</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+const SIZE=20,CELL=20;
+let maze=[],player={x:1,y:1},exit={x:18,y:18};
+function startGame(){maze=Array(SIZE).fill().map(()=>Array(SIZE).fill(1));generateMaze(1,1);player={x:1,y:1};exit={x:SIZE-2,y:SIZE-2};maze[exit.y][exit.x]=0;draw()}
+function generateMaze(x,y){maze[y][x]=0;const dirs=[[0,-2],[0,2],[-2,0],[2,0]].sort(()=>Math.random()-.5);dirs.forEach(([dx,dy])=>{const nx=x+dx,ny=y+dy;if(nx>0&&nx<SIZE-1&&ny>0&&ny<SIZE-1&&maze[ny][nx]){maze[y+dy/2][x+dx/2]=0;generateMaze(nx,ny)}})}
+function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,400,400)
+for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++){if(maze[y][x]){ctx.fillStyle='#1a1a2e';ctx.fillRect(x*CELL,y*CELL,CELL,CELL)}}
+ctx.fillStyle='#00ffcc';ctx.shadowColor='#00ffcc';ctx.shadowBlur=15;ctx.fillRect(player.x*CELL+2,player.y*CELL+2,CELL-4,CELL-4);ctx.shadowBlur=0
+ctx.fillStyle='#00ff00';ctx.shadowColor='#00ff00';ctx.shadowBlur=15;ctx.fillRect(exit.x*CELL+2,exit.y*CELL+2,CELL-4,CELL-4);ctx.shadowBlur=0}
+document.addEventListener('keydown',e=>{let nx=player.x,ny=player.y;if(e.key==='ArrowUp')ny--;if(e.key==='ArrowDown')ny++;if(e.key==='ArrowLeft')nx--;if(e.key==='ArrowRight')nx++;if(nx>=0&&nx<SIZE&&ny>=0&&ny<SIZE&&!maze[ny][nx]){player.x=nx;player.y=ny;draw()}})
+startGame()
+</script></body></html>

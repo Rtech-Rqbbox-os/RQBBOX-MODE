@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><head><title>Zombie Defense</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#050810;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px}h1{font-weight:300;letter-spacing:4px;color:#00ff00;font-size:1.5rem}button{padding:8px 20px;background:#00ff00;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}.score{font-size:1rem;font-weight:200;color:rgba(255,255,255,.4)}</style></head><body>
+<h1>ZOMBIE DEFENSE</h1><div class="score" id="score">Score: 0</div>
+<canvas id="game" width="600" height="400"></canvas>
+<button onclick="startGame()">New Game</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+let player={x:300,y:350},bullets=[],zombies=[],score=0,gameOver=false;
+function startGame(){player={x:300,y:350};bullets=[];zombies=[];score=0;gameOver=false;requestAnimationFrame(gameLoop)}
+function gameLoop(){if(gameOver){ctx.fillStyle='rgba(0,0,0,.9)';ctx.fillRect(0,0,600,400);ctx.fillStyle='#00ff00';ctx.font='28px system-ui';ctx.textAlign='center';ctx.fillText('GAME OVER',300,180);ctx.font='16px system-ui';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText('Score: '+score,300,210);return}
+update();draw();requestAnimationFrame(gameLoop)}
+function update(){if(Math.random()<.03)zombies.push({x:Math.random()*560,y:-30,w:30,h:30,health:2})
+zombies.forEach(z=>z.y+=1.5);zombies=zombies.filter(z=>z.y<420)
+bullets.forEach(b=>b.y-=8);bullets=bullets.filter(b=>b.y>0)
+bullets.forEach(b=>{zombies.forEach(z=>{if(b.x>z.x&&b.x<z.x+z.w&&b.y>z.y&&b.y<z.y+z.h){z.health--;if(z.health<=0){score+=5;document.getElementById('score').textContent='Score: '+score}}})})
+zombies=zombies.filter(z=>z.health>0)
+zombies.forEach(z=>{if(player.x<z.x+z.w&&player.x+30>z.x&&player.y<z.y+z.h&&player.y+30>z.y)gameOver=true})
+c.addEventListener('click',e=>{bullets.push({x:e.offsetX,y:player.y})})}
+function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,600,400)
+ctx.fillStyle='#00ff00';ctx.shadowColor='#00ff00';ctx.shadowBlur=15;ctx.fillRect(player.x,player.y,30,30);ctx.shadowBlur=0
+ctx.fillStyle='#fff';bullets.forEach(b=>ctx.fillRect(b.x-2,b.y,4,12))
+ctx.fillStyle='#ff0000';ctx.shadowColor='#ff0000';ctx.shadowBlur=10;zombies.forEach(z=>ctx.fillRect(z.x,z.y,z.w,z.h));ctx.shadowBlur=0}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')player.x=Math.max(0,player.x-15)
+if(e.key==='ArrowRight')player.x=Math.min(570,player.x+15)})
+startGame()
+</script></body></html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html><head><title>Dungeon Crawler</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#050810;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px}h1{font-weight:300;letter-spacing:4px;color:#ffcc00;font-size:1.5rem}button{padding:8px 20px;background:#ffcc00;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}.info{font-size:.8rem;color:rgba(255,255,255,.4)}</style></head><body>
+<h1>DUNGEON CRAWLER</h1><canvas id="game" width="400" height="400"></canvas>
+<div class="info">WASD to move • Click to attack enemies</div>
+<button onclick="startGame()">New Dungeon</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+const SIZE=101,CELL=40;
+let player={x:5,y:5,health:100},enemies=[],map=[];
+function startGame(){player={x:5,y:5,health:100};enemies=[];map=Array(SIZE).fill().map(()=>Array(SIZE).fill(1));generateMap();spawnEnemies();draw()}
+function generateMap(){for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++)if(Math.random()<.3)map[y][x]=0;map[player.y][player.x]=0}
+function spawnEnemies(){for(let i=0;i<10;i++){let ex,ey;do{ex=Math.floor(Math.random()*SIZE);ey=Math.floor(Math.random()*SIZE)}while(map[ey][ex]||Math.hypot(ex-player.x,ey-player.y)<5);enemies.push({x:ex,y:ey,health:30})}}
+function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,400,400)
+const viewX=Math.max(0,Math.min(SIZE-10,player.x-5)),viewY=Math.max(0,Math.min(SIZE-10,player.y-5));
+for(let y=viewY;y<viewY+10;y++)for(let x=viewX;x<viewX+10;x++){if(map[y][x]){ctx.fillStyle='#1a1a2e';ctx.fillRect((x-viewX)*CELL,(y-viewY)*CELL,CELL,CELL)}}
+ctx.fillStyle='#ffcc00';ctx.shadowColor='#ffcc00';ctx.shadowBlur=15;ctx.fillRect((player.x-viewX)*CELL+5,(player.y-viewY)*CELL+5,CELL-10,CELL-10);ctx.shadowBlur=0
+ctx.fillStyle='#ff0000';ctx.shadowColor='#ff0000';ctx.shadowBlur=10;enemies.forEach(e=>{if(e.x>=viewX&&e.x<viewX+10&&e.y>=viewY&&e.y<viewY+10)ctx.fillRect((e.x-viewX)*CELL+8,(e.y-viewY)*CELL+8,CELL-16,CELL-16)});ctx.shadowBlur=0
+ctx.fillStyle='#fff';ctx.font='14px system-ui';ctx.fillText('Health: '+player.health,10,20)}
+document.addEventListener('keydown',e=>{let nx=player.x,ny=player.y;if(e.key==='w'||e.key==='W')ny--;if(e.key==='s'||e.key==='S')ny++;if(e.key==='a'||e.key==='A')nx--;if(e.key==='d'||e.key==='D')nx++;if(nx>=0&&nx<SIZE&&ny>=0&&ny<SIZE&&!map[ny][nx]){player.x=nx;player.y=ny;draw()}})
+c.addEventListener('click',e=>{const tx=Math.floor(e.offsetX/CELL)+Math.max(0,Math.min(SIZE-10,player.x-5)),ty=Math.floor(e.offsetY/CELL)+Math.max(0,Math.min(SIZE-10,player.y-5));enemies=enemies.filter(e=>{if(Math.abs(e.x-tx)<1&&Math.abs(e.y-ty)<1){e.health-=10;return e.health>0}return true})})
+startGame()
+</script></body></html>

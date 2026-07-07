@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300">
+  <defs>
+    <linearGradient id="bg10" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a2a"/>
+      <stop offset="50%" style="stop-color:#1a1a4a"/>
+      <stop offset="100%" style="stop-color:#0a0a2a"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00ffff"/>
+      <stop offset="50%" style="stop-color:#ff00ff"/>
+      <stop offset="100%" style="stop-color:#00ffff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="300" fill="url(#bg10)"/>
+  <text x="600" y="100" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="url(#brand)">RQBBOX EXPERIENCE</text>
+  <text x="600" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" fill="#ffffff">by RhysTech</text>
+  <text x="600" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#00ffff">Plug Into Gaming</text>
+  <text x="600" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#ffffff" opacity="0.6">© 2026 RhysTech • MIT License • Open Source</text>
+</svg>

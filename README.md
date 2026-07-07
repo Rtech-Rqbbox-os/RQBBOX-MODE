@@ -8,9 +8,9 @@
 
 **Next-generation desktop gaming console hybrid by RhysTech**
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-blue?style=for-the-badge&logo=github)](https://rtech-rqbbox-os.github.io/RQBBOX-MODE)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE/blob/master/LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0.0-cyan?style=for-the-badge)](https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE)
+[![GitHub Release](https://img.shields.io/badge/Release-v1.0.0-cyan?style=for-the-badge)](https://github.com/rtech-rqbbox-os/RQBBOX-Experience/releases/latest)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](https://github.com/rtech-rqbbox-os/RQBBOX-Experience/blob/master/LICENSE)
+[![Version](https://img.shields.io/badge/Version-1.0.0-cyan?style=for-the-badge)](https://github.com/rtech-rqbbox-os/RQBBOX-Experience)
 [![Electron](https://img.shields.io/badge/Electron-33-purple?style=for-the-badge&logo=electron)](https://electronjs.org)
 
 </div>
@@ -53,15 +53,15 @@ RQBBOX Experience OS 1.0 is a **full-screen desktop platform** that combines gam
 ### Installation
 
 **Option 1: Download the Installer**
-1. Download `RQBBOX-Experience-Setup-1.0.0.exe` from [Releases](https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE/releases)
+1. Download `RQBBOX-Experience-Setup-1.0.0.exe` from [Releases](https://github.com/rtech-rqbbox-os/RQBBOX-Experience/releases/latest)
 2. Run the installer
 3. Choose installation directory
 4. Launch RQBBOX Experience OS 1.0
 
 **Option 2: Run from Source**
 ```bash
-git clone https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE.git
-cd RQBBOX-MODE
+git clone https://github.com/rtech-rqbbox-os/RQBBOX-Experience.git
+cd RQBBOX-Experience
 npm install
 npm start
 ```

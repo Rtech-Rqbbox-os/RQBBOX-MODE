@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300">
+  <defs>
+    <linearGradient id="bg6" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0a2a"/>
+      <stop offset="50%" style="stop-color:#2a1a4a"/>
+      <stop offset="100%" style="stop-color:#1a0a2a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="300" fill="url(#bg6)"/>
+  <text x="600" y="80" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#ff00ff">ALL-IN-ONE PLATFORM</text>
+  <text x="200" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#ffffff">🎮 Gaming</text>
+  <text x="400" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#ffffff">✦ AI</text>
+  <text x="600" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#ffffff">🛒 Apps</text>
+  <text x="800" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#ffffff">📊 System</text>
+  <text x="1000" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#ffffff">🌐 Browser</text>
+  <text x="200" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#ff00ff" opacity="0.8">📝 Editor</text>
+  <text x="400" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#ff00ff" opacity="0.8">🎨 Paint</text>
+  <text x="600" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#ff00ff" opacity="0.8">🕐 Clock</text>
+  <text x="800" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#ff00ff" opacity="0.8">👥 Social</text>
+  <text x="1000" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#ff00ff" opacity="0.8">☁ Cloud</text>
+</svg>

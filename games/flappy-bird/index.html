@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html><head><title>Flappy Neon</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#050810;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px}h1{font-weight:300;letter-spacing:4px;color:#ffff00;font-size:1.5rem}button{padding:8px 20px;background:#ffff00;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}.score{font-size:1rem;font-weight:200;color:rgba(255,255,255,.4)}</style></head><body>
+<h1>FLAPPY NEON</h1><div class="score" id="score">Score: 0</div>
+<canvas id="game" width="400" height="600"></canvas>
+<button onclick="startGame()">New Game</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+let bird={x:80,y:300,vy:0},pipes=[],score=0,gameOver=false;
+function startGame(){bird={x:80,y:300,vy:0};pipes=[];score=0;gameOver=false;requestAnimationFrame(gameLoop)}
+function gameLoop(){if(gameOver){ctx.fillStyle='rgba(0,0,0,.9)';ctx.fillRect(0,0,400,600);ctx.fillStyle='#ffff00';ctx.font='28px system-ui';ctx.textAlign='center';ctx.fillText('GAME OVER',200,280);ctx.font='14px system-ui';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText('Score: '+score,200,310);return}
+update();draw();requestAnimationFrame(gameLoop)}
+function update(){bird.vy+=0.5;bird.y+=bird.vy
+if(pipes.length===0||pipes[pipes.length-1].x<250){const gap=150;const topY=Math.random()*(400-gap)+50;pipes.push({x:400,topY:topY,gap:gap,passed:false})}
+pipes.forEach(p=>p.x-=1);pipes=pipes.filter(p=>p.x>-60)
+pipes.forEach(p=>{if(!p.passed&&p.x+60<bird.x){p.passed=true;score++;document.getElementById('score').textContent='Score: '+score}
+if(bird.x+20>p.x&&bird.x<p.x+60&&(bird.y<p.topY||bird.y+20>p.topY+p.gap))gameOver=true})
+if(bird.y<0||bird.y+20>600)gameOver=true}
+function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,400,600)
+ctx.fillStyle='#ffff00';ctx.shadowColor='#ffff00';ctx.shadowBlur=15;ctx.fillRect(bird.x,bird.y,20,20);ctx.shadowBlur=0
+ctx.fillStyle='#00ffff';ctx.shadowColor='#00ffff';ctx.shadowBlur=10;pipes.forEach(p=>{ctx.fillRect(p.x,0,60,p.topY);ctx.fillRect(p.x,p.topY+p.gap,60,600-p.topY-p.gap)});ctx.shadowBlur=0}
+document.addEventListener('keydown',e=>{if(e.key===' '){bird.vy=-8}})
+c.addEventListener('click',()=>{bird.vy=-8})
+startGame()
+</script></body></html>
