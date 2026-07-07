@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html><head><title>Cube Runner 3D</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#050810;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px}h1{font-weight:300;letter-spacing:4px;color:#00ff88;font-size:1.5rem}button{padding:8px 20px;background:#00ff88;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}.score{font-size:1rem;font-weight:200;color:rgba(255,255,255,.4)}</style></head><body>
+<h1>CUBE RUNNER 3D</h1><div class="score" id="score3">Distance: 0</div>
+<canvas id="game" width="500" height="400"></canvas>
+<button onclick="startRun()">Start Again</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+let player={x:230,y:340,w:30,h:30},obstacles=[],score=0,gameOver=false;
+let roadPos=0,roadSpeed=4;
+function startRun(){obstacles=[];score=0;gameOver=false;player.x=230;requestAnimationFrame(loop)}
+function loop(){if(gameOver){ctx.fillStyle='rgba(0,0,0,.9)';ctx.fillRect(0,0,500,400);ctx.fillStyle='#00ff88';ctx.font='28px system-ui';ctx.textAlign='center';ctx.fillText('GAME OVER',250,180);ctx.font='14px system-ui';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText('Distance: '+score,250,210);return}
+update();draw();requestAnimationFrame(loop)}
+function update(){roadPos=(roadPos+roadSpeed)%80
+if(Math.random()<.025)obstacles.push({x:Math.random()*440,y:-40,w:40+Math.random()*30,h:40})
+obstacles.forEach(o=>o.y+=roadSpeed+2);obstacles=obstacles.filter(o=>o.y<420)
+obstacles.forEach(o=>{if(player.x<o.x+o.w&&player.x+player.w>o.x&&player.y<o.y+o.h&&player.y+player.h>o.y)gameOver=true})
+score++;document.getElementById('score3').textContent='Distance: '+score}
+function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,500,400)
+ctx.strokeStyle='rgba(255,255,255,.03)';ctx.lineWidth=2;for(let i=-80;i<500;i+=80){const y=i+roadPos;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(500,y);ctx.stroke()}
+ctx.fillStyle='#00ff88';ctx.shadowColor='#00ff88';ctx.shadowBlur=30;ctx.fillRect(player.x,player.y,player.w,player.h);ctx.shadowBlur=0
+ctx.fillStyle='rgba(255,100,100,.9)';obstacles.forEach(o=>{ctx.shadowColor='rgba(255,100,100,.4)';ctx.shadowBlur=15;ctx.fillRect(o.x,o.y,o.w,o.h);ctx.shadowBlur=0})}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')player.x=Math.max(0,player.x-30)
+if(e.key==='ArrowRight')player.x=Math.min(470,player.x+30)
+if(e.key==='ArrowUp')player.y=Math.max(0,player.y-30)
+if(e.key==='ArrowDown')player.y=Math.min(370,player.y+30)})
+startRun()
+</script></body></html>

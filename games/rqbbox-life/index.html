@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>RQBBOX LIFE - Life Simulation</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080818;--surface:rgba(255,255,255,0.04);--surface-hover:rgba(255,255,255,0.08);--border:rgba(255,255,255,0.06);--text:#fff;--text-dim:rgba(255,255,255,0.4);--text-mid:rgba(255,255,255,0.6);--cyan:#00d4ff;--cyan-dim:rgba(0,212,255,0.15);--green:#00ff88;--pink:#ff0080;--orange:#ff8800;--red:#ff3344;--yellow:#ffdd00;--purple:#8844ff;--radius:12px;--font:'Segoe UI',system-ui,sans-serif}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);overflow:hidden;user-select:none}
+input,button,select{font-family:inherit;outline:none}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);z-index:10}
+.screen.active{display:flex}
+
+/* Splash */
+#splash{background:linear-gradient(160deg,#080818 0%,#0a0a2a 50%,#060614 100%)}
+.splash-logo{font-size:3rem;font-weight:200;letter-spacing:12px;color:var(--cyan);text-shadow:0 0 40px rgba(0,212,255,0.3);margin-bottom:8px}
+.splash-sub{font-size:1.2rem;font-weight:300;letter-spacing:8px;color:var(--text-dim);margin-bottom:40px}
+.splash-bar{width:200px;height:2px;background:rgba(255,255,255,0.06);border-radius:1px;overflow:hidden}
+.splash-bar div{height:100%;background:var(--cyan);width:0%;transition:width 0.3s}
+
+/* Main Menu */
+.menu-title{font-size:2.5rem;font-weight:200;letter-spacing:10px;color:var(--cyan);margin-bottom:4px}
+.menu-sub{font-size:0.85rem;color:var(--text-dim);letter-spacing:4px;margin-bottom:36px}
+.menu-btns{display:flex;flex-direction:column;gap:10px;width:280px}
+.menu-btn{padding:14px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:0.95rem;cursor:pointer;transition:all 0.2s;text-align:center;letter-spacing:1px}
+.menu-btn:hover{background:var(--surface-hover);border-color:var(--cyan);transform:translateY(-2px)}
+.menu-btn.primary{background:var(--cyan-dim);border-color:var(--cyan);color:var(--cyan)}
+.menu-btn.primary:hover{background:rgba(0,212,255,0.25)}
+.menu-version{position:absolute;bottom:20px;color:var(--text-dim);font-size:0.7rem;letter-spacing:2px}
+
+/* Character Creator */
+.creator-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;width:380px;max-width:90vw}
+.creator-title{font-size:1.2rem;font-weight:300;letter-spacing:4px;color:var(--cyan);text-align:center;margin-bottom:24px}
+.creator-field{margin-bottom:16px}
+.creator-field label{display:block;font-size:0.75rem;color:var(--text-mid);letter-spacing:1px;margin-bottom:6px}
+.creator-field input[type="text"]{width:100%;padding:10px 14px;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:0.9rem;transition:border-color 0.2s}
+.creator-field input[type="text"]:focus{border-color:var(--cyan)}
+.style-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.style-opt{padding:10px;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;text-align:center;cursor:pointer;transition:all 0.15s;font-size:0.8rem;color:var(--text-mid)}
+.style-opt:hover{border-color:var(--text-dim)}
+.style-opt.selected{border-color:var(--cyan);background:var(--cyan-dim);color:var(--cyan)}
+
+/* Game HUD */
+#game-hud{position:fixed;inset:0;display:none;flex-direction:column;background:var(--bg)}
+#game-hud.active{display:flex}
+.top-strip{height:56px;background:rgba(0,0,0,0.5);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
+.top-brand{font-weight:300;letter-spacing:4px;color:var(--cyan);font-size:0.8rem}
+.top-day{font-size:0.75rem;color:var(--text-mid);margin-left:auto}
+.top-weather{font-size:0.75rem;color:var(--text-mid);display:flex;align-items:center;gap:4px}
+.top-phase{font-size:0.7rem;padding:4px 12px;border-radius:20px;background:var(--cyan-dim);color:var(--cyan);letter-spacing:1px;border:1px solid rgba(0,212,255,0.2)}
+.top-fps{font-size:0.65rem;color:var(--green);font-family:monospace}
+.stats-bar{height:40px;background:rgba(0,0,0,0.3);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:6px;flex-shrink:0;overflow-x:auto}
+.stat-item{display:flex;align-items:center;gap:4px;font-size:0.65rem;color:var(--text-mid);padding:0 6px;white-space:nowrap}
+.stat-item .label{color:var(--text-dim);font-size:0.6rem}
+.stat-bar-bg{width:50px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.stat-bar-fill{height:100%;border-radius:2px;transition:width 0.3s}
+.stat-bar-fill.health{background:var(--red)}
+.stat-bar-fill.energy{background:var(--yellow)}
+.stat-bar-fill.happiness{background:var(--green)}
+.stat-bar-fill.social{background:var(--cyan)}
+.stat-bar-fill.career{background:var(--purple)}
+.stat-val{font-size:0.65rem;font-weight:600;min-width:28px;text-align:right;color:var(--text)}
+
+/* Game Main Area */
+.game-area{flex:1;display:flex;overflow:hidden}
+.game-left{flex:1;display:flex;flex-direction:column;padding:16px;overflow-y:auto}
+.game-right{width:280px;border-left:1px solid var(--border);padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.phase-title{font-size:1.3rem;font-weight:300;color:var(--cyan);margin-bottom:4px}
+.phase-desc{font-size:0.8rem;color:var(--text-mid);margin-bottom:16px}
+.activity-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:16px}
+.activity-btn{padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.2s;text-align:left;display:flex;flex-direction:column;gap:4px}
+.activity-btn:hover{background:var(--surface-hover);border-color:var(--cyan);transform:translateY(-2px)}
+.activity-btn .act-icon{font-size:1.3rem}
+.activity-btn .act-name{font-size:0.85rem;font-weight:500}
+.activity-btn .act-desc{font-size:0.65rem;color:var(--text-dim)}
+.activity-btn .act-cost{font-size:0.65rem;color:var(--yellow)}
+.activity-btn .act-reward{font-size:0.65rem;color:var(--green)}
+.activity-btn.locked{opacity:0.4;pointer-events:none}
+.activity-btn.locked .act-name::after{content:" 🔒"}
+.activity-btn .act-effect{font-size:0.6rem;color:var(--text-dim);margin-top:2px}
+.next-phase-btn{margin-top:auto;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);cursor:pointer;transition:all 0.2s;font-size:0.85rem;text-align:center;letter-spacing:1px}
+.next-phase-btn:hover{background:var(--surface-hover);border-color:var(--cyan);color:var(--cyan)}
+
+/* Log */
+.log-panel{margin-top:8px}
+.log-title{font-size:0.7rem;color:var(--text-dim);letter-spacing:2px;margin-bottom:6px}
+.log-entry{padding:6px 10px;margin-bottom:4px;background:rgba(255,255,255,0.02);border-radius:6px;font-size:0.75rem;color:var(--text-mid);border-left:2px solid var(--border)}
+.log-entry.good{border-left-color:var(--green);color:rgba(255,255,255,0.8)}
+.log-entry.bad{border-left-color:var(--red);color:rgba(255,255,255,0.7)}
+.log-entry.special{border-left-color:var(--cyan);color:var(--cyan)}
+
+/* Right panel */
+.info-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px}
+.info-card h3{font-size:0.7rem;color:var(--text-dim);letter-spacing:2px;margin-bottom:8px}
+.info-row{display:flex;justify-content:space-between;font-size:0.75rem;padding:4px 0;color:var(--text-mid)}
+.info-row .val{color:var(--text)}
+.money-display{font-size:1.1rem;font-weight:600;color:var(--yellow);margin-bottom:4px}
+.money-label{font-size:0.65rem;color:var(--text-dim);letter-spacing:1px}
+.vehicle-display{font-size:0.85rem;color:var(--cyan)}
+.house-display{font-size:0.85rem;color:var(--green)}
+.job-display{font-size:0.85rem;color:var(--text)}
+.friend-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+.friend-item:last-child{border-bottom:none}
+.friend-name{font-size:0.75rem;color:var(--text-mid)}
+.friend-level{font-size:0.65rem;color:var(--text-dim)}
+.inv-item{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.75rem;color:var(--text-mid);border-bottom:1px solid rgba(255,255,255,0.03)}
+.inv-item:last-child{border-bottom:none}
+.inv-qty{color:var(--text-dim);font-size:0.65rem}
+
+/* Overlays */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:50}
+.overlay.active{display:flex}
+.overlay-panel{background:#0e0e24;border:1px solid var(--border);border-radius:var(--radius);padding:24px;width:420px;max-width:90vw;max-height:80vh;overflow-y:auto}
+.overlay-panel h2{font-size:1rem;font-weight:300;letter-spacing:3px;color:var(--cyan);margin-bottom:16px}
+.overlay-panel p{font-size:0.75rem;color:var(--text-mid);margin-bottom:12px;line-height:1.5}
+.overlay-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text-dim);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.overlay-close:hover{background:var(--surface-hover);color:var(--text)}
+.overlay-btn{width:100%;padding:12px;margin-bottom:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;transition:all 0.15s;font-size:0.8rem;text-align:left;display:flex;justify-content:space-between;align-items:center}
+.overlay-btn:hover{background:var(--surface-hover);border-color:var(--cyan)}
+.overlay-btn .price{color:var(--yellow);font-size:0.7rem}
+.overlay-btn .req{color:var(--red);font-size:0.65rem}
+.overlay-btn.locked{opacity:0.5;pointer-events:none}
+.overlay-btn .boost{color:var(--green);font-size:0.65rem}
+
+/* Event popup */
+.event-popup{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;z-index:60}
+.event-popup.active{display:flex}
+.event-card{background:linear-gradient(160deg,#0e0e24,#1a0a2a);border:1px solid var(--border);border-radius:var(--radius);padding:32px;width:400px;max-width:90vw;text-align:center}
+.event-icon{font-size:3rem;margin-bottom:12px}
+.event-title{font-size:1.1rem;font-weight:500;color:var(--text);margin-bottom:8px}
+.event-desc{font-size:0.8rem;color:var(--text-mid);margin-bottom:20px;line-height:1.5}
+.event-btns{display:flex;gap:8px;justify-content:center}
+.event-btn{padding:10px 24px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:all 0.15s;font-size:0.8rem}
+.event-btn:hover{background:var(--surface-hover);border-color:var(--cyan)}
+.event-btn.good{border-color:var(--green);color:var(--green);background:rgba(0,255,136,0.08)}
+.event-btn.good:hover{background:rgba(0,255,136,0.15)}
+.event-btn.bad{border-color:var(--red);color:var(--red);background:rgba(255,51,68,0.08)}
+.event-btn.bad:hover{background:rgba(255,51,68,0.15)}
+
+/* Age-up animation */
+.age-up-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;z-index:70;text-align:center}
+.age-up-overlay.active{display:flex}
+.age-up-text{font-size:3rem;font-weight:200;color:var(--cyan);letter-spacing:8px;margin-bottom:8px;animation:pulse 1s ease-in-out}
+.age-up-sub{font-size:1rem;color:var(--text-mid);margin-bottom:24px}
+.age-up-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:320px;text-align:left}
+.age-up-stat{padding:8px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);font-size:0.75rem}
+.age-up-stat .delta{font-weight:600}
+.age-up-stat .delta.up{color:var(--green)}
+.age-up-stat .delta.down{color:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* Pause Menu (RQBBOX Experience OS 1.0 style) */
+#pause-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(20px);display:none;z-index:80}
+#pause-overlay.active{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pause-title{font-size:1.5rem;font-weight:200;letter-spacing:8px;color:var(--text);margin-bottom:24px}
+.pause-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:320px}
+.pause-btn{padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-mid);cursor:pointer;transition:all 0.15s;text-align:center;font-size:0.8rem}
+.pause-btn:hover{background:var(--surface-hover);border-color:var(--cyan);color:var(--text)}
+.pause-btn .pb-icon{font-size:1.3rem;margin-bottom:4px}
+.pause-btn .pb-label{font-size:0.7rem;letter-spacing:1px}
+.pause-footer{position:absolute;bottom:20px;color:var(--text-dim);font-size:0.65rem;letter-spacing:3px}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.12)}
+
+/* Notification toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(14,14,36,0.95);border:1px solid var(--border);border-radius:8px;padding:10px 20px;z-index:90;backdrop-filter:blur(8px);font-size:0.8rem;color:var(--text-mid);display:none;animation:toastIn 0.3s}
+.toast.show{display:block}
+.toast.good{border-color:var(--green);color:var(--green)}
+.toast.bad{border-color:var(--red);color:var(--red)}
+.toast.info{border-color:var(--cyan);color:var(--cyan)}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* Achievements */
+.ach-popup{position:fixed;top:80px;right:16px;background:linear-gradient(135deg,#0e0e24,#1a0a2a);border:1px solid var(--cyan);border-radius:var(--radius);padding:16px 20px;z-index:85;display:none;animation:achSlide 0.4s;max-width:300px}
+.ach-popup.show{display:block}
+.ach-popup .ach-icon{font-size:1.5rem;margin-bottom:4px}
+.ach-popup .ach-title-{font-size:0.7rem;color:var(--cyan);letter-spacing:2px;margin-bottom:2px}
+.ach-popup .ach-name{font-size:0.85rem;font-weight:500;color:var(--text)}
+.ach-popup .ach-desc{font-size:0.65rem;color:var(--text-dim)}
+@keyframes achSlide{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+
+/* Mini-games within life sim */
+.minigame-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:8px}
+.minigame-panel h4{font-size:0.8rem;color:var(--cyan);margin-bottom:8px}
+.minigame-btn{padding:8px 16px;background:var(--cyan-dim);border:1px solid var(--cyan);border-radius:6px;color:var(--cyan);cursor:pointer;font-size:0.75rem;transition:all 0.15s}
+.minigame-btn:hover{background:rgba(0,212,255,0.25)}
+.minigame-result{margin-top:8px;font-size:0.75rem;color:var(--text-mid);padding:8px;background:rgba(0,0,0,0.3);border-radius:6px;min-height:30px}
+</style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash" class="screen active">
+  <div class="splash-logo">RQBBOX</div>
+  <div class="splash-sub">L I F E</div>
+  <div class="splash-bar"><div id="splash-progress"></div></div>
+</div>
+
+<!-- MAIN MENU -->
+<div id="main-menu" class="screen">
+  <div class="menu-title">RQBBOX</div>
+  <div class="menu-sub">L I F E &mdash; S I M U L A T I O N</div>
+  <div class="menu-btns">
+    <button class="menu-btn primary" onclick="showCreator()">NEW LIFE</button>
+    <button class="menu-btn" onclick="showAbout()">ABOUT</button>
+  </div>
+  <div class="menu-version">v1.0 &middot; RQBBOX OS</div>
+</div>
+
+<!-- CHARACTER CREATOR -->
+<div id="creator" class="screen">
+  <div class="creator-panel">
+    <div class="creator-title">CREATE YOUR LIFE</div>
+    <div class="creator-field">
+      <label>NAME</label>
+      <input type="text" id="player-name" placeholder="Enter name..." maxlength="16">
+    </div>
+    <div class="creator-field">
+      <label>STYLE</label>
+      <div class="style-grid">
+        <div class="style-opt selected" data-style="explorer" onclick="selectStyle(this)">🌍 Explorer</div>
+        <div class="style-opt" data-style="socialite" onclick="selectStyle(this)">🎉 Socialite</div>
+        <div class="style-opt" data-style="hustler" onclick="selectStyle(this)">💼 Hustler</div>
+        <div class="style-opt" data-style="creator" onclick="selectStyle(this)">🎨 Creator</div>
+      </div>
+    </div>
+    <button class="menu-btn primary" onclick="startGame()" style="margin-top:8px;width:100%">BEGIN LIFE</button>
+  </div>
+</div>
+
+<!-- GAME HUD -->
+<div id="game-hud">
+  <div class="top-strip">
+    <span class="top-brand">RQBBOX LIFE</span>
+    <span class="top-phase" id="phase-indicator">MORNING</span>
+    <span class="top-weather" id="weather-indicator">☀️ Clear</span>
+    <span class="top-day" id="day-indicator">Day 1 &middot; Age 18</span>
+    <span class="top-fps" id="fps-counter">FPS: 60</span>
+  </div>
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-item"><span class="label">❤️</span><div class="stat-bar-bg"><div class="stat-bar-fill health" id="stat-health" style="width:100%"></div></div><span class="stat-val" id="val-health">100</span></div>
+    <div class="stat-item"><span class="label">⚡</span><div class="stat-bar-bg"><div class="stat-bar-fill energy" id="stat-energy" style="width:100%"></div></div><span class="stat-val" id="val-energy">100</span></div>
+    <div class="stat-item"><span class="label">😊</span><div class="stat-bar-bg"><div class="stat-bar-fill happiness" id="stat-happiness" style="width:80%"></div></div><span class="stat-val" id="val-happiness">80</span></div>
+    <div class="stat-item"><span class="label">👥</span><div class="stat-bar-bg"><div class="stat-bar-fill social" id="stat-social" style="width:50%"></div></div><span class="stat-val" id="val-social">50</span></div>
+    <div class="stat-item"><span class="label">💼</span><div class="stat-bar-bg"><div class="stat-bar-fill career" id="stat-career" style="width:10%"></div></div><span class="stat-val" id="val-career">0</span></div>
+    <div class="stat-item" style="margin-left:auto"><span class="label">💰</span><span class="stat-val" id="val-money" style="color:var(--yellow)">$500</span></div>
+  </div>
+  <div class="game-area">
+    <div class="game-left" id="game-left">
+      <div class="phase-title" id="phase-title">Morning</div>
+      <div class="phase-desc" id="phase-desc">Start your day. What will you do?</div>
+      <div class="activity-grid" id="activity-grid"></div>
+      <button class="next-phase-btn" onclick="nextPhase()">NEXT PHASE →</button>
+      <div class="log-panel" id="log-panel">
+        <div class="log-title">LIFE LOG</div>
+        <div id="log-entries"></div>
+      </div>
+    </div>
+    <div class="game-right" id="game-right">
+      <div class="info-card">
+        <div class="money-display" id="right-money">$500</div>
+        <div class="money-label">BALANCE</div>
+      </div>
+      <div class="info-card">
+        <h3>RESIDENCE</h3>
+        <div class="house-display" id="right-house">🏠 Studio Apartment</div>
+      </div>
+      <div class="info-card">
+        <h3>VEHICLE</h3>
+        <div class="vehicle-display" id="right-vehicle">🚲 Bicycle</div>
+      </div>
+      <div class="info-card">
+        <h3>EMPLOYMENT</h3>
+        <div class="job-display" id="right-job">💼 Unemployed</div>
+      </div>
+      <div class="info-card">
+        <h3>INVENTORY</h3>
+        <div id="right-inventory"><div class="inv-item" style="color:var(--text-dim);font-size:0.65rem">Empty</div></div>
+      </div>
+      <div class="info-card" id="friends-card">
+        <h3>FRIENDS</h3>
+        <div id="right-friends"><div style="font-size:0.65rem;color:var(--text-dim)">Meet people to make friends</div></div>
+      </div>
+      <div class="info-card">
+        <h3>ACTIONS</h3>
+        <button class="overlay-btn" onclick="openShop()" style="margin-bottom:4px;font-size:0.75rem">🛒 Shop</button>
+        <button class="overlay-btn" onclick="openJobs()" style="margin-bottom:4px;font-size:0.75rem">💼 Careers</button>
+        <button class="overlay-btn" onclick="openHousing()" style="margin-bottom:4px;font-size:0.75rem">🏠 Housing</button>
+        <button class="overlay-btn" onclick="openVehicles()" style="margin-bottom:4px;font-size:0.75rem">🚗 Vehicles</button>
+        <button class="overlay-btn" onclick="openSocial()" style="margin-bottom:4px;font-size:0.75rem">👥 Social</button>
+        <button class="overlay-btn" onclick="togglePause()" style="font-size:0.75rem">⏸ Pause</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP OVERLAY -->
+<div id="shop-overlay" class="overlay">
+  <button class="overlay-close" onclick="closeShop()">✕</button>
+  <div class="overlay-panel">
+    <h2>🛒 SHOP</h2>
+    <p>Buy items to boost your stats and lifestyle.</p>
+    <div id="shop-items"></div>
+  </div>
+</div>
+
+<!-- JOBS OVERLAY -->
+<div id="jobs-overlay" class="overlay">
+  <button class="overlay-close" onclick="closeJobs()">✕</button>
+  <div class="overlay-panel">
+    <h2>💼 CAREERS</h2>
+    <p>Apply for jobs to earn money and build your career.</p>
+    <div id="job-list"></div>
+    <div style="margin-top:12px;padding:10px;background:var(--surface);border-radius:8px;text-align:center">
+      <div style="font-size:0.75rem;color:var(--text-mid)">Current Job</div>
+      <div id="current-job-display" style="font-size:0.9rem;color:var(--text);margin-top:4px">Unemployed</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOUSING OVERLAY -->
+<div id="housing-overlay" class="overlay">
+  <button class="overlay-close" onclick="closeHousing()">✕</button>
+  <div class="overlay-panel">
+    <h2>🏠 HOUSING</h2>
+    <p>Upgrade your residence for better rest and status.</p>
+    <div id="housing-list"></div>
+  </div>
+</div>
+
+<!-- VEHICLES OVERLAY -->
+<div id="vehicles-overlay" class="overlay">
+  <button class="overlay-close" onclick="closeVehicles()">✕</button>
+  <div class="overlay-panel">
+    <h2>🚗 VEHICLES</h2>
+    <p>Buy vehicles to commute faster and impress friends.</p>
+    <div id="vehicle-list"></div>
+  </div>
+</div>
+
+<!-- SOCIAL OVERLAY -->
+<div id="social-overlay" class="overlay">
+  <button class="overlay-close" onclick="closeSocial()">✕</button>
+  <div class="overlay-panel">
+    <h2>👥 SOCIAL</h2>
+    <p>Your friends and relationships.</p>
+    <div id="social-list"></div>
+    <button class="overlay-btn" onclick="findNewFriends()" style="margin-top:8px;text-align:center">🔍 Meet New People</button>
+  </div>
+</div>
+
+<!-- ABOUT OVERLAY -->
+<div id="about-overlay" class="overlay">
+  <button class="overlay-close" onclick="closeAbout()">✕</button>
+  <div class="overlay-panel">
+    <h2>RQBBOX LIFE</h2>
+    <p><strong>Version:</strong> 1.0.0</p>
+    <p><strong>Platform:</strong> RQBBOX OS / RQBBOX Experience OS 1.0</p>
+    <p>A flagship life-sandbox simulation built for the RQBBOX ecosystem. Live, work, build, and thrive in a vibrant neon-lit world. Every decision shapes your story.</p>
+    <p style="color:var(--cyan);font-size:0.7rem;letter-spacing:2px;margin-top:12px">RQBBOX &mdash; Plug Into Gaming.</p>
+  </div>
+</div>
+
+<!-- EVENT POPUP -->
+<div id="event-popup" class="event-popup">
+  <div class="event-card">
+    <div class="event-icon" id="event-icon">🎉</div>
+    <div class="event-title" id="event-title">Event!</div>
+    <div class="event-desc" id="event-desc">Something happened.</div>
+    <div class="event-btns" id="event-btns"></div>
+  </div>
+</div>
+
+<!-- AGE UP OVERLAY -->
+<div id="age-up" class="age-up-overlay">
+  <div>
+    <div class="age-up-text" id="age-up-text">🎂 AGE 19</div>
+    <div class="age-up-sub">A new year of life begins</div>
+    <div class="age-up-stats" id="age-up-stats"></div>
+    <button class="menu-btn primary" onclick="closeAgeUp()" style="margin-top:20px;margin-left:auto;margin-right:auto">CONTINUE</button>
+  </div>
+</div>
+
+<!-- PAUSE MENU -->
+<div id="pause-overlay">
+  <div class="pause-title">⏸ PAUSED</div>
+  <div class="pause-grid">
+    <div class="pause-btn" onclick="togglePause()"><div class="pb-icon">▶</div><div class="pb-label">Resume</div></div>
+    <div class="pause-btn" onclick="showAchievements()"><div class="pb-icon">🏆</div><div class="pb-label">Achievements</div></div>
+    <div class="pause-btn" onclick="togglePerformance()"><div class="pb-icon">⚡</div><div class="pb-label" id="perf-label">Performance: OFF</div></div>
+    <div class="pause-btn" onclick="saveGame()"><div class="pb-icon">💾</div><div class="pb-label">Save &amp; Quit</div></div>
+  </div>
+  <div class="pause-footer">RQBBOX Experience OS 1.0 &middot; Ctrl+Shift+P</div>
+</div>
+
+<!-- ACHIEVEMENTS POPUP -->
+<div id="ach-popup" class="ach-popup">
+  <div class="ach-icon">🏆</div>
+  <div class="ach-title-">ACHIEVEMENT UNLOCKED</div>
+  <div class="ach-name" id="ach-name">Achievement</div>
+  <div class="ach-desc" id="ach-desc">Description</div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<script>
+// ===== GAME STATE =====
+const state = {
+  player: { name: 'Player', style: 'explorer', age: 18, health: 100, energy: 100, happiness: 80, social: 50, money: 500, career: 0 },
+  day: 1, phase: 0, weather: 'Clear', eventsToday: 0,
+  house: 0, vehicle: 0, job: -1,
+  inventory: [],
+  friends: [],
+  achievements: [],
+  eventLog: [],
+  phaseActions: 0,
+  totalDaysPlayed: 0,
+  totalMoneyEarned: 0,
+  jobsHeld: 0,
+  friendsMade: 0,
+  itemsBought: 0
+};
+
+const phases = [
+  { name: 'MORNING', desc: 'The sun rises. Start your day right.', icon: '🌅' },
+  { name: 'DAY', desc: 'The city is alive. What will you do?', icon: '☀️' },
+  { name: 'EVENING', desc: 'The sun sets. Time to unwind.', icon: '🌆' },
+  { name: 'NIGHT', desc: 'The city glows under neon lights.', icon: '🌃' }
+];
+
+const weathers = ['☀️ Clear','⛅ Cloudy','🌧 Rainy','🌩 Stormy','❄️ Snowy','🌈 Rainbow'];
+
+const allJobs = [
+  { id: 0, name: 'Cashier', pay: 40, req: 0, desc: 'Entry-level job at a local store' },
+  { id: 1, name: 'Delivery Driver', pay: 65, req: 1, desc: 'Deliver goods across the city', vehReq: true },
+  { id: 2, name: 'Barista', pay: 50, req: 0, desc: 'Serve coffee at a neon-lit café' },
+  { id: 3, name: 'Tech Support', pay: 90, req: 3, desc: 'Solve tech problems remotely', careerReq: 10 },
+  { id: 4, name: 'Graphic Designer', pay: 80, req: 2, desc: 'Create digital art and UI', careerReq: 15 },
+  { id: 5, name: 'Chef', pay: 75, req: 1, desc: 'Cook at a downtown restaurant' },
+  { id: 6, name: 'Pilot', pay: 130, req: 4, desc: 'Fly aircraft across regions', careerReq: 30 },
+  { id: 7, name: 'Software Engineer', pay: 120, req: 3, desc: 'Build apps for RQBBOX OS', careerReq: 25 },
+  { id: 8, name: 'Doctor', pay: 150, req: 5, desc: 'Save lives at the city hospital', careerReq: 40 },
+  { id: 9, name: 'CEO', pay: 250, req: 6, desc: 'Run your own company', careerReq: 60, socialReq: 70 }
+];
+
+const allHouses = [
+  { id: 0, name: 'Studio Apartment', cost: 0, desc: 'A small but cozy space', energy: 30, happiness: 5 },
+  { id: 1, name: 'Downtown Loft', cost: 5000, desc: 'Modern loft in the city center', energy: 40, happiness: 10 },
+  { id: 2, name: 'Suburban House', cost: 15000, desc: 'A comfortable home with a garden', energy: 50, happiness: 15 },
+  { id: 3, name: 'Penthouse Suite', cost: 40000, desc: 'Luxury living at the top', energy: 60, happiness: 20 },
+  { id: 4, name: 'Smart Villa', cost: 80000, desc: 'Fully automated smart home', energy: 70, happiness: 25 },
+  { id: 5, name: 'Cyber Estate', cost: 150000, desc: 'Elite residence with AI concierge', energy: 85, happiness: 30 }
+];
+
+const allVehicles = [
+  { id: 0, name: 'Bicycle', cost: 0, desc: 'Eco-friendly and healthy', speed: 1 },
+  { id: 1, name: 'Scooter', cost: 1200, desc: 'Quick and nimble', speed: 2 },
+  { id: 2, name: 'Compact Car', cost: 5000, desc: 'Reliable daily driver', speed: 3 },
+  { id: 3, name: 'Sports Coupe', cost: 15000, desc: 'Fast and stylish', speed: 4 },
+  { id: 4, name: 'Electric SUV', cost: 30000, desc: 'Luxury electric vehicle', speed: 5 },
+  { id: 5, name: 'Hypercar', cost: 80000, desc: 'Ultimate performance machine', speed: 7 },
+  { id: 6, name: 'Hoverbike', cost: 120000, desc: 'Next-gen flying vehicle', speed: 9 }
+];
+
+const allItems = [
+  { id: 'coffee', name: '☕ Energy Coffee', cost: 15, desc: 'Boost energy +15', effect: { energy: 15 }, sellable: false },
+  { id: 'meal', name: '🍱 Healthy Meal', cost: 25, desc: 'Boost health +10, energy +10', effect: { health: 10, energy: 10 }, sellable: false },
+  { id: 'gift', name: '🎁 Gift Box', cost: 30, desc: '+15 social when gifted', effect: { social: 15 }, sellable: true, sellPrice: 10 },
+  { id: 'game', name: '🎮 Game Cartridge', cost: 50, desc: '+20 happiness when played', effect: { happiness: 20 }, sellable: true, sellPrice: 20 },
+  { id: 'book', name: '📚 Skill Book', cost: 40, desc: '+5 career progress', effect: { career: 5 }, sellable: true, sellPrice: 15 },
+  { id: 'gym', name: '🏋️ Gym Pass', cost: 80, desc: '+15 health, +10 energy', effect: { health: 15, energy: 10 }, sellable: false },
+  { id: 'music', name: '🎧 Music Player', cost: 60, desc: '+15 happiness', effect: { happiness: 15 }, sellable: true, sellPrice: 25 },
+  { id: 'meds', name: '💊 Health Kit', cost: 50, desc: 'Restore +25 health', effect: { health: 25 }, sellable: false },
+  { id: 'snacks', name: '🍿 Snack Pack', cost: 10, desc: '+5 happiness, +5 energy', effect: { happiness: 5, energy: 5 }, sellable: false },
+  { id: 'suit', name: '👔 Business Suit', cost: 120, desc: '+10 career progress, +5 social', effect: { career: 10, social: 5 }, sellable: true, sellPrice: 50 }
+];
+
+const npcNames = ['Alex','Jordan','Sam','Riley','Casey','Quinn','Taylor','Morgan','Avery','Reese','Skyler','Parker','Drew','Harper','Emerson','Blake','Cameron','Dakota','Hayden','Sage'];
+const npcTraits = ['Friendly','Shy','Energetic','Calm','Funny','Serious','Creative','Logical','Adventurous','Cozy'];
+
+const achievementDefs = [
+  { id: 'first_day', name: 'First Steps', desc: 'Complete your first day', icon: '👶', check: s => s.totalDaysPlayed >= 1 },
+  { id: 'week', name: 'One Week Strong', desc: 'Survive 7 days', icon: '📅', check: s => s.totalDaysPlayed >= 7 },
+  { id: 'month', name: 'Monthly Milestone', desc: 'Survive 30 days', icon: '📆', check: s => s.totalDaysPlayed >= 30 },
+  { id: 'money_1k', name: 'First Grand', desc: 'Earn $1,000 total', icon: '💰', check: s => s.totalMoneyEarned >= 1000 },
+  { id: 'money_10k', name: 'Money Maker', desc: 'Earn $10,000 total', icon: '💎', check: s => s.totalMoneyEarned >= 10000 },
+  { id: 'money_100k', name: 'Tycoon', desc: 'Earn $100,000 total', icon: '🏦', check: s => s.totalMoneyEarned >= 100000 },
+  { id: 'house_upgrade', name: 'Homeowner', desc: 'Upgrade your house', icon: '🏠', check: s => s.house >= 1 },
+  { id: 'car_upgrade', name: 'On The Move', desc: 'Buy your first vehicle', icon: '🚗', check: s => s.vehicle >= 1 },
+  { id: 'job_get', name: 'Employed', desc: 'Get your first job', icon: '💼', check: s => s.jobsHeld >= 1 },
+  { id: 'career_50', name: 'Career Climber', desc: 'Reach career level 50', icon: '📈', check: s => s.player.career >= 50 },
+  { id: 'friend_5', name: 'Social Circle', desc: 'Make 5 friends', icon: '👥', check: s => s.friendsMade >= 5 },
+  { id: 'friend_10', name: 'Life of the Party', desc: 'Make 10 friends', icon: '🎉', check: s => s.friendsMade >= 10 },
+  { id: 'age_30', name: 'Prime of Life', desc: 'Reach age 30', icon: '🎂', check: s => s.player.age >= 30 },
+  { id: 'age_50', name: 'Veteran', desc: 'Reach age 50', icon: '👑', check: s => s.player.age >= 50 },
+  { id: 'millionaire', name: 'Millionaire', desc: 'Have $1,000,000 in the bank', icon: '🏆', check: s => s.player.money >= 1000000 }
+];
+
+// ===== SPLASH =====
+let splashProgress = 0;
+function animateSplash() {
+  const bar = document.getElementById('splash-progress');
+  splashProgress += 2;
+  bar.style.width = splashProgress + '%';
+  if (splashProgress < 100) { setTimeout(animateSplash, 25); }
+  else {
+    setTimeout(() => {
+      document.getElementById('splash').classList.remove('active');
+      document.getElementById('main-menu').classList.add('active');
+    }, 400);
+  }
+}
+setTimeout(animateSplash, 300);
+
+// ===== MENU =====
+function showCreator() {
+  document.getElementById('main-menu').classList.remove('active');
+  document.getElementById('creator').classList.add('active');
+}
+function showAbout() {
+  document.getElementById('about-overlay').classList.add('active');
+}
+function closeAbout() {
+  document.getElementById('about-overlay').classList.remove('active');
+}
+function selectStyle(el) {
+  document.querySelectorAll('.style-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ===== INIT GAME =====
+function startGame() {
+  const name = document.getElementById('player-name').value.trim() || 'Player';
+  const style = document.querySelector('.style-opt.selected')?.dataset?.style || 'explorer';
+  state.player.name = name;
+  state.player.style = style;
+
+  // Style bonuses
+  if (style === 'explorer') { state.player.energy += 10; state.player.happiness += 5; }
+  else if (style === 'socialite') { state.player.social += 20; }
+  else if (style === 'hustler') { state.player.money += 200; state.player.career += 5; }
+  else if (style === 'creator') { state.player.happiness += 15; state.player.career += 3; }
+
+  document.getElementById('creator').classList.remove('active');
+  document.getElementById('game-hud').classList.add('active');
+  addLog('Your new life begins in RQBBOX City.', 'special');
+  addLog(`Welcome, ${state.player.name}! The city awaits.`, 'good');
+  renderPhase();
+  startFpsCounter();
+  checkAchievements();
+}
+
+// ===== FPS COUNTER =====
+let frameCount = 0, lastFpsTime = performance.now();
+function startFpsCounter() {
+  function tick() {
+    frameCount++;
+    const now = performance.now();
+    if (now - lastFpsTime >= 1000) {
+      document.getElementById('fps-counter').textContent = `FPS: ${frameCount}`;
+      frameCount = 0;
+      lastFpsTime = now;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ===== PHASE SYSTEM =====
+const morningActivities = [
+  { id: 'meditate', name: '🧘 Meditate', desc: 'Calm your mind', effect: { happiness: 8, energy: 5 }, unlock: () => true },
+  { id: 'exercise', name: '🏃 Exercise', desc: 'Stay fit and healthy', effect: { health: 10, energy: -5, happiness: 5 }, unlock: () => true },
+  { id: 'cook', name: '🍳 Cook Breakfast', desc: 'A healthy start', effect: { health: 8, energy: 10, happiness: 3, money: -10 }, unlock: () => true },
+  { id: 'read_news', name: '📰 Read News', desc: 'Stay informed', effect: { career: 3, happiness: 2 }, unlock: () => true },
+  { id: 'shower', name: '🚿 Fresh Shower', desc: 'Feel refreshed', effect: { energy: 8, happiness: 3 }, unlock: () => true },
+  { id: 'work_from_home', name: '💻 Remote Work', desc: 'Earn money remotely', effect: { money: 30, energy: -5 }, unlock: () => true }
+];
+
+const dayActivities = [
+  { id: 'work', name: '💼 Go to Work', desc: 'Earn your daily wage', effect: { money: 50, career: 3, energy: -15, social: 3 }, unlock: () => state.job >= 0 },
+  { id: 'job_hunt', name: '📝 Job Hunt', desc: 'Search for opportunities', effect: { career: 5, energy: -5 }, unlock: () => true },
+  { id: 'visit_park', name: '🌳 Visit Park', desc: 'Enjoy nature', effect: { happiness: 10, energy: 5 }, unlock: () => true },
+  { id: 'gym', name: '🏋️ Hit the Gym', desc: 'Work out hard', effect: { health: 15, energy: -10, happiness: 5, money: -15 }, unlock: () => true },
+  { id: 'shopping', name: '🛍 Go Shopping', desc: 'Browse the city stores', effect: { happiness: 8, social: 5, money: -20 }, unlock: () => true },
+  { id: 'library', name: '📚 Visit Library', desc: 'Study and improve', effect: { career: 8, energy: -5 }, unlock: () => true },
+  { id: 'coffee_shop', name: '☕ Coffee Shop', desc: 'Relax with a drink', effect: { energy: 10, social: 5, money: -8, happiness: 5 }, unlock: () => true },
+  { id: 'side_hustle', name: '🛵 Side Hustle', desc: 'Make extra cash', effect: { money: 40, energy: -10, career: 2 }, unlock: () => state.vehicle >= 1 }
+];
+
+const eveningActivities = [
+  { id: 'dinner', name: '🍽 Cook Dinner', desc: 'Prepare a meal', effect: { health: 8, energy: 8, happiness: 5, money: -12 }, unlock: () => true },
+  { id: 'dine_out', name: '🍝 Dine Out', desc: 'Eat at a restaurant', effect: { happiness: 12, social: 5, money: -30 }, unlock: () => state.player.money >= 30 },
+  { id: 'hobby', name: '🎨 Pursue Hobby', desc: 'Do what you love', effect: { happiness: 15, career: 3, energy: -3 }, unlock: () => true },
+  { id: 'socialize', name: '🎉 Socialize', desc: 'Hang out with friends', effect: { social: 15, happiness: 8, money: -15 }, unlock: () => state.friends.length > 0 },
+  { id: 'tv', name: '📺 Watch TV', desc: 'Relax and unwind', effect: { happiness: 8, energy: 3 }, unlock: () => true },
+  { id: 'study', name: '📖 Study', desc: 'Learn new skills', effect: { career: 10, energy: -8 }, unlock: () => true },
+  { id: 'walk', name: '🚶 Evening Walk', desc: 'Stroll through the city', effect: { happiness: 8, health: 5, energy: 3 }, unlock: () => true }
+];
+
+const nightActivities = [
+  { id: 'sleep', name: '😴 Sleep', desc: 'Rest for the next day', effect: { energy: 40, health: 5 }, unlock: () => true },
+  { id: 'party', name: '🎊 Go Party', desc: 'Nightlife in the neon district', effect: { social: 12, happiness: 10, energy: -15, money: -25 }, unlock: () => state.player.energy >= 20 },
+  { id: 'night_work', name: '🌙 Night Shift', desc: 'Earn overtime pay', effect: { money: 60, energy: -20, career: 2 }, unlock: () => state.player.energy >= 30 },
+  { id: 'stargaze', name: '⭐ Stargaze', desc: 'Look at the night sky', effect: { happiness: 10, energy: -2 }, unlock: () => true },
+  { id: 'game_night', name: '🎮 Game Night', desc: 'Play RQBBOX games', effect: { happiness: 12, social: 3, energy: -5 }, unlock: () => true },
+  { id: 'read', name: '📖 Read Before Bed', desc: 'Wind down with a book', effect: { career: 5, happiness: 5, energy: 5 }, unlock: () => true }
+];
+
+const phaseActivities = [morningActivities, dayActivities, eveningActivities, nightActivities];
+
+function renderPhase() {
+  const p = state.phase;
+  const phase = phases[p];
+  document.getElementById('phase-indicator').textContent = phase.name;
+  document.getElementById('phase-title').textContent = `${phase.icon} ${phase.name}`;
+  document.getElementById('phase-desc').textContent = phase.desc;
+  document.getElementById('day-indicator').textContent = `Day ${state.day} · Age ${state.player.age}`;
+
+  // Update weather
+  updateWeather();
+
+  // Render activities
+  const grid = document.getElementById('activity-grid');
+  grid.innerHTML = '';
+  const acts = phaseActivities[p];
+  acts.forEach(a => {
+    const canDo = a.unlock();
+    const btn = document.createElement('div');
+    btn.className = 'activity-btn' + (canDo ? '' : ' locked');
+    if (canDo) btn.onclick = () => doActivity(a);
+    btn.innerHTML = `<div class="act-icon">${a.name.split(' ')[0]}</div><div class="act-name">${a.name}</div><div class="act-desc">${a.desc}</div>`;
+    // Show effect hints
+    const eff = a.effect;
+    const parts = [];
+    if (eff.money) parts.push(eff.money > 0 ? `+$${eff.money}` : `-$${Math.abs(eff.money)}`);
+    if (eff.health) parts.push(`❤️${eff.health>0?'+':''}${eff.health}`);
+    if (eff.energy) parts.push(`⚡${eff.energy>0?'+':''}${eff.energy}`);
+    if (eff.happiness) parts.push(`😊${eff.happiness>0?'+':''}${eff.happiness}`);
+    if (eff.social) parts.push(`👥${eff.social>0?'+':''}${eff.social}`);
+    if (eff.career) parts.push(`💼+${eff.career}`);
+    if (parts.length) {
+      const effDiv = document.createElement('div');
+      effDiv.className = 'act-effect';
+      effDiv.textContent = parts.join(' · ');
+      btn.appendChild(effDiv);
+    }
+    grid.appendChild(btn);
+  });
+
+  // Update right panel
+  updateRightPanel();
+  updateStatsBar();
+}
+
+function doActivity(act) {
+  const p = state.player;
+  const e = act.effect;
+  const changes = [];
+
+  if (e.health) { p.health = Math.max(0, Math.min(100, p.health + e.health)); changes.push(`Health ${e.health>0?'+':''}${e.health}`); }
+  if (e.energy) { p.energy = Math.max(0, Math.min(100, p.energy + e.energy)); changes.push(`Energy ${e.energy>0?'+':''}${e.energy}`); }
+  if (e.happiness) { p.happiness = Math.max(0, Math.min(100, p.happiness + e.happiness)); changes.push(`Happiness ${e.happiness>0?'+':''}${e.happiness}`); }
+  if (e.social) { p.social = Math.max(0, Math.min(100, p.social + e.social)); changes.push(`Social ${e.social>0?'+':''}${e.social}`); }
+  if (e.career) { p.career = Math.min(100, p.career + e.career); changes.push(`Career +${e.career}`); }
+  if (e.money) {
+    if (e.money > 0) { p.money += e.money; state.totalMoneyEarned += e.money; changes.push(`+$${e.money}`); }
+    else { p.money = Math.max(0, p.money + e.money); changes.push(`-$${Math.abs(e.money)}`); }
+  }
+
+  state.phaseActions++;
+  addLog(`${act.name} — ${changes.join(', ')}`, e.health > 0 || e.happiness > 0 || e.money > 0 ? 'good' : 'bad');
+  updateStatsBar();
+  updateRightPanel();
+
+  // Check for random event (15% chance)
+  if (Math.random() < 0.15 && state.eventsToday < 2) {
+    state.eventsToday++;
+    setTimeout(triggerRandomEvent, 600);
+  }
+}
+
+function nextPhase() {
+  state.phase++;
+  if (state.phase > 3) {
+    // End of day
+    state.phase = 0;
+    advanceDay();
+  }
+  state.phaseActions = 0;
+  renderPhase();
+}
+
+function advanceDay() {
+  const p = state.player;
+  state.day++;
+  state.totalDaysPlayed++;
+  state.eventsToday = 0;
+
+  // Age up every 10 days
+  if (state.day % 10 === 0) {
+    p.age++;
+    ageUpEffect();
+  }
+
+  // Passive changes
+  p.health = Math.max(0, p.health - 2);
+  p.happiness = Math.max(0, p.happiness - 3);
+  p.social = Math.max(0, p.social - 2);
+
+  // House rest bonus
+  const restBonus = allHouses[state.house]?.energy || 20;
+  p.energy = Math.min(100, p.energy + restBonus);
+
+  // Job income
+  if (state.job >= 0) {
+    const job = allJobs.find(j => j.id === state.job);
+    if (job) {
+      p.money += job.pay;
+      p.career = Math.min(100, p.career + 1);
+      state.totalMoneyEarned += job.pay;
+      addLog(`Work day complete. Earned $${job.pay}.`, 'good');
+    }
+  }
+
+  // Passive money drain (living costs)
+  const livingCost = 15 + (state.house * 5);
+  p.money = Math.max(0, p.money - livingCost);
+  if (livingCost > 0) addLog(`Living expenses: -$${livingCost}`, 'bad');
+
+  // Starvation
+  if (p.health < 20) { p.energy = Math.max(0, p.energy - 5); addLog('You feel weak from poor health.', 'bad'); }
+  if (p.energy < 10) { p.happiness = Math.max(0, p.happiness - 5); addLog('You are exhausted.', 'bad'); }
+
+  addLog(`--- Day ${state.day} (Age ${p.age}) ---`, 'special');
+  checkAchievements();
+  renderPhase();
+}
+
+function ageUpEffect() {
+  const p = state.player;
+  const age = p.age;
+  const statsEl = document.getElementById('age-up-stats');
+  statsEl.innerHTML = '';
+
+  const changes = [];
+  // Age effects
+  if (age >= 20) { const h = Math.floor(Math.random() * 5); p.happiness = Math.min(100, p.happiness + h); changes.push({ label: '😊 Happiness', val: `+${h}`, cls: 'up' }); }
+  if (age >= 25) { const c = 3 + Math.floor(Math.random() * 5); p.career = Math.min(100, p.career + c); changes.push({ label: '💼 Career', val: `+${c}`, cls: 'up' }); }
+  if (age >= 30) { const s = Math.floor(Math.random() * 5); p.social = Math.min(100, p.social + s); changes.push({ label: '👥 Social', val: `+${s}`, cls: 'up' }); }
+  if (age >= 40) { const hl = -Math.floor(Math.random() * 5); p.health = Math.max(0, p.health + hl); changes.push({ label: '❤️ Health', val: `${hl}`, cls: hl > 0 ? 'up' : 'down' }); }
+  if (age >= 50) { const e = -Math.floor(Math.random() * 5); p.energy = Math.max(0, p.energy + e); changes.push({ label: '⚡ Energy', val: `${e}`, cls: e > 0 ? 'up' : 'down' }); }
+
+  changes.forEach(c => {
+    statsEl.innerHTML += `<div class="age-up-stat">${c.label} <span class="delta ${c.cls}">${c.val}</span></div>`;
+  });
+
+  document.getElementById('age-up-text').textContent = `🎂 AGE ${age}`;
+  document.getElementById('age-up').classList.add('active');
+}
+
+function closeAgeUp() {
+  document.getElementById('age-up').classList.remove('active');
+}
+
+// ===== WEATHER =====
+function updateWeather() {
+  if (state.day % 3 === 0) {
+    state.weather = weathers[Math.floor(Math.random() * weathers.length)];
+  }
+  document.getElementById('weather-indicator').textContent = state.weather;
+}
+
+// ===== STATS BAR =====
+function updateStatsBar() {
+  const p = state.player;
+  document.getElementById('stat-health').style.width = p.health + '%';
+  document.getElementById('stat-energy').style.width = p.energy + '%';
+  document.getElementById('stat-happiness').style.width = p.happiness + '%';
+  document.getElementById('stat-social').style.width = p.social + '%';
+  document.getElementById('stat-career').style.width = p.career + '%';
+  document.getElementById('val-health').textContent = Math.floor(p.health);
+  document.getElementById('val-energy').textContent = Math.floor(p.energy);
+  document.getElementById('val-happiness').textContent = Math.floor(p.happiness);
+  document.getElementById('val-social').textContent = Math.floor(p.social);
+  document.getElementById('val-career').textContent = Math.floor(p.career);
+  document.getElementById('val-money').textContent = '$' + Math.floor(p.money);
+  document.getElementById('right-money').textContent = '$' + Math.floor(p.money);
+}
+
+function updateRightPanel() {
+  const h = allHouses[state.house];
+  document.getElementById('right-house').textContent = h ? `${h.name}` : '🏠 Studio Apartment';
+  const v = allVehicles[state.vehicle];
+  document.getElementById('right-vehicle').textContent = v ? `${v.name}` : '🚲 Bicycle';
+  const j = state.job >= 0 ? allJobs.find(jj => jj.id === state.job) : null;
+  document.getElementById('right-job').textContent = j ? `💼 ${j.name} ($${j.pay}/day)` : '💼 Unemployed';
+
+  // Inventory
+  const inv = document.getElementById('right-inventory');
+  if (state.inventory.length === 0) {
+    inv.innerHTML = '<div class="inv-item" style="color:var(--text-dim);font-size:0.65rem">Empty</div>';
+  } else {
+    const counts = {};
+    state.inventory.forEach(i => { counts[i] = (counts[i] || 0) + 1; });
+    inv.innerHTML = Object.entries(counts).slice(0, 4).map(([id, qty]) => {
+      const item = allItems.find(it => it.id === id);
+      return `<div class="inv-item">${item ? item.name : id} <span class="inv-qty">x${qty}</span></div>`;
+    }).join('');
+    if (Object.keys(counts).length > 4) {
+      inv.innerHTML += `<div class="inv-item" style="color:var(--text-dim)">+${Object.keys(counts).length-4} more items</div>`;
+    }
+  }
+
+  // Friends
+  const friendsEl = document.getElementById('right-friends');
+  if (state.friends.length === 0) {
+    friendsEl.innerHTML = '<div style="font-size:0.65rem;color:var(--text-dim)">Meet people to make friends</div>';
+  } else {
+    friendsEl.innerHTML = state.friends.slice(0, 4).map(f =>
+      `<div class="friend-item"><span class="friend-name">${f.name}</span><span class="friend-level">${'❤️'.repeat(Math.max(1,Math.ceil(f.level/25)))}</span></div>`
+    ).join('');
+    if (state.friends.length > 4) {
+      friendsEl.innerHTML += `<div class="friend-item" style="border:none"><span class="friend-name" style="color:var(--text-dim)">+${state.friends.length-4} more</span></div>`;
+    }
+  }
+}
+
+// ===== LOG =====
+function addLog(text, type) {
+  state.eventLog.push({ text, type, day: state.day, phase: state.phase });
+  const el = document.getElementById('log-entries');
+  const entry = document.createElement('div');
+  entry.className = `log-entry ${type || ''}`;
+  entry.textContent = `[Day ${state.day}] ${text}`;
+  el.prepend(entry);
+  // Keep max 50
+  while (el.children.length > 50) el.removeChild(el.lastChild);
+}
+
+// ===== OVERLAYS =====
+function openShop() {
+  const container = document.getElementById('shop-items');
+  container.innerHTML = '';
+  allItems.forEach(item => {
+    const canBuy = state.player.money >= item.cost;
+    const btn = document.createElement('button');
+    btn.className = 'overlay-btn' + (canBuy ? '' : ' locked');
+    btn.innerHTML = `<span>${item.name} — ${item.desc}</span><span class="price">$${item.cost}</span>`;
+    if (canBuy) btn.onclick = () => buyItem(item);
+    container.appendChild(btn);
+  });
+  document.getElementById('shop-overlay').classList.add('active');
+}
+function closeShop() { document.getElementById('shop-overlay').classList.remove('active'); }
+function buyItem(item) {
+  if (state.player.money < item.cost) { showToast('Not enough money!', 'bad'); return; }
+  state.player.money -= item.cost;
+  state.inventory.push(item.id);
+  state.itemsBought++;
+  // Apply effects
+  if (item.effect.health) state.player.health = Math.min(100, state.player.health + item.effect.health);
+  if (item.effect.energy) state.player.energy = Math.min(100, state.player.energy + item.effect.energy);
+  if (item.effect.happiness) state.player.happiness = Math.min(100, state.player.happiness + item.effect.happiness);
+  if (item.effect.social) state.player.social = Math.min(100, state.player.social + item.effect.social);
+  if (item.effect.career) state.player.career = Math.min(100, state.player.career + item.effect.career);
+  addLog(`Purchased: ${item.name}`, 'good');
+  showToast(`Purchased ${item.name}!`, 'good');
+  updateStatsBar();
+  updateRightPanel();
+  checkAchievements();
+  openShop(); // Refresh
+}
+
+function openJobs() {
+  const container = document.getElementById('job-list');
+  container.innerHTML = '';
+  allJobs.forEach(job => {
+    const metCareer = state.player.career >= (job.careerReq || 0);
+    const metSocial = state.player.social >= (job.socialReq || 0);
+    const metVeh = job.vehReq ? state.vehicle >= 1 : true;
+    const canApply = metCareer && metSocial && metVeh && state.job !== job.id;
+    let reqText = [];
+    if (job.careerReq) reqText.push(`Career ${job.careerReq}`);
+    if (job.socialReq) reqText.push(`Social ${job.socialReq}`);
+    if (job.vehReq) reqText.push('Vehicle Required');
+
+    const btn = document.createElement('button');
+    btn.className = 'overlay-btn' + ((canApply || state.job === job.id) ? '' : ' locked');
+    const isCurrent = state.job === job.id;
+    btn.innerHTML = `<span>${job.name} — ${job.desc} <span style="color:var(--text-dim);font-size:0.65rem">${reqText.length ? 'Req: '+reqText.join(', ') : ''}</span></span><span>${isCurrent ? '✓ Current' : '$'+job.pay+'/day'}</span>`;
+    if (canApply) btn.onclick = () => applyJob(job);
+    container.appendChild(btn);
+  });
+  document.getElementById('current-job-display').textContent = state.job >= 0 ? (allJobs.find(j => j.id === state.job)?.name || 'Unemployed') : 'Unemployed';
+  document.getElementById('jobs-overlay').classList.add('active');
+}
+function closeJobs() { document.getElementById('jobs-overlay').classList.remove('active'); }
+function applyJob(job) {
+  const p = state.player;
+  if (job.careerReq && p.career < job.careerReq) { showToast('Career level too low!', 'bad'); return; }
+  if (job.socialReq && p.social < job.socialReq) { showToast('Need more social skills!', 'bad'); return; }
+  if (job.vehReq && state.vehicle < 1) { showToast('Need a vehicle!', 'bad'); return; }
+  state.job = job.id;
+  state.jobsHeld++;
+  addLog(`Started new job: ${job.name} ($${job.pay}/day)`, 'good');
+  showToast(`Hired as ${job.name}!`, 'good');
+  updateRightPanel();
+  checkAchievements();
+  closeJobs();
+}
+
+function openHousing() {
+  const container = document.getElementById('housing-list');
+  container.innerHTML = '';
+  allHouses.forEach(h => {
+    const canBuy = state.player.money >= h.cost && state.house < h.id;
+    const isCurrent = state.house === h.id;
+    const btn = document.createElement('button');
+    btn.className = 'overlay-btn' + (canBuy ? '' : ' locked');
+    btn.innerHTML = `<span>${h.name} — ${h.desc} <span style="color:var(--green);font-size:0.65rem">Rest +${h.energy}</span></span><span>${isCurrent ? '✓ Current' : '$'+h.cost}</span>`;
+    if (canBuy) btn.onclick = () => buyHouse(h);
+    container.appendChild(btn);
+  });
+  document.getElementById('housing-overlay').classList.add('active');
+}
+function closeHousing() { document.getElementById('housing-overlay').classList.remove('active'); }
+function buyHouse(h) {
+  if (state.player.money < h.cost) { showToast('Not enough money!', 'bad'); return; }
+  if (h.id <= state.house) { showToast('Already own this!', 'bad'); return; }
+  state.player.money -= h.cost;
+  state.house = h.id;
+  addLog(`Moved into ${h.name}!`, 'good');
+  showToast(`Welcome to your new ${h.name}!`, 'good');
+  updateStatsBar();
+  updateRightPanel();
+  checkAchievements();
+  openHousing();
+}
+
+function openVehicles() {
+  const container = document.getElementById('vehicle-list');
+  container.innerHTML = '';
+  allVehicles.forEach(v => {
+    const canBuy = state.player.money >= v.cost && state.vehicle < v.id;
+    const isCurrent = state.vehicle === v.id;
+    const btn = document.createElement('button');
+    btn.className = 'overlay-btn' + (canBuy ? '' : ' locked');
+    btn.innerHTML = `<span>${v.name} — ${v.desc}</span><span>${isCurrent ? '✓ Owned' : '$'+v.cost}</span>`;
+    if (canBuy) btn.onclick = () => buyVehicle(v);
+    container.appendChild(btn);
+  });
+  document.getElementById('vehicles-overlay').classList.add('active');
+}
+function closeVehicles() { document.getElementById('vehicles-overlay').classList.remove('active'); }
+function buyVehicle(v) {
+  if (state.player.money < v.cost) { showToast('Not enough money!', 'bad'); return; }
+  if (v.id <= state.vehicle) { showToast('Already own this!', 'bad'); return; }
+  state.player.money -= v.cost;
+  state.vehicle = v.id;
+  addLog(`Bought a ${v.name}! Speed: ${v.speed}`, 'good');
+  showToast(`Enjoy your new ${v.name}!`, 'good');
+  updateStatsBar();
+  updateRightPanel();
+  checkAchievements();
+  openVehicles();
+}
+
+function openSocial() {
+  const container = document.getElementById('social-list');
+  if (state.friends.length === 0) {
+    container.innerHTML = '<p style="text-align:center;color:var(--text-dim)">No friends yet. Go meet people!</p>';
+  } else {
+    container.innerHTML = state.friends.map(f =>
+      `<div class="friend-item"><span class="friend-name">${f.name} <span style="font-size:0.65rem;color:var(--text-dim)">— ${f.trait}</span></span><span style="font-size:0.65rem;color:var(--text-mid)">❤️ ${Math.floor(f.level)}%</span></div>`
+    ).join('');
+  }
+  document.getElementById('social-overlay').classList.add('active');
+}
+function closeSocial() { document.getElementById('social-overlay').classList.remove('active'); }
+function findNewFriends() {
+  if (state.player.social < 10) { showToast('Your social skills are too low!', 'bad'); return; }
+  if (state.friends.length >= 15) { showToast('Your social circle is full!', 'info'); return; }
+  const name = npcNames[Math.floor(Math.random() * npcNames.length)];
+  const trait = npcTraits[Math.floor(Math.random() * npcTraits.length)];
+  const level = 10 + Math.floor(Math.random() * 30);
+  state.friends.push({ name, trait, level });
+  state.friendsMade++;
+  state.player.social = Math.min(100, state.player.social + 5);
+  addLog(`Met new friend: ${name} (${trait})`, 'good');
+  showToast(`New friend: ${name}!`, 'good');
+  updateStatsBar();
+  updateRightPanel();
+  checkAchievements();
+  openSocial();
+}
+
+// ===== RANDOM EVENTS =====
+const events = [
+  { icon: '💼', title: 'Promotion Opportunity', desc: 'Your boss noticed your hard work.', choices: [
+    { text: 'Accept', effect: { career: 10, money: 100, happiness: 5 }, good: true },
+    { text: 'Decline (stay safe)', effect: { happiness: 3 }, good: false }
+  ]},
+  { icon: '🤝', title: 'Stranger Needs Help', desc: 'Someone on the street asks for assistance.', choices: [
+    { text: 'Help them', effect: { social: 15, happiness: 8, money: -10 }, good: true },
+    { text: 'Walk away', effect: {}, good: false }
+  ]},
+  { icon: '🍀', title: 'Found Money!', desc: 'You found an envelope with cash on the sidewalk.', choices: [
+    { text: 'Keep it', effect: { money: 100, happiness: 5 }, good: true },
+    { text: 'Turn it in', effect: { social: 10, happiness: 8 }, good: true }
+  ]},
+  { icon: '🏥', title: 'Health Scare', desc: 'You feel unwell after a long week.', choices: [
+    { text: 'Rest and recover', effect: { health: 15, energy: 10, money: -30 }, good: true },
+    { text: 'Push through it', effect: { health: -10, career: 3 }, good: false }
+  ]},
+  { icon: '🎪', title: 'City Festival!', desc: 'A neon festival is happening downtown.', choices: [
+    { text: 'Attend the festival', effect: { happiness: 20, social: 10, money: -20, energy: -10 }, good: true },
+    { text: 'Skip it', effect: {}, good: false }
+  ]},
+  { icon: '💔', title: 'Friend Conflict', desc: 'A friend is upset with you.', choices: [
+    { text: 'Talk it out', effect: { social: -5, happiness: -5 }, good: false },
+    { text: 'Give them space', effect: { social: -10 }, good: false }
+  ]},
+  { icon: '📱', title: 'RQBBOX Update', desc: 'A new RQBBOX OS update is available. Install?', choices: [
+    { text: 'Install update', effect: { career: 8, happiness: 3 }, good: true },
+    { text: 'Skip for now', effect: {}, good: false }
+  ]},
+  { icon: '🏆', title: 'Side Quest: Delivery', desc: 'A local shop needs urgent deliveries.', choices: [
+    { text: 'Take the job (+$80)', effect: { money: 80, energy: -10, career: 2 }, good: true },
+    { text: 'Too busy', effect: {}, good: false }
+  ]}
+];
+
+function triggerRandomEvent() {
+  const evt = events[Math.floor(Math.random() * events.length)];
+  document.getElementById('event-icon').textContent = evt.icon;
+  document.getElementById('event-title').textContent = evt.title;
+  document.getElementById('event-desc').textContent = evt.desc;
+  const btns = document.getElementById('event-btns');
+  btns.innerHTML = '';
+  evt.choices.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'event-btn' + (c.good ? ' good' : ' bad');
+    btn.textContent = c.text;
+    btn.onclick = () => {
+      const e = c.effect;
+      if (e.health) state.player.health = Math.max(0, Math.min(100, state.player.health + e.health));
+      if (e.energy) state.player.energy = Math.max(0, Math.min(100, state.player.energy + e.energy));
+      if (e.happiness) state.player.happiness = Math.max(0, Math.min(100, state.player.happiness + e.happiness));
+      if (e.social) state.player.social = Math.max(0, Math.min(100, state.player.social + e.social));
+      if (e.career) state.player.career = Math.min(100, state.player.career + e.career);
+      if (e.money) { state.player.money += e.money; if (e.money > 0) state.totalMoneyEarned += e.money; }
+      addLog(`Event: ${evt.title} — ${c.text}`, c.good ? 'good' : 'bad');
+      showToast(`Event: ${evt.title}`, c.good ? 'good' : 'bad');
+      updateStatsBar();
+      updateRightPanel();
+      document.getElementById('event-popup').classList.remove('active');
+      checkAchievements();
+    };
+    btns.appendChild(btn);
+  });
+  document.getElementById('event-popup').classList.add('active');
+}
+
+// ===== PAUSE / ACHIEVEMENTS / PERFORMANCE =====
+function togglePause() {
+  document.getElementById('pause-overlay').classList.toggle('active');
+}
+let perfMode = false;
+function togglePerformance() {
+  perfMode = !perfMode;
+  document.getElementById('perf-label').textContent = `Performance: ${perfMode ? 'ON' : 'OFF'}`;
+  showToast(`Performance mode ${perfMode ? 'enabled' : 'disabled'}`, 'info');
+}
+function showAchievements() {
+  const unlocked = state.achievements;
+  const all = achievementDefs;
+  let msg = '🏆 ACHIEVEMENTS\n\n';
+  all.forEach(a => {
+    const done = unlocked.includes(a.id);
+    msg += `${done ? '✓' : '○'} ${a.icon} ${a.name}: ${a.desc}\n`;
+  });
+  showToast(msg.replace(/\n/g, ' · '), 'info');
+}
+function saveGame() {
+  try {
+    const data = JSON.stringify(state);
+    localStorage.setItem('rqbbox-life-save', data);
+    localStorage.setItem('rqbbox-life-achievements', JSON.stringify(state.achievements));
+    showToast('Game saved to RQBBOX Cloud!', 'good');
+    addLog('Game saved. Thanks for playing!', 'special');
+  } catch(e) {
+    showToast('Save failed!', 'bad');
+  }
+}
+
+// ===== ACHIEVEMENTS =====
+function checkAchievements() {
+  achievementDefs.forEach(a => {
+    if (!state.achievements.includes(a.id) && a.check(state)) {
+      state.achievements.push(a.id);
+      showAchievementPopup(a);
+    }
+  });
+}
+function showAchievementPopup(a) {
+  const el = document.getElementById('ach-popup');
+  document.getElementById('ach-name').textContent = a.name;
+  document.getElementById('ach-desc').textContent = a.desc;
+  el.querySelector('.ach-icon').textContent = a.icon;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+// ===== TOAST =====
+function showToast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast ' + (type || '');
+  el.classList.add('show');
+  clearTimeout(el._timeout);
+  el._timeout = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ===== KEYBOARD & CONTROLLER =====
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('event-popup').classList.contains('active')) {
+      document.getElementById('event-popup').classList.remove('active');
+    } else if (document.querySelector('.overlay.active')) {
+      document.querySelectorAll('.overlay.active').forEach(o => o.classList.remove('active'));
+    } else {
+      togglePause();
+    }
+  }
+  if (e.key === 'p' && e.ctrlKey && e.shiftKey) { e.preventDefault(); togglePerformance(); }
+  if (e.key === 's' && e.ctrlKey && e.shiftKey) { e.preventDefault(); saveGame(); }
+});
+
+// Controller support via Gamepad API
+let controllerConnected = false;
+window.addEventListener('gamepadconnected', () => { controllerConnected = true; showToast('🎮 Controller connected', 'info'); });
+window.addEventListener('gamepaddisconnected', () => { controllerConnected = false; });
+
+function pollController() {
+  if (!controllerConnected) { requestAnimationFrame(pollController); return; }
+  const gp = navigator.getGamepads()[0];
+  if (gp) {
+    // A button (0) = select
+    if (gp.buttons[0].pressed) {
+      document.querySelector('.activity-btn:not(.locked)')?.click();
+    }
+    // B button (1) = back/escape
+    if (gp.buttons[1].pressed) {
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    }
+    // Start (9) = pause
+    if (gp.buttons[9].pressed) {
+      togglePause();
+    }
+  }
+  requestAnimationFrame(pollController);
+}
+requestAnimationFrame(pollController);
+
+// ===== AUTO-START FROM SAVE =====
+try {
+  const save = localStorage.getItem('rqbbox-life-save');
+  if (save) {
+    // Offer load option in future, for now just let them start fresh
+    console.log('RQBBOX LIFE: Save data found.');
+  }
+} catch(e) {}
+
+console.log('RQBBOX LIFE v1.0 — Live your neon life.');
+</script>
+</body>
+</html>

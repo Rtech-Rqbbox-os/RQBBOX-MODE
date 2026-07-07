@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><head><title>Pixel Quest</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#0a0a1a;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px;image-rendering:pixelated}h1{font-weight:300;letter-spacing:4px;color:#ffcc00;font-size:1.5rem}button{padding:8px 20px;background:#ffcc00;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}.info{font-size:.8rem;color:rgba(255,255,255,.4)}</style></head><body>
+<h1>PIXEL QUEST</h1><canvas id="game" width="400" height="300"></canvas>
+<div class="info">Arrow keys to move • Collect gems!</div>
+<button onclick="init()">New Game</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+let player={x:180,y:140},gems=[],score=0,tiles=[];
+function init(){player={x:180,y:140};gems=[];for(let i=0;i<10;i++)gems.push({x:Math.random()*380,y:Math.random()*280});score=0
+tiles=[];for(let i=0;i<20;i++)tiles.push({x:Math.random()*380,y:Math.random()*280,w:20,h:20})
+requestAnimationFrame(gameLoop)}
+function gameLoop(){update();draw();requestAnimationFrame(gameLoop)}
+function update(){gems=gems.filter(g=>{if(Math.abs(player.x-g.x)<15&&Math.abs(player.y-g.y)<15){score++;return false}return true})}
+function draw(){ctx.fillStyle='#0a0a1a';ctx.fillRect(0,0,400,300)
+tiles.forEach(t=>{ctx.fillStyle='#1a1a2e';ctx.fillRect(t.x,t.y,t.w,t.h)})
+ctx.fillStyle='#ffcc00';ctx.shadowColor='#ffcc00';ctx.shadowBlur=10
+gems.forEach(g=>{ctx.beginPath();ctx.arc(g.x+5,g.y+5,5,0,Math.PI*2);ctx.fill()});ctx.shadowBlur=0
+ctx.fillStyle='#fff';ctx.fillRect(player.x,player.y,16,24)
+ctx.fillStyle='rgba(255,255,255,.5)';ctx.font='12px system-ui';ctx.fillText('Gems: '+score+'/'+10,8,16)}
+document.addEventListener('keydown',e=>{const s=8
+if(e.key==='ArrowUp')player.y=Math.max(0,player.y-s)
+if(e.key==='ArrowDown')player.y=Math.min(284,player.y+s)
+if(e.key==='ArrowLeft')player.x=Math.max(0,player.x-s)
+if(e.key==='ArrowRight')player.x=Math.min(384,player.x+s)})
+init()
+</script></body></html>

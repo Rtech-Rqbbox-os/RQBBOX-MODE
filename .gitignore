@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.ico
+*.exe
+*.dll
+*.pak
+*.dat
+*.bin
+*.asar
+*.blockmap
+package-lock.json

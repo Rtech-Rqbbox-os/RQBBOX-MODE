@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Roblox — RQBBOX</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a1a;color:#fff;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-y:auto}
+.hdr{padding:16px 24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.06)}
+.hdr img{width:32px;height:32px}
+.hdr h1{font-size:18px;background:linear-gradient(135deg,#00bcd4,#9c27b0);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.badge{margin-left:auto;padding:3px 10px;border-radius:10px;background:rgba(0,188,212,.12);border:1px solid #00bcd4;color:#00bcd4;font-size:10px;font-weight:600;letter-spacing:1px}
+.tabs{padding:8px 24px;display:flex;gap:4px;border-bottom:1px solid rgba(255,255,255,.06)}
+.tabs a{padding:6px 14px;border-radius:5px;font-size:12px;color:rgba(255,255,255,.4);cursor:pointer;text-decoration:none;transition:.15s}
+.tabs a:hover{background:rgba(255,255,255,.06);color:#fff}
+.tabs a.on{background:rgba(0,188,212,.12);color:#00bcd4;font-weight:600}
+.bar{padding:6px 24px;display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.4);border-bottom:1px solid rgba(255,255,255,.04)}
+.dot{width:6px;height:6px;border-radius:50%;background:#555}
+.dot.ok{background:#4caf50;box-shadow:0 0 4px #4caf50}
+.srch{margin:12px 24px;display:flex;gap:6px}
+.srch input{flex:1;padding:10px 14px;border-radius:6px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.04);color:#fff;font-size:13px;font-family:monospace}
+.srch input:focus{border-color:#00bcd4;outline:none}
+.srch button{padding:10px 20px;border-radius:6px;border:none;background:#00bcd4;color:#fff;cursor:pointer;font-weight:600;font-size:13px}
+.sec{padding:12px 24px}
+.sec-t{font-size:12px;font-weight:600;color:rgba(255,255,255,.35);letter-spacing:1.5px;margin-bottom:10px;text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.gc{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:12px;cursor:pointer;transition:.2s}
+.gc:hover{background:rgba(255,255,255,.06);border-color:#00bcd4;transform:translateY(-2px)}
+.gc .th{width:100%;aspect-ratio:16/9;border-radius:5px;margin-bottom:8px;background:linear-gradient(135deg,rgba(0,188,212,.12),rgba(156,39,176,.08));display:flex;align-items:center;justify-content:center;font-size:22px}
+.gc h3{font-size:12px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gc .m{font-size:10px;color:rgba(255,255,255,.35);display:flex;gap:6px}
+.gc .pb{display:block;width:100%;padding:6px;margin-top:7px;border-radius:5px;border:none;background:#00bcd4;color:#fff;font-weight:600;font-size:11px;cursor:pointer;text-align:center}
+.gc .pb:hover{background:#00acc1}
+.gc.f{border-color:#00bcd4;background:rgba(0,188,212,.06)}
+#ls{position:fixed;inset:0;z-index:100;background:#0a0a1a;display:none;flex-direction:column;align-items:center;justify-content:center}
+#ls.on{display:flex}
+.sp{width:40px;height:40px;border:3px solid rgba(255,255,255,.06);border-top-color:#00bcd4;border-radius:50%;animation:r .8s linear infinite;margin-bottom:20px}
+@keyframes r{to{transform:rotate(360deg)}}
+.ls-t{font-size:16px;margin-bottom:4px}
+.ls-p{font-size:11px;color:rgba(255,255,255,.35);font-family:monospace;margin-bottom:10px}
+.ls-d{font-size:12px;color:rgba(255,255,255,.35)}
+.stp{margin:12px 0;width:280px}
+.stp div{padding:6px 10px;margin-bottom:3px;border-radius:5px;font-size:11px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.stp div.ok{background:rgba(76,175,80,.08);border-color:#4caf50;color:#81c784}
+.stp div.ok::before{content:'✓';font-weight:700}
+.stp div.on{background:rgba(0,188,212,.08);border-color:#00bcd4;color:#00bcd4}
+.stp div.on::before{content:'⟳';animation:r .8s linear infinite}
+.stp div.w{opacity:.4}
+.stp div.w::before{content:'○'}
+.er{color:#ff5252;margin-top:12px;display:none;font-size:12px;text-align:center}
+.bt{margin-top:16px;padding:8px 20px;border-radius:6px;border:1px solid rgba(255,255,255,.06);background:transparent;color:#fff;cursor:pointer;font-size:12px}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <img src="icon.svg" alt="">
+  <h1>Roblox</h1>
+  <span class="badge">RQBBOX LINK SYSTEM</span>
+</div>
+<div class="tabs">
+  <a class="on" onclick="tab('pop')">Popular</a>
+  <a onclick="tab('all')">All Experiences</a>
+  <a onclick="tab('cid')">Custom ID</a>
+</div>
+<div class="bar">
+  <span class="dot" id="rd"></span>
+  <span id="rt">Checking Roblox...</span>
+</div>
+<div class="srch">
+  <input id="si" placeholder="Paste Place ID (e.g. 4483381587) or search..." onkeydown="if(event.key==='Enter')go()">
+  <button onclick="go()">▶ Launch</button>
+</div>
+<div id="sec-pop" class="sec">
+  <div class="sec-t">🔥 Featured & Popular</div>
+  <div class="grid" id="pg"></div>
+</div>
+<div id="sec-all" class="sec" style="display:none">
+  <div class="sec-t">📋 All Experiences</div>
+  <div class="grid" id="ag"></div>
+</div>
+<div id="sec-cid" class="sec" style="display:none">
+  <div class="sec-t">🎮 Custom Place ID</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+    <input id="cpi" placeholder="e.g. 4483381587" style="padding:8px 12px;border-radius:5px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.04);color:#fff;font-family:monospace;font-size:13px;width:160px" onkeydown="if(event.key==='Enter')lc()">
+    <button onclick="lc()" style="padding:8px 16px;border-radius:5px;border:none;background:#00bcd4;color:#fff;cursor:pointer;font-weight:600;font-size:12px">Launch</button>
+    <span style="font-size:10px;font-family:monospace;color:rgba(255,255,255,.3)">roblox://placeId=<span id="cup">?</span></span>
+  </div>
+</div>
+<div id="ls">
+  <div class="sp"></div>
+  <div class="ls-t" id="lt">Launching...</div>
+  <div class="ls-p" id="lp">placeId=?</div>
+  <div class="ls-d" id="ld">Connecting to Roblox Player</div>
+  <div class="stp">
+    <div class="on" id="s1">Contacting RQBBOX link server</div>
+    <div class="w" id="s2">Finding RobloxPlayerBeta.exe</div>
+    <div class="w" id="s3">Launching Roblox process</div>
+    <div class="w" id="s4">Verifying Roblox is running</div>
+  </div>
+  <div class="er" id="ler">⚠ Failed to launch. Roblox may not be installed.</div>
+  <button class="bt" onclick="cl()">Close</button>
+</div>
+<script>
+var D=[
+  {i:920587237,n:'Adopt Me!',p:'200K+',e:'🐱'},{i:4483381587,n:'Pet Simulator 99',p:'180K+',e:'🐾'},
+  {i:2753915549,n:'Blox Fruits',p:'150K+',e:'🍇'},{i:6284583030,n:'Pet Simulator X',p:'120K+',e:'🐶'},
+  {i:142823291,n:'Murder Mystery 2',p:'90K+',e:'🔪'},{i:768153815,n:'Tower of Hell',p:'60K+',e:'🗼'},
+  {i:537413528,n:'Build A Boat For Treasure',p:'50K+',e:'🚢'},{i:3101667897,n:'Legends of Speed',p:'40K+',e:'💨'},
+  {i:2868682900,n:'Dungeon Quest',p:'35K+',e:'⚔️'},{i:597414048,n:'MeepCity',p:'30K+',e:'🏙️'},
+  {i:595461702,n:'Natural Disaster Survival',p:'25K+',e:'🌪️'},{i:4842115020,n:'Mining Simulator 2',p:'20K+',e:'⛏️'},
+  {i:3844359186,n:'Starving Artists',p:'18K+',e:'🎨'},{i:4879585880,n:'Theme Park Tycoon 2',p:'15K+',e:'🎢'},
+  {i:3034920392,n:'Tower Defense Simulator',p:'14K+',e:'🏰'},{i:1537690962,n:'Bee Swarm Simulator',p:'13K+',e:'🐝'},
+  {i:7169222620,n:'Doors',p:'12K+',e:'🚪'},{i:6516141723,n:'Fisch',p:'11K+',e:'🐟'},
+  {i:7877885094,n:'Dress to Impress',p:'10K+',e:'👗'}
+];
+function rc(g,f){var c=document.createElement('div');c.className='gc'+(f?' f':'');
+c.innerHTML='<div class="th">'+g.e+'</div><h3 title="'+g.n+'">'+g.n+'</h3><div class="m"><span>👤 '+g.p+'</span><span>#'+g.i+'</span></div><button class="pb">▶ Play via RQBBOX</button>';
+c.querySelector('.pb').onclick=function(ev){ev.stopPropagation();lg(g.i,g.n)};
+c.onclick=function(){lg(g.i,g.n)};return c}
+D.slice(0,6).forEach(function(g){document.getElementById('pg').appendChild(rc(g,true))});
+D.forEach(function(g){document.getElementById('ag').appendChild(rc(g,false))});
+function tab(t){
+  document.querySelectorAll('.tabs a').forEach(function(a){a.className=''});
+  document.querySelector('.tabs a[onclick="tab(\''+t+'\')"]').className='on';
+  document.getElementById('sec-pop').style.display=t==='pop'?'':'none';
+  document.getElementById('sec-all').style.display=t==='all'?'':'none';
+  document.getElementById('sec-cid').style.display=t==='cid'?'':'none';
+}
+document.getElementById('cpi').addEventListener('input',function(){document.getElementById('cup').textContent=this.value||'?'});
+function go(){var v=document.getElementById('si').value.trim();if(!v)return;var id=parseInt(v);if(id>0)lg(id,'Place '+id);else window.open('https://www.roblox.com/games/search?q='+encodeURIComponent(v),'_blank')}
+function lc(){var v=document.getElementById('cpi').value.trim();if(!v)return;var id=parseInt(v);if(id>0)lg(id,'Place '+id)}
+function ss(i,s){var e=document.getElementById(i);if(e)e.className=s}
+function lg(id,name){
+  var ls=document.getElementById('ls');ls.className='on';
+  document.getElementById('lt').textContent=name||'Roblox';
+  document.getElementById('lp').textContent='placeId='+id;
+  document.getElementById('ld').textContent='Connecting to Roblox Player';
+  document.getElementById('ler').style.display='none';
+  ss('s1','on');ss('s2','w');ss('s3','w');ss('s4','w');
+  fetch('/api/launch-roblox?id='+id).then(function(r){return r.json()}).then(function(d){
+    if(d.exe){
+      ss('s1','ok');ss('s2','ok');ss('s3','on');
+      document.getElementById('ld').textContent='Launched '+d.exe.split('\\').pop();
+      setTimeout(function(){ss('s3','ok');ss('s4','on');
+        document.getElementById('ld').textContent='Roblox Player is starting...';
+        setTimeout(function(){ss('s4','ok');
+          document.getElementById('ld').textContent='Roblox is running!';
+        },2000);
+      },1000);
+    }else{
+      ss('s1','ok');ss('s2','ok');ss('s3','ok');ss('s4','ok');
+      document.getElementById('ld').textContent='Roblox launched via protocol link';
+    }
+  }).catch(function(){
+    document.getElementById('ler').style.display='block';
+    document.getElementById('ld').textContent='Using protocol fallback';
+    var f=document.createElement('iframe');f.style.display='none';f.src='roblox://placeId='+id;
+    document.body.appendChild(f);setTimeout(function(){if(f.parentNode)f.parentNode.removeChild(f)},2000);
+  });
+}
+function cl(){document.getElementById('ls').className=''}
+(function(){fetch('/api/check-roblox').then(function(r){return r.json()}).then(function(d){
+  var rd=document.getElementById('rd'),rt=document.getElementById('rt');
+  if(d.installed){rd.className='dot ok';rt.textContent='Roblox '+d.version+' — ready'}
+  else{rt.textContent='Roblox not found'}
+}).catch(function(){document.getElementById('rt').textContent='Link server offline'})})();
+</script>
+</body>
+</html>

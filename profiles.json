@@ -1,0 +1,211 @@
+{
+  "users": [
+    {
+      "id": "than0s230",
+      "name": "than0s230",
+      "username": "than0s230",
+      "avatar": "T",
+      "role": "star",
+      "theme": "default",
+      "achievements": [],
+      "friends": [],
+      "friendRequests": [],
+      "stats": {
+        "gamesLaunched": 0,
+        "playTime": 0,
+        "captures": 0
+      },
+      "createdAt": "2026-07-04T00:00:00.000Z",
+      "token": "975fe9d5274146f88682140d8d7c2953a7e874063411007d9665c72e660c1b10"
+    }
+  ],
+  "achievements": [],
+  "quickResume": [],
+  "captures": [],
+  "settings": {},
+  "stars": [
+    {
+      "id": "than0s230",
+      "name": "than0s230",
+      "avatar": "T",
+      "addedAt": "2026-07-04T00:00:00.000Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "mr5on2yf0eqb6y",
+      "from": "thanos230",
+      "fromAvatar": "T",
+      "text": "Hello World!",
+      "room": "general",
+      "timestamp": "2026-07-04T01:27:31.767Z"
+    },
+    {
+      "id": "mr5oongffhz5rc",
+      "from": "than0s230",
+      "fromAvatar": "T",
+      "text": "Hello from the command line!",
+      "room": "general",
+      "timestamp": "2026-07-04T01:28:44.991Z"
+    },
+    {
+      "id": "mr5p5kn8kwj1lg",
+      "from": "RQBBOX",
+      "fromAvatar": "R",
+      "text": "HI",
+      "room": "general",
+      "timestamp": "2026-07-04T01:41:54.500Z"
+    }
+  ],
+  "gameData": {
+    "neon-drift-racing": {
+      "playCount": 3,
+      "highScores": [
+        {
+          "score": 9999,
+          "player": "than0s230",
+          "date": "2026-07-04T01:37:12.811Z"
+        }
+      ],
+      "sessions": [],
+      "state": {}
+    },
+    "rqbbox-life": {
+      "playCount": 3,
+      "highScores": [],
+      "sessions": [],
+      "state": {}
+    },
+    "roblox": {
+      "playCount": 6,
+      "highScores": [],
+      "sessions": [],
+      "state": {}
+    },
+    "playtree-c1s1": {
+      "playCount": 2,
+      "highScores": [],
+      "sessions": [],
+      "state": {}
+    },
+    "chess-ai": {
+      "playCount": 1,
+      "highScores": [],
+      "sessions": [],
+      "state": {}
+    }
+  },
+  "appData": {
+    "steam": {
+      "launchCount": 2,
+      "lastLaunched": "2026-07-04T01:38:52.478Z"
+    },
+    "google-play-games": {
+      "launchCount": 1,
+      "lastLaunched": "2026-07-04T01:40:47.956Z"
+    },
+    "netflix": {
+      "launchCount": 1,
+      "lastLaunched": "2026-07-04T01:41:03.307Z"
+    }
+  },
+  "aiConversations": [
+    {
+      "role": "user",
+      "content": "Translate Hello World to Spanish",
+      "timestamp": "2026-07-07T02:44:20.579Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! I'm your RQBBOX AI Assistant. How can I help you today?",
+      "timestamp": "2026-07-07T02:44:20.580Z"
+    },
+    {
+      "role": "user",
+      "content": "Hello, what can you do?",
+      "timestamp": "2026-07-07T02:44:27.326Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! I'm your RQBBOX AI Assistant. How can I help you today?",
+      "timestamp": "2026-07-07T02:44:27.326Z"
+    },
+    {
+      "role": "user",
+      "content": "Help me debug: my code has an error",
+      "timestamp": "2026-07-07T04:00:30.356Z"
+    },
+    {
+      "role": "assistant",
+      "content": "I can help you write, debug, and review code. What language or project are you working on?",
+      "timestamp": "2026-07-07T04:00:30.356Z"
+    },
+    {
+      "role": "user",
+      "content": "hi",
+      "timestamp": "2026-07-07T04:00:45.530Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello! I'm your RQBBOX AI Assistant. How can I help you today?",
+      "timestamp": "2026-07-07T04:00:45.530Z"
+    },
+    {
+      "role": "user",
+      "content": "pls help me",
+      "timestamp": "2026-07-07T04:00:55.147Z"
+    },
+    {
+      "role": "assistant",
+      "content": "I can: answer questions, write content, summarize documents, assist with coding, debug errors, translate text, manage workflows, track tasks, take notes, provide productivity tips, and help with file organization. What would you like help with?",
+      "timestamp": "2026-07-07T04:00:55.147Z"
+    },
+    {
+      "role": "user",
+      "content": "help",
+      "timestamp": "2026-07-07T04:01:09.374Z"
+    },
+    {
+      "role": "assistant",
+      "content": "I can: answer questions, write content, summarize documents, assist with coding, debug errors, translate text, manage workflows, track tasks, take notes, provide productivity tips, and help with file organization. What would you like help with?",
+      "timestamp": "2026-07-07T04:01:09.374Z"
+    },
+    {
+      "role": "user",
+      "content": "tips",
+      "timestamp": "2026-07-07T04:01:19.198Z"
+    },
+    {
+      "role": "assistant",
+      "content": "I understand you're asking about \"tips\". I'm your AI assistant integrated into RQBBOX Experience. I can help with questions, content creation, coding, translation, summarization, productivity, and more. How would you like me to assist?",
+      "timestamp": "2026-07-07T04:01:19.198Z"
+    },
+    {
+      "role": "user",
+      "content": "content",
+      "timestamp": "2026-07-07T04:01:45.223Z"
+    },
+    {
+      "role": "assistant",
+      "content": "I can help create content — articles, emails, stories, social posts, and more. What kind of content do you need?",
+      "timestamp": "2026-07-07T04:01:45.223Z"
+    },
+    {
+      "role": "user",
+      "content": "emails",
+      "timestamp": "2026-07-07T04:01:54.518Z"
+    },
+    {
+      "role": "assistant",
+      "content": "I understand you're asking about \"emails\". I'm your AI assistant integrated into RQBBOX Experience. I can help with questions, content creation, coding, translation, summarization, productivity, and more. How would you like me to assist?",
+      "timestamp": "2026-07-07T04:01:54.518Z"
+    }
+  ],
+  "cloud": {
+    "enabled": true,
+    "lastSync": "2026-07-07T04:00:02.818Z",
+    "storageUsed": 596325550,
+    "storageTotal": 1073741824,
+    "deviceName": "RhysCotton"
+  }
+}

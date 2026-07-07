@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html><head><title>Neon Drift Racing</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#050510;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px;box-shadow:0 0 60px rgba(0,212,255,.15)}h1{font-weight:300;letter-spacing:4px;color:#00d4ff;font-size:1.5rem}button{padding:8px 20px;background:#00d4ff;border:none;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-family:inherit}button:hover{filter:brightness(1.15)}.score{font-size:1.2rem;font-weight:200;color:rgba(255,255,255,.6)}</style></head><body>
+<h1>NEON DRIFT</h1><canvas id="game" width="600" height="400"></canvas>
+<div class="score" id="score">Score: 0</div>
+<button onclick="startGame()">Play Again</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+let car={x:280,y:340,w:40,h:60},obstacles=[],score=0,gameOver=false,speed=3;
+function startGame(){obstacles=[];score=0;gameOver=false;speed=3;car.x=280;requestAnimationFrame(gameLoop)}
+function gameLoop(){if(gameOver){ctx.fillStyle='rgba(0,0,0,.8)';ctx.fillRect(0,0,600,400);ctx.fillStyle='#fff';ctx.font='30px system-ui';ctx.textAlign='center';ctx.fillText('GAME OVER',300,180);ctx.font='16px system-ui';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText('Score: '+score,300,220);return}
+update();draw();requestAnimationFrame(gameLoop)}
+function update(){if(Math.random()<.02)obstacles.push({x:Math.random()*560,y:-60,w:40,h:60})
+obstacles.forEach(o=>o.y+=speed);obstacles=obstacles.filter(o=>o.y<420)
+obstacles.forEach(o=>{if(car.x<o.x+o.w&&car.x+car.w>o.x&&car.y<o.y+o.h&&car.y+car.h>o.y)gameOver=true})
+score++;document.getElementById('score').textContent='Score: '+score
+if(score%500===0)speed=Math.min(speed+0.5,10)}
+function draw(){ctx.clearRect(0,0,600,400)
+ctx.strokeStyle='rgba(0,212,255,.05)';ctx.lineWidth=1;for(let i=0;i<400;i+=40){ctx.beginPath();ctx.moveTo(300,i);ctx.lineTo(300,i+20);ctx.stroke()}
+ctx.fillStyle='#00d4ff';ctx.shadowColor='#00d4ff';ctx.shadowBlur=20;ctx.fillRect(car.x,car.y,car.w,car.h);ctx.shadowBlur=0
+ctx.fillStyle='rgba(255,0,255,.8)';obstacles.forEach(o=>{ctx.shadowColor='#ff00ff';ctx.shadowBlur=15;ctx.fillRect(o.x,o.y,o.w,o.h);ctx.shadowBlur=0})}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')car.x=Math.max(0,car.x-20)
+if(e.key==='ArrowRight')car.x=Math.min(560,car.x+20)})
+startGame()
+</script></body></html>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a2e2e"/>
+      <stop offset="100%" style="stop-color:#001515"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="20" fill="url(#bg)"/>
+  <rect x="44" y="30" width="40" height="40" fill="url(#cyan)" opacity="0.8"/>
+  <rect x="44" y="30" width="20" height="20" fill="#06b6d4"/>
+  <rect x="64" y="50" width="20" height="20" fill="#22d3ee"/>
+  <rect x="44" y="70" width="40" height="8" fill="#06b6d4" opacity="0.4"/>
+  <circle cx="64" cy="95" r="8" fill="none" stroke="#22d3ee" stroke-width="2"/>
+  <circle cx="64" cy="95" r="3" fill="#22d3ee"/>
+  <text x="64" y="118" text-anchor="middle" font-family="sans-serif" font-size="8" font-weight="bold" fill="#22d3ee">CUBE RUNNER</text>
+</svg>

@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>RQBBOX Experience OS 1.0 (Discontinued)</title>
+  <meta name="msvalidate.01" content="37D5DC8997B23C62BB43E51C2729A569" />
+  <!-- Primary Meta Tags -->
+  <meta name="description" content="RQBBOX Experience OS 1.0 (Discontinued) - Xbox-style gaming dashboard by RhysTech. Full-screen kiosk mode, Quick Resume, game scanning, achievements, and system optimization for Windows.">
+  <meta name="keywords" content="RQBBOX Experience OS 1.0, RhysTech, Xbox Mode, gaming dashboard, Electron, game launcher, Windows kiosk, Quick Resume, discontinued">
+  <meta name="author" content="RhysTech">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rtech-rqbbox-os.github.io/RQBBOX-MODE/">
+  <meta property="og:title" content="RQBBOX Experience OS 1.0 (Discontinued) — Xbox-Style Gaming Dashboard by RhysTech">
+  <meta property="og:description" content="RQBBOX Experience OS 1.0 (Discontinued) - Xbox-style gaming dashboard Electron app by RhysTech. Full-screen kiosk mode, Quick Resume, game scanning, achievements, and system optimization for Windows.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/Rtech-Rqbbox-os/RhysTech/main/og-image.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://rtech-rqbbox-os.github.io/RQBBOX-MODE/">
+  <meta name="twitter:title" content="RQBBOX Experience OS 1.0 (Discontinued) — Xbox-Style Gaming Dashboard by RhysTech">
+  <meta name="twitter:description" content="RQBBOX Experience OS 1.0 (Discontinued) - Xbox-style gaming dashboard Electron app by RhysTech. Full-screen kiosk mode, Quick Resume, game scanning, achievements, and system optimization for Windows.">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/Rtech-Rqbbox-os/RhysTech/main/og-image.png">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "RQBBOX Experience OS 1.0 (Discontinued)",
+    "operatingSystem": "Windows",
+    "applicationCategory": "GameApplication",
+    "description": "RQBBOX Experience OS 1.0 (Discontinued) - Xbox-style gaming dashboard Electron app by RhysTech. Full-screen kiosk mode, Quick Resume, game scanning, achievements, and system optimization for Windows.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Organization", "name": "RhysTech", "url": "https://rtech-rqbbox-os.github.io/RhysTech/" }
+  }
+  </script>
+  <meta name="theme-color" content="#107c10">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="assets/logo.svg">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    @font-face { font-family: 'Segoe UI'; src: local('Segoe UI'); }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --teal: #107c10;
+      --teal-light: #1db954;
+      --bg: #111;
+      --bg-dark: #0a0a0a;
+      --bg-card: rgba(255,255,255,0.06);
+      --bg-card-hover: rgba(255,255,255,0.1);
+      --text: #fff;
+      --text-dim: rgba(255,255,255,0.6);
+      --text-muted: rgba(255,255,255,0.35);
+      --border: rgba(255,255,255,0.08);
+    }
+    html, body {
+      font-family: 'Segoe UI', 'Segoe UI Variable', system-ui, -apple-system, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Background teal gradient */
+    .bg { position: fixed; inset: 0; z-index: 0; background: linear-gradient(160deg, #0a2a1e 0%, #0a1510 40%, #0a0a0a 70%); }
+
+    /* LAYOUT */
+    .app {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      grid-row: 1 / -1;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      gap: 2px;
+      border-right: 1px solid rgba(255,255,255,0.04);
+    }
+    .sb-btn {
+      width: 40px; height: 40px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.35);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .sb-btn:hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.05); }
+    .sb-btn.active { color: var(--text); }
+    .sb-btn .badge {
+      position: absolute; top: 2px; right: 2px;
+      font-size: 0.55rem; background: var(--teal);
+      color: #fff; padding: 0 3px; border-radius: 3px; font-weight: 700;
+    }
+    .sb-spacer { flex: 1; }
+
+    /* TOP BAR */
+    .topbar {
+      grid-column: 2;
+      display: flex;
+      align-items: center;
+      padding: 10px 24px;
+      gap: 16px;
+      background: rgba(0,0,0,0.25);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .tb-user { display: flex; align-items: center; gap: 10px; }
+    .tb-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b35 0%, #d4380d 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; font-weight: 700; color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .tb-info { line-height: 1.2; }
+    .tb-name { font-size: 0.95rem; font-weight: 600; }
+    .tb-score { font-size: 0.7rem; color: rgba(255,255,255,0.5); display: flex; align-items: center; gap: 4px; }
+    .tb-score .g { color: #c7a000; font-weight: 700; }
+    .tb-nav { display: flex; gap: 28px; flex: 1; justify-content: center; }
+    .tb-nav a {
+      font-size: 0.9rem; color: rgba(255,255,255,0.5);
+      text-decoration: none; padding: 6px 2px;
+      transition: color 0.15s;
+    }
+    .tb-nav a:hover, .tb-nav a.active { color: #fff; }
+    .tb-right { display: flex; align-items: center; gap: 14px; }
+    .tb-time { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
+    .tb-battery { font-size: 0.85rem; }
+
+    /* MAIN */
+    .main {
+      grid-column: 2;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.08) transparent;
+    }
+    .main::-webkit-scrollbar { width: 4px; }
+    .main::-webkit-scrollbar-track { background: transparent; }
+    .main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: 280px;
+      display: grid;
+      grid-template-columns: 240px 1fr 240px;
+      gap: 0;
+      padding: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .hero-art {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 16px;
+    }
+    .hero-art-img {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #1a3a2a 0%, #0d2218 60%, #0a1510 100%);
+    }
+    .hero-art-img::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, transparent 60%, rgba(0,0,0,0.4) 100%),
+                  linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 40%);
+    }
+    .hero-art-content {
+      position: relative; z-index: 1;
+      display: flex; align-items: flex-end; gap: 12px;
+    }
+    .hero-game-box {
+      width: 160px; height: 160px;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.1);
+    }
+    .hero-game-box .game-art {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, var(--teal) 0%, #0a3a1a 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem;
+    }
+    .hero-game-box img { width: 100%; height: 100%; object-fit: cover; }
+
+    .hero-center {
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 24px 32px;
+    }
+    .hero-label {
+      font-size: 0.75rem; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.5px; margin-bottom: 4px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .hero-title {
+      font-size: 2.8rem; font-weight: 300;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .hero-players { display: flex; gap: 0; margin-bottom: 0; }
+    .hero-p {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 2px solid var(--bg-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700;
+      margin-left: -6px;
+    }
+    .hero-p:first-child { margin-left: 0; }
+    .hero-p.p1 { background: #1a6b1a; }
+    .hero-p.p2 { background: #c44; }
+    .hero-p.p3 { background: #3366cc; }
+    .hero-p.p4 { background: #8855aa; }
+    .hero-p.more { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); font-size: 0.6rem; }
+
+    .hero-right {
+      display: flex; flex-direction: column;
+      padding: 8px;
+      gap: 4px;
+      background: rgba(0,0,0,0.2);
+    }
+    .hr-card {
+      flex: 1;
+      padding: 14px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+      position: relative;
+      overflow: hidden;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .hr-card:hover { background: rgba(255,255,255,0.06); }
+    .hr-card-icon { font-size: 0.9rem; margin-bottom: 4px; }
+    .hr-card-title { font-size: 0.85rem; font-weight: 500; line-height: 1.3; }
+    .hr-card-desc { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 2px; line-height: 1.3; }
+    .hr-card-gold {
+      background: linear-gradient(135deg, rgba(199,160,0,0.15) 0%, rgba(138,110,0,0.1) 100%);
+      border: 1px solid rgba(199,160,0,0.2);
+    }
+    .hr-card-gold .hr-card-title { color: #c7a000; }
+    .hr-card-gold .gold-badge {
+      position: absolute; top: 8px; right: 8px;
+      background: #c7a000; color: #000;
+      font-size: 0.55rem; font-weight: 800;
+      padding: 1px 5px; border-radius: 2px;
+    }
+    .hr-card-gold .gold-art {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(199,160,0,0.08) 0%, transparent 60%);
+    }
+
+    /* ACTION ROW */
+    .action-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .action-tile {
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-right: 1px solid rgba(255,255,255,0.04);
+      display: flex; flex-direction: column;
+    }
+    .action-tile:last-child { border-right: none; }
+    .action-tile:hover { background: rgba(255,255,255,0.03); }
+    .action-tile-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .action-tile-icon { font-size: 1rem; }
+    .action-tile-title { font-size: 0.9rem; font-weight: 500; }
+    .action-tile-desc { font-size: 0.75rem; color: rgba(255,255,255,0.4); line-height: 1.4; }
+
+    /* CONTENT AREA */
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 0;
+    }
+
+    /* GAME HUB FEED */
+    .feed { padding: 0; }
+    .hub-card {
+      display: grid;
+      grid-template-columns: 200px 1fr 200px;
+      min-height: 140px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .hub-card:hover { background: rgba(255,255,255,0.02); }
+    .hub-art {
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hub-art-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #1a2a3a 0%, #0a1520 100%);
+    }
+    .hub-art-img {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      opacity: 0.7;
+    }
+    .hub-art-content {
+      position: relative; z-index: 1;
+      font-size: 3rem;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    }
+    .hub-art-content img { width: 80px; height: 80px; }
+    .hub-info {
+      padding: 20px 24px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .hub-type { font-size: 0.8rem; color: var(--teal); font-weight: 500; margin-bottom: 4px; }
+    .hub-title { font-size: 1rem; font-weight: 500; margin-bottom: 4px; line-height: 1.3; }
+    .hub-desc { font-size: 0.8rem; color: rgba(255,255,255,0.4); line-height: 1.4; }
+    .hub-meta { font-size: 0.7rem; color: rgba(255,255,255,0.3); margin-top: 6px; }
+    .hub-avatars {
+      display: flex; align-items: center; gap: 4px; padding: 20px; justify-content: flex-end;
+    }
+    .hub-av {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem; font-weight: 700; border: 2px solid var(--bg-dark);
+      margin-left: -6px;
+    }
+    .hub-av:first-child { margin-left: 0; }
+
+    /* RIGHT COLUMN */
+    .right-col { padding: 0; }
+    .rc-game {
+      position: relative;
+      min-height: 200px;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      overflow: hidden;
+    }
+    .rc-game:hover { background: rgba(255,255,255,0.03); }
+    .rc-game-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #2a3a4a 0%, #1a2530 100%);
+    }
+    .rc-game-img {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      opacity: 0.6;
+    }
+    .rc-game-title {
+      position: relative; z-index: 1;
+      font-size: 0.85rem; font-weight: 500;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    }
+    .rc-sponsored {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .rc-sponsored-label {
+      font-size: 0.55rem; color: rgba(255,255,255,0.3);
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .rc-sponsored-art {
+      width: 100%; aspect-ratio: 16/10;
+      background: linear-gradient(135deg, #3a2a2a 0%, #2a1a1a 100%);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; overflow: hidden;
+    }
+
+    /* BOOT SCREEN */
+    .boot-screen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #000;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.6s;
+    }
+    .boot-screen.hidden { opacity: 0; pointer-events: none; }
+    .boot-content { text-align: center; }
+    .boot-logo { font-size: 3rem; font-weight: 200; letter-spacing: 12px; color: #fff; }
+    .boot-sub { font-size: 0.7rem; letter-spacing: 16px; color: var(--teal); margin-top: 4px; }
+    .boot-bar-wrap { width: 200px; height: 2px; background: rgba(255,255,255,0.08); border-radius: 1px; margin: 32px auto 0; overflow: hidden; }
+    .boot-bar { height: 100%; background: var(--teal); width: 0; transition: width 0.3s; }
+
+    /* AUTH SCREEN */
+    .auth-screen {
+      position: fixed; inset: 0; z-index: 9998;
+      background: var(--bg-dark);
+      display: none; align-items: center; justify-content: center;
+    }
+    .auth-panel { text-align: center; }
+    .auth-logo { font-size: 1.5rem; font-weight: 200; letter-spacing: 8px; color: var(--teal); margin-bottom: 24px; }
+    .profile-list { display: flex; gap: 16px; margin-bottom: 24px; }
+    .profile-card {
+      width: 100px; padding: 16px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px; cursor: pointer;
+      transition: all 0.15s;
+      border: 2px solid transparent;
+    }
+    .profile-card:hover { border-color: var(--teal); transform: translateY(-4px); }
+    .profile-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b35, #d4380d);
+      margin: 0 auto 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 700;
+    }
+    .profile-name { font-size: 0.8rem; }
+    .btn {
+      padding: 12px 24px; border-radius: 4px; border: none;
+      font-size: 0.9rem; font-weight: 500; cursor: pointer;
+      font-family: inherit; transition: all 0.15s;
+    }
+    .btn-primary { background: var(--teal); color: white; }
+    .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+
+    /* GUIDE OVERLAY */
+    .guide-overlay {
+      position: fixed; inset: 0; z-index: 5000;
+      background: rgba(0,0,0,0.6);
+      display: none; align-items: center; justify-content: center;
+    }
+    .guide-overlay.show { display: flex; }
+    .guide-panel {
+      width: 420px; background: #1a1a1a;
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+    }
+    .guide-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .guide-title { font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+    .guide-close { background: none; border: none; color: var(--text-muted); font-size: 1.1rem; cursor: pointer; }
+    .guide-body { padding: 20px; }
+
+    /* TOAST */
+    .toast-container {
+      position: fixed; bottom: 24px; right: 24px;
+      z-index: 9999; display: flex; flex-direction: column; gap: 8px;
+    }
+    .toast {
+      background: rgba(30,30,30,0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 12px 20px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.85rem;
+      animation: toastIn 0.25s ease;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
+
+    /* PERFORMANCE OVERLAY */
+    .perf-overlay {
+      position: fixed; top: 8px; left: 64px; z-index: 100;
+      font-size: 0.6rem; color: rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 4px;
+      pointer-events: none; font-variant-numeric: tabular-nums;
+      display: none;
+    }
+    .perf-overlay.show { display: block; }
+
+    /* ACHIEVEMENT POPUP */
+    .achievement-popup {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      z-index: 10000;
+      display: none; align-items: center; gap: 16px;
+      padding: 16px 24px;
+      background: rgba(16,124,16,0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(16,124,16,0.4);
+      border-radius: 12px;
+      animation: achSlide 0.3s ease;
+    }
+    .achievement-popup.show { display: flex; }
+    @keyframes achSlide { from { opacity: 0; transform: translateX(-50%) translateY(-16px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+    .ach-icon { font-size: 2rem; }
+    .ach-label { font-size: 0.65rem; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; }
+    .ach-title { font-size: 1rem; font-weight: 600; }
+    .ach-desc { font-size: 0.8rem; color: rgba(255,255,255,0.6); }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <!-- Boot -->
+  <div id="boot" class="boot-screen">
+    <div class="boot-content">
+      <div class="boot-logo">RQBBOX</div>
+      <div class="boot-sub">M O D E</div>
+      <div class="boot-bar-wrap"><div id="bootBar" class="boot-bar"></div></div>
+    </div>
+  </div>
+
+  <!-- Auth -->
+  <div id="auth" class="auth-screen">
+    <div class="auth-panel">
+      <div class="auth-logo">RQBBOX Experience OS 1.0 <span style="font-size:0.5em;opacity:0.5;display:block;letter-spacing:3px">DISCONTINUED</span></div>
+      <h2 style="margin-bottom:24px;font-weight:400;">Who's Playing?</h2>
+      <div id="profileList" class="profile-list"></div>
+      <button class="btn btn-ghost">+ Add Profile</button>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dash" class="app" style="display:none">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <button class="sb-btn active" data-page="home" title="Home"><img src="assets/icons/home.svg" alt="" width="20" height="20"></button>
+      <button class="sb-btn" data-page="friends" title="Friends">
+        <img src="assets/icons/friends.svg" alt="" width="20" height="20">
+        <span class="badge">18</span>
+      </button>
+      <button class="sb-btn" data-page="xbox" title="Xbox"><img src="assets/icons/games.svg" alt="" width="20" height="20"></button>
+      <button class="sb-btn" data-page="messages" title="Messages">
+        <img src="assets/icons/notifications.svg" alt="" width="20" height="20">
+        <span class="badge">5</span>
+      </button>
+      <button class="sb-btn" data-page="store" title="Store">
+        <img src="assets/icons/store.svg" alt="" width="20" height="20">
+        <span class="badge">2</span>
+      </button>
+      <button class="sb-btn" data-page="captures" title="Captures"><img src="assets/icons/captures.svg" alt="" width="20" height="20"></button>
+      <div class="sb-spacer"></div>
+      <button class="sb-btn" data-page="controller" title="Controller"><img src="assets/icons/controller.svg" alt="" width="20" height="20"></button>
+      <button class="sb-btn" data-page="settings" title="Settings"><img src="assets/icons/settings.svg" alt="" width="20" height="20"></button>
+    </nav>
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="tb-user">
+        <div class="tb-avatar">R</div>
+        <div class="tb-info">
+          <div class="tb-name">RQBBOX</div>
+          <div class="tb-score"><span class="g">G</span> 287145</div>
+        </div>
+      </div>
+      <nav class="tb-nav">
+        <a class="active" data-page="home">Home</a>
+        <a data-page="friends">Community</a>
+        <a data-page="store">Store</a>
+      </nav>
+      <div class="tb-right">
+        <span class="tb-battery">🔋</span>
+        <span class="tb-time" id="clock">9:57 pm</span>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main" id="main">
+      <!-- Discontinuation Notice -->
+      <div style="background:linear-gradient(135deg,#b71c1c,#880e4f);padding:24px 32px;color:#fff;text-align:center">
+        <div style="font-size:11px;letter-spacing:3px;opacity:.7;margin-bottom:6px">NOTICE</div>
+        <div style="font-size:24px;font-weight:700;margin-bottom:8px">RQBBOX Experience OS 1.0 has been discontinued</div>
+        <div style="font-size:13px;opacity:.7;max-width:500px;margin:0 auto">Thank you for using RQBBOX Experience OS 1.0. This project is no longer actively developed or supported. All features remain available but no further updates will be made.</div>
+      </div>
+      <!-- Hero Section -->
+      <div class="hero">
+        <!-- Game Art Left -->
+        <div class="hero-art">
+          <div class="hero-art-img"></div>
+          <div class="hero-art-content">
+            <div class="hero-game-box">
+              <div class="game-art">🎮</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center: Title + Players -->
+        <div class="hero-center">
+          <div class="hero-label">▶ Resume</div>
+          <div class="hero-title" id="heroTitle">RQBBOX Experience OS 1.0 (Discontinued)</div>
+          <div class="hero-players">
+            <div class="hero-p p1">R</div>
+            <div class="hero-p p2">A</div>
+            <div class="hero-p p3">M</div>
+            <div class="hero-p more">+3</div>
+          </div>
+        </div>
+
+        <!-- Right: Cards -->
+        <div class="hero-right">
+          <div class="hr-card" onclick="RQBOX.navigate('games')">
+            <div class="hr-card-icon">📋</div>
+            <div class="hr-card-title">My games & apps</div>
+          </div>
+          <div class="hr-card">
+            <div class="hr-card-title">Check out looking for groups, clubs and tournaments</div>
+          </div>
+          <div class="hr-card hr-card-gold">
+            <div class="gold-art"></div>
+            <div class="gold-badge">GOLD</div>
+            <div class="hr-card-title">Join now and start saving</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;padding:20px;background:rgba(16,124,16,.08);border:1px solid rgba(16,124,16,.2);border-radius:12px;margin:20px auto;max-width:500px">
+        <a href="https://github.com/Rtech-Rqbbox-os/RQBBOX-MODE/releases/latest" style="display:inline-block;padding:12px 32px;background:#107c10;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:16px">⬇ Download for Windows</a>
+        <p style="margin-top:8px;font-size:12px;color:rgba(255,255,255,.4)">Windows 10/11 · Electron Desktop App</p>
+      </div>
+
+      <!-- Action Row -->
+      <div class="action-row">
+        <div class="action-tile" onclick="RQBOX.navigate('games')">
+          <div class="action-tile-header">
+            <span class="action-tile-icon">📋</span>
+            <span class="action-tile-title">Game hub</span>
+          </div>
+          <div class="action-tile-desc">You're in charge of the RQBBOX Festival. Customize everything...</div>
+        </div>
+        <div class="action-tile">
+          <div class="action-tile-header">
+            <span class="action-tile-icon">👥</span>
+            <span class="action-tile-title">Clubs</span>
+          </div>
+          <div class="action-tile-desc">Looking for group</div>
+        </div>
+        <div class="action-tile">
+          <div class="action-tile-header">
+            <span class="action-tile-icon">📤</span>
+            <span class="action-tile-title">Share</span>
+          </div>
+          <div class="action-tile-desc">1 game clip<br>1 screenshot</div>
+        </div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="content">
+        <!-- Feed -->
+        <div class="feed">
+          <!-- Hub Card 1 -->
+          <div class="hub-card" onclick="GameLibrary.launch('neon-drift-racing')">
+            <div class="hub-art">
+              <div class="hub-art-bg"></div>
+              <div class="hub-art-content">
+                <img src="games/neon-drift-racing/icon.svg" alt="Neon Drift">
+              </div>
+            </div>
+            <div class="hub-info">
+              <div class="hub-type">Game hub</div>
+              <div class="hub-title">Come check out the latest happenings in Neon Drift Racing...</div>
+              <div class="hub-meta">2 Clubs recommended</div>
+            </div>
+            <div class="hub-avatars">
+              <div class="hub-av" style="background:#1a6b1a;">R</div>
+              <div class="hub-av" style="background:#c44;">A</div>
+              <div class="hub-av" style="background:#36c;">M</div>
+            </div>
+          </div>
+
+          <!-- Hub Card 2 -->
+          <div class="hub-card" onclick="GameLibrary.launch('pixel-quest')">
+            <div class="hub-art">
+              <div class="hub-art-bg" style="background:linear-gradient(135deg,#2a1a3a,#150a20);"></div>
+              <div class="hub-art-content">
+                <img src="games/pixel-quest/icon.svg" alt="Pixel Quest">
+              </div>
+            </div>
+            <div class="hub-info">
+              <div class="hub-type">Game hub</div>
+              <div class="hub-title">The tale of a young orphan destined for heroics...</div>
+              <div class="hub-meta">4 Clubs recommended</div>
+            </div>
+            <div class="hub-avatars">
+              <div class="hub-av" style="background:#c44;">A</div>
+              <div class="hub-av" style="background:#8855aa;">K</div>
+            </div>
+          </div>
+
+          <!-- Hub Card 3 -->
+          <div class="hub-card" onclick="GameLibrary.launch('star-fighter-x')">
+            <div class="hub-art">
+              <div class="hub-art-bg" style="background:linear-gradient(135deg,#1a2a4a,#0a1530);"></div>
+              <div class="hub-art-content">
+                <img src="games/star-fighter-x/icon.svg" alt="Star Fighter X">
+              </div>
+            </div>
+            <div class="hub-info">
+              <div class="hub-type">Game hub</div>
+              <div class="hub-title">Blast off into the cosmos and fight for the galaxy...</div>
+              <div class="hub-meta">1 Club recommended</div>
+            </div>
+            <div class="hub-avatars">
+              <div class="hub-av" style="background:#36c;">M</div>
+            </div>
+          </div>
+
+          <!-- Hub Card 4 -->
+          <div class="hub-card" onclick="GameLibrary.launch('void-craft-sandbox')">
+            <div class="hub-art">
+              <div class="hub-art-bg" style="background:linear-gradient(135deg,#1a3a3a,#0a2020);"></div>
+              <div class="hub-art-content">
+                <img src="games/void-craft-sandbox/icon.svg" alt="Void Craft">
+              </div>
+            </div>
+            <div class="hub-info">
+              <div class="hub-type">Game hub</div>
+              <div class="hub-title">Build, craft, and survive in the endless void...</div>
+              <div class="hub-meta">3 Clubs recommended</div>
+            </div>
+            <div class="hub-avatars">
+              <div class="hub-av" style="background:#1a6b1a;">R</div>
+              <div class="hub-av" style="background:#8855aa;">K</div>
+            </div>
+          </div>
+
+          <!-- Roblox Hub Card -->
+          <div class="hub-card" onclick="GameLibrary.launch('roblox')">
+            <div class="hub-art">
+              <div class="hub-art-bg" style="background:linear-gradient(135deg,#003344,#001a22);"></div>
+              <div class="hub-art-content">
+                <img src="games/roblox/icon.svg" alt="Roblox">
+              </div>
+            </div>
+            <div class="hub-info">
+              <div class="hub-type">Game hub</div>
+              <div class="hub-title">Browse and launch millions of Roblox experiences — powered by RQBBOX...</div>
+              <div class="hub-meta">5 Clubs recommended</div>
+            </div>
+            <div class="hub-avatars">
+              <div class="hub-av" style="background:#00bcd4;">R</div>
+              <div class="hub-av" style="background:#0097a7;">B</div>
+              <div class="hub-av" style="background:#00838f;">L</div>
+              <div class="hub-av" style="background:#006064;">X</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-col">
+          <div class="rc-game">
+            <div class="rc-game-bg" style="background:linear-gradient(135deg,#2a4a2a,#1a3020);"></div>
+            <div class="rc-game-img" style="background:linear-gradient(135deg,#3a5a3a,#2a4a30);opacity:0.4;"></div>
+            <div class="rc-game-title">Minecraft: RQBBOX Edition</div>
+          </div>
+          <div class="rc-game">
+            <div class="rc-game-bg" style="background:linear-gradient(135deg,#3a2a2a,#2a1a1a);"></div>
+            <div class="rc-game-img" style="background:linear-gradient(135deg,#4a3a3a,#3a2a2a);opacity:0.4;"></div>
+            <div class="rc-game-title">Retro Zone</div>
+          </div>
+          <div class="rc-game">
+            <div class="rc-game-bg" style="background:linear-gradient(135deg,#2a2a4a,#1a1a30);"></div>
+            <div class="rc-game-img" style="background:linear-gradient(135deg,#3a3a5a,#2a2a40);opacity:0.4;"></div>
+            <div class="rc-game-title">Cube Runner 3D</div>
+          </div>
+          <div class="rc-sponsored">
+            <div class="rc-sponsored-label">SPONSORED</div>
+            <div class="rc-sponsored-art">🎮</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guide Overlay -->
+  <div id="guideOverlay" class="guide-overlay">
+    <div class="guide-panel">
+      <div class="guide-header">
+        <span class="guide-title"><img src="assets/favicon.svg" alt="" style="width:18px;height:18px;"> RQBBOX Experience OS 1.0 (Discontinued)</span>
+        <button class="guide-close" onclick="document.getElementById('guideOverlay').classList.remove('show')">✕</button>
+      </div>
+      <div class="guide-body" id="guideBody"></div>
+    </div>
+  </div>
+
+  <!-- Performance Overlay -->
+  <div id="perfOverlay" class="perf-overlay">FPS: 60 | CPU: 12% | RAM: 45%</div>
+
+  <!-- Achievement Popup -->
+  <div id="achPopup" class="achievement-popup">
+    <div class="ach-icon">🏆</div>
+    <div>
+      <div class="ach-label">Achievement Unlocked</div>
+      <div class="ach-title" id="achTitle">First Launch</div>
+      <div class="ach-desc" id="achDesc">Started RQBBOX Experience OS 1.0 (Discontinued)</div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toasts" class="toast-container"></div>
+
+  <script>
+    // Boot sequence
+    const boot = document.getElementById('boot');
+    const bootBar = document.getElementById('bootBar');
+    const auth = document.getElementById('auth');
+    const dash = document.getElementById('dash');
+
+    const statuses = [
+      'Loading RQBBOX Experience OS 1.0 (Discontinued)...',
+      'Initializing controller...',
+      'Scanning game library...',
+      'Loading achievements...',
+      'Preparing dashboard...'
+    ];
+
+    let progress = 0;
+    const bootInterval = setInterval(() => {
+      progress += Math.random() * 25 + 10;
+      if (progress >= 100) {
+        progress = 100;
+        bootBar.style.width = '100%';
+        clearInterval(bootInterval);
+        setTimeout(() => {
+          boot.classList.add('hidden');
+          showAuth();
+        }, 400);
+      }
+      bootBar.style.width = progress + '%';
+    }, 500);
+
+    function showAuth() {
+      auth.style.display = 'flex';
+      const profiles = [
+        { name: 'RQBBOX', avatar: 'R' },
+        { name: 'Player 2', avatar: 'P' }
+      ];
+      const list = document.getElementById('profileList');
+      profiles.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'profile-card';
+        card.innerHTML = `<div class="profile-avatar">${p.avatar}</div><div class="profile-name">${p.name}</div>`;
+        card.onclick = () => {
+          auth.style.display = 'none';
+          dash.style.display = 'grid';
+          startDashboard();
+        };
+        list.appendChild(card);
+      });
+    }
+
+    function startDashboard() {
+      // Clock
+      updateClock();
+      setInterval(updateClock, 30000);
+
+      // Load saved game
+      const saved = localStorage.getItem('rqbox-lastGame');
+      if (saved) {
+        try {
+          const g = JSON.parse(saved);
+          document.getElementById('heroTitle').textContent = g.title || 'RQBBOX Experience OS 1.0 (Discontinued)';
+        } catch(e) {}
+      }
+
+      // Toast
+      showToast('🎮', 'RQBBOX Experience OS 1.0 (Discontinued) loaded');
+
+      // Achievement
+      setTimeout(() => showAchievement('First Launch', 'Started RQBBOX Experience OS 1.0 (Discontinued)'), 1500);
+
+      // Fullscreen
+      setTimeout(() => {
+        try { document.documentElement.requestFullscreen(); } catch(e) {}
+      }, 500);
+    }
+
+    function updateClock() {
+      const el = document.getElementById('clock');
+      if (el) el.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function showToast(icon, msg) {
+      const c = document.getElementById('toasts');
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+      c.appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+
+    function showAchievement(title, desc) {
+      const p = document.getElementById('achPopup');
+      document.getElementById('achTitle').textContent = title;
+      document.getElementById('achDesc').textContent = desc;
+      p.classList.add('show');
+      setTimeout(() => p.classList.remove('show'), 4000);
+    }
+
+    // Navigation
+    document.querySelectorAll('[data-page]').forEach(el => {
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tb-nav a').forEach(a => a.classList.remove('active'));
+        const page = el.dataset.page;
+        el.classList.add('active');
+        document.querySelector(`.tb-nav a[data-page="${page}"]`)?.classList.add('active');
+        showToast('📁', `Navigated to ${page}`);
+      });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', e => {
+      if (e.key === 'F11') {
+        e.preventDefault();
+        try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); } catch(err) {}
+      }
+      if (e.key === 'g' && e.ctrlKey) {
+        e.preventDefault();
+        document.getElementById('guideOverlay').classList.toggle('show');
+      }
+    });
+
+    // Game library (minimal)
+    const GameLibrary = {
+      launch(id) {
+        const games = {
+          'neon-drift-racing': { title: 'Neon Drift Racing', url: 'games/neon-drift-racing/index.html' },
+          'pixel-quest': { title: 'Pixel Quest', url: 'games/pixel-quest/index.html' },
+          'star-fighter-x': { title: 'Star Fighter X', url: 'games/star-fighter-x/index.html' },
+          'void-craft-sandbox': { title: 'Void Craft Sandbox', url: 'games/void-craft-sandbox/index.html' },
+          'retro-zone': { title: 'Retro Zone', url: 'games/retro-zone/index.html' },
+          'cube-runner-3d': { title: 'Cube Runner 3D', url: 'games/cube-runner-3d/index.html' },
+          'playtree-c1s1': { title: 'PlayTree Chapter 1 Season 1', url: 'games/playtree-c1s1/index.html' },
+          'roblox': { title: 'Roblox', url: 'games/roblox/index.html' }
+        };
+        const game = games[id];
+        if (game) {
+          localStorage.setItem('rqbox-lastGame', JSON.stringify(game));
+          showToast('🚀', `Launching ${game.title}...`);
+          window.location.href = game.url;
+        }
+      },
+      launchAll() { RQBOX.navigate('games'); }
+    };
+
+    // RQBOX global
+    const RQBOX = {
+      navigate(page) { showToast('📁', `Opening ${page}...`); }
+    };
+  </script>
+</body>
+</html>

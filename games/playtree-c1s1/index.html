@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html><head><title>PlayTree Chapter 1 Season 1</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#0a1a0a;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column}#game{display:block;border-radius:12px;box-shadow:0 0 60px rgba(76,175,80,.15)}h1{font-weight:300;letter-spacing:3px;color:#4CAF50;font-size:1.3rem;margin:4px 0 2px}.hud{display:flex;gap:24px;font-size:.85rem;color:rgba(255,255,255,.6);margin-bottom:4px}.hud span{display:flex;align-items:center;gap:6px}.hud .val{color:#4CAF50;font-weight:600}.controls{font-size:.7rem;color:rgba(255,255,255,.3);margin-top:4px}.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;background:rgba(0,0,0,.85);z-index:10;border-radius:12px}.overlay h2{font-size:2rem;margin:0;font-weight:200;letter-spacing:4px;color:#4CAF50}.overlay p{color:rgba(255,255,255,.5);font-size:.85rem;margin:0}.overlay button{padding:10px 28px;background:#4CAF50;border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-size:.9rem;font-family:inherit}.overlay button:hover{filter:brightness(1.2)}</style></head><body>
+<h1>🌳 PLAY TREE — C1 S1</h1>
+<div class="hud"><span>🍃 Leaves: <span class="val" id="leaves">0</span></span><span>🌿 Level: <span class="val" id="level">1</span></span><span>🏆 Score: <span class="val" id="score">0</span></span></div>
+<canvas id="game" width="600" height="400"></canvas>
+<div class="controls">← → to move  •  ↑ or Space to jump  •  Collect leaves  •  Reach the nest!</div>
+<div id="overlay" class="overlay" style="display:none"><h2 id="overlay-title">🌳 PlayTree</h2><p id="overlay-msg">Chapter 1 • Season 1</p><button id="overlay-btn">Start Climbing</button></div>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d'),W=600,H=400;
+const overlay=document.getElementById('overlay'),overlayTitle=document.getElementById('overlay-title'),overlayMsg=document.getElementById('overlay-msg'),overlayBtn=document.getElementById('overlay-btn');
+
+const LEVELS=[
+  {branches:[{x:160,y:280,w:100},{x:320,y:300,w:80},{x:100,y:220,w:90},{x:280,y:200,w:100},{x:180,y:140,w:80},{x:300,y:80,w:90},{x:220,y:20,w:100}],leaves:[{x:180,y:260},{x:340,y:280},{x:120,y:200},{x:300,y:180},{x:200,y:120},{x:320,y:60}],title:'The Roots',msg:'Begin your climb from the ancient roots.'},
+  {branches:[{x:80,y:320,w:70},{x:240,y:280,w:90},{x:120,y:220,w:80},{x:320,y:200,w:100},{x:200,y:140,w:70},{x:350,y:100,w:80},{x:160,y:60,w:90},{x:300,y:20,w:70}],leaves:[{x:100,y:300},{x:260,y:260},{x:140,y:200},{x:340,y:180},{x:220,y:120},{x:370,y:80},{x:180,y:40}],title:'The Trunk',msg:'The tree grows wider as you ascend.'},
+  {branches:[{x:120,y:340,w:80},{x:300,y:310,w:90},{x:80,y:260,w:70},{x:220,y:230,w:80},{x:360,y:200,w:70},{x:140,y:160,w:90},{x:280,y:120,w:80},{x:100,y:70,w:70},{x:260,y:30,w:100}],leaves:[{x:140,y:320},{x:320,y:290},{x:100,y:240},{x:240,y:210},{x:380,y:180},{x:160,y:140},{x:300,y:100},{x:120,y:50},{x:280,y:10}],title:'The Canopy',msg:'Sunlight breaks through the leaves above.'},
+  {branches:[{x:60,y:350,w:60},{x:200,y:320,w:80},{x:340,y:290,w:70},{x:100,y:250,w:70},{x:260,y:220,w:90},{x:160,y:170,w:80},{x:320,y:140,w:70},{x:80,y:90,w:60},{x:220,y:50,w:80},{x:160,y:10,w:70}],leaves:[{x:80,y:330},{x:220,y:300},{x:360,y:270},{x:120,y:230},{x:280,y:200},{x:180,y:150},{x:340,y:120},{x:100,y:70},{x:240,y:30}],title:'The Bloom',msg:'Golden flowers glow along the branches.'},
+  {branches:[{x:150,y:360,w:90},{x:40,y:310,w:70},{x:280,y:290,w:80},{x:130,y:240,w:70},{x:350,y:210,w:90},{x:90,y:160,w:70},{x:240,y:130,w:80},{x:170,y:70,w:70},{x:310,y:40,w:80},{x:220,y:10,w:60}],leaves:[{x:170,y:340},{x:60,y:290},{x:300,y:270},{x:150,y:220},{x:370,y:190},{x:110,y:140},{x:260,y:110},{x:190,y:50},{x:330,y:20}],title:'The Summit',msg:'The top of the world. Can you reach the nest?'}
+];
+let currentLevel=0,player,leaves=[],collected=0,totalScore=0,gameRunning=false,keys={};
+const GRAVITY=0.5,JUMP=-10,WALK=4;
+const NEST={x:250,y:8,w:100,h:30};
+
+function resetLevel(levelIdx){
+  const lvl=LEVELS[levelIdx];
+  player={x:260,y:360,w:30,h:30,vy:0,onGround:false};
+  leaves=lvl.leaves.map(l=>({x:l.x,y:l.y,w:12,h:12,collected:false}));
+  collected=0;
+  document.getElementById('leaves').textContent='0';
+  document.getElementById('level').textContent=levelIdx+1;
+}
+
+function checkCollision(rect1,rect2){
+  return rect1.x<rect2.x+rect2.w&&rect1.x+rect1.w>rect2.x&&rect1.y<rect2.y+rect2.h&&rect1.y+rect1.h>rect2.y;
+}
+
+function update(){
+  if(!gameRunning)return;
+  if(keys['ArrowLeft']||keys['KeyA'])player.x-=WALK;
+  if(keys['ArrowRight']||keys['KeyD'])player.x+=WALK;
+  if((keys['ArrowUp']||keys['Space']||keys['KeyW'])&&player.onGround){player.vy=JUMP;player.onGround=false;}
+  player.vy+=GRAVITY;
+  player.y+=player.vy;
+  player.onGround=false;
+  const lvl=LEVELS[currentLevel];
+  for(const b of lvl.branches){
+    if(player.vy>=0&&player.x<b.x+b.w&&player.x+player.w>b.x&&player.y+player.h>=b.y&&player.y+player.h<=b.y+b.h+player.vy+2){
+      player.y=b.y-player.h;player.vy=0;player.onGround=true;
+    }
+  }
+  if(player.y>H){gameRunning=false;showOverlay('Fell!','Press Continue to retry this level.','Continue',()=>startLevel(currentLevel));return;}
+  if(player.x<0)player.x=0;
+  if(player.x+player.w>W)player.x=W-player.w;
+  for(const l of leaves){
+    if(!l.collected&&checkCollision(player,l)){l.collected=true;collected++;totalScore+=100;document.getElementById('leaves').textContent=collected;document.getElementById('score').textContent=totalScore;}
+  }
+  if(player.y<NEST.y+NEST.h&&player.x+player.w>NEST.x&&player.x<NEST.x+NEST.w&&player.y+player.h>NEST.y&&collected===lvl.leaves.length){
+    gameRunning=false;
+    if(currentLevel<LEVELS.length-1){
+      showOverlay('Level Complete!','All leaves collected! Onward to the next branch.','Next Level',()=>{currentLevel++;resetLevel(currentLevel);gameRunning=true;});
+    }else{
+      showOverlay('🎉 YOU WIN!','You climbed to the top of PlayTree! Chapter 1 Season 1 complete!','Play Again',()=>{currentLevel=0;totalScore=0;document.getElementById('score').textContent='0';resetLevel(0);gameRunning=true;});
+    }
+  }else if(player.y<NEST.y+NEST.h&&player.x+player.w>NEST.x&&player.x<NEST.x+NEST.w&&player.y+player.h>NEST.y&&collected<lvl.leaves.length){
+    showOverlay('Not Enough Leaves!','Collect all leaves before reaching the nest! '+(lvl.leaves.length-collected)+' remaining.','Keep Climbing',()=>{gameRunning=true;});
+  }
+}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const grad=ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,'#0a2a0a');grad.addColorStop(1,'#051005');ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+  const lvl=LEVELS[currentLevel];
+  for(const b of lvl.branches){
+    ctx.fillStyle='#3d2b1f';ctx.shadowColor='#4CAF50';ctx.shadowBlur=10;
+    ctx.beginPath();ctx.roundRect(b.x,b.y,b.w,b.h+4,4);ctx.fill();
+    ctx.fillStyle='#4a3525';ctx.fillRect(b.x+4,b.y-2,b.w-8,6);
+    ctx.shadowBlur=0;
+  }
+  for(const l of leaves){
+    if(l.collected)continue;
+    ctx.fillStyle='#8bc34a';ctx.shadowColor='#8bc34a';ctx.shadowBlur=15;
+    ctx.beginPath();ctx.ellipse(l.x+l.w/2,l.y+l.h/2,7,5,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#558b2f';ctx.beginPath();ctx.ellipse(l.x+l.w/2-2,l.y+l.h/2-2,3,2,0,0,Math.PI*2);ctx.fill();
+    ctx.shadowBlur=0;
+  }
+  ctx.shadowColor='#4CAF50';ctx.shadowBlur=12;
+  ctx.fillStyle='#8d6e63';ctx.fillRect(NEST.x,NEST.y,NEST.w,NEST.h);
+  ctx.fillStyle='#a1887f';ctx.fillRect(NEST.x+5,NEST.y-4,NEST.w-10,6);
+  ctx.fillStyle='#6d4c41';ctx.font='11px system-ui';ctx.textAlign='center';ctx.fillText('🏠 Nest',NEST.x+NEST.w/2,NEST.y+NEST.h-4);
+  ctx.shadowBlur=0;
+  ctx.shadowColor='#a5d6a7';ctx.shadowBlur=20;
+  ctx.fillStyle='#66bb6a';ctx.fillRect(player.x,player.y,player.w,player.h);
+  ctx.fillStyle='#43a047';ctx.fillRect(player.x+6,player.y-4,6,6);ctx.fillRect(player.x+player.w-12,player.y-4,6,6);
+  ctx.fillStyle='#fff';ctx.fillRect(player.x+6,player.y+8,5,3);ctx.fillRect(player.x+player.w-11,player.y+8,5,3);
+  ctx.shadowBlur=0;
+}
+
+function gameLoop(){if(gameRunning){update();draw();requestAnimationFrame(gameLoop);}}
+
+function startLevel(idx){
+  currentLevel=idx;
+  resetLevel(idx);
+  overlay.style.display='none';
+  gameRunning=true;
+  document.getElementById('score').textContent=totalScore;
+  requestAnimationFrame(gameLoop);
+}
+
+function showOverlay(title,msg,btnText,callback){
+  gameRunning=false;
+  overlayTitle.textContent=title;
+  overlayMsg.textContent=msg;
+  overlayBtn.textContent=btnText;
+  overlayBtn.onclick=()=>{overlay.style.display='none';callback();};
+  overlay.style.display='flex';
+}
+
+function startGame(){currentLevel=0;totalScore=0;document.getElementById('score').textContent='0';showOverlay('🌳 PlayTree','Chapter 1 • Season 1\n5 levels of leafy adventure!','Start Climbing',()=>startLevel(0));}
+
+document.addEventListener('keydown',e=>{keys[e.code]=true;if(e.code==='Space'||e.code==='ArrowUp')e.preventDefault();});
+document.addEventListener('keyup',e=>{keys[e.code]=false;});
+
+if(!CanvasRenderingContext2D.prototype.roundRect){
+  CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
+    if(r>w/2)r=w/2;if(r>h/2)r=h/2;this.moveTo(x+r,y);this.lineTo(x+w-r,y);this.quadraticCurveTo(x+w,y,x+w,y+r);this.lineTo(x+w,y+h-r);this.quadraticCurveTo(x+w,y+h,x+w-r,y+h);this.lineTo(x+r,y+h);this.quadraticCurveTo(x,y+h,x,y+h-r);this.lineTo(x,y+r);this.quadraticCurveTo(x,y,x+r,y);this.closePath();
+  };
+}
+
+startGame();
+</script></body></html>

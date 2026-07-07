@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html><head><title>Void Craft Sandbox</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;overflow:hidden;background:#0a0a12;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px}canvas{display:block;border-radius:12px;cursor:crosshair}h1{font-weight:300;letter-spacing:4px;color:#aa66ff;font-size:1.5rem}button{padding:8px 16px;background:#aa66ff;border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:inherit}.info{font-size:.7rem;color:rgba(255,255,255,.3)}</style></head><body>
+<h1>VOID CRAFT</h1><canvas id="game" width="500" height="400"></canvas>
+<div class="info">Click to place blocks • Right-click to remove • Sandbox mode</div>
+<button onclick="clearWorld()">Clear World</button>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d'),SIZE=20,COLS=25,ROWS=20
+let world=[],view={x:0,y:0}
+for(let y=0;y<ROWS;y++){world[y]=[];for(let x=0;x<COLS;x++)world[y][x]=0}
+for(let y=ROWS-3;y<ROWS;y++)for(let x=0;x<COLS;x++)world[y][x]=1
+function draw(){ctx.fillStyle='#0a0a12';ctx.fillRect(0,0,500,400)
+for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){if(world[y][x]){ctx.fillStyle=world[y][x]===1?'#6a4a9a':'#ff6644';ctx.shadowColor='rgba(170,102,255,.2)';ctx.shadowBlur=10;ctx.fillRect(x*SIZE,y*SIZE,SIZE-1,SIZE-1);ctx.shadowBlur=0}}
+ctx.strokeStyle='rgba(255,255,255,.03)';ctx.lineWidth=1;for(let x=0;x<500;x+=SIZE){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,400);ctx.stroke()}
+for(let y=0;y<400;y+=SIZE){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(500,y);ctx.stroke()}}
+c.addEventListener('click',e=>{const r=Math.floor(e.offsetY/SIZE),cl=Math.floor(e.offsetX/SIZE);if(r>=0&&r<ROWS&&cl>=0&&cl<COLS)world[r][cl]=1;draw()})
+c.addEventListener('contextmenu',e=>{e.preventDefault();const r=Math.floor(e.offsetY/SIZE),cl=Math.floor(e.offsetX/SIZE);if(r>=0&&r<ROWS&&cl>=0&&cl<COLS)world[r][cl]=0;draw()})
+function clearWorld(){for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)world[y][x]=0;draw()}
+draw()
+</script></body></html>

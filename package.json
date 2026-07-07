@@ -1,0 +1,93 @@
+{
+  "name": "@rqbbox/experience",
+  "version": "1.0.0",
+  "description": "RQBBOX Experience — Next-generation digital platform combining gaming, AI, productivity, media, and cloud services into one unified RhysTech experience.",
+  "private": false,
+  "main": "electron-main.js",
+  "bin": {
+    "rqbbox-experience": "rqbbox-launcher.js"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "node server.js --dev",
+    "server": "node server.js",
+    "build:exe": "electron-builder --win --config",
+    "build:electron": "electron-builder --win --config",
+    "build:pkg": "pkg rqbbox-launcher.js --targets node18-win-x64 --output RQBBOX-Experience.exe",
+    "build:all": "npm run build:electron"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RhysTech/RQBBOX-Experience.git"
+  },
+  "keywords": [
+    "gaming",
+    "ai",
+    "productivity",
+    "media",
+    "cloud",
+    "rqbbox",
+    "rhystech",
+    "experience",
+    "dashboard",
+    "portable",
+    "usb",
+    "windows"
+  ],
+  "author": "RhysTech",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RhysTech/RQBBOX-Experience/issues"
+  },
+  "homepage": "https://rhystech.io/rqbbox-experience",
+  "build": {
+    "appId": "com.rhystech.rqbbox.experience",
+    "productName": "RQBBOX Experience",
+    "directories": {
+      "output": "dist"
+    },
+    "artifactName": "RQBBOX-Experience-Setup-${version}.${ext}",
+    "files": [
+      "**/*",
+      "!dist",
+      "!windows/scripts",
+      "!node_modules/electron",
+      "!node_modules/electron-builder",
+      "!node_modules/pkg",
+      "!node_modules/nexe",
+      "!*.bat",
+      "!*.cmd"
+    ],
+    "extraMetadata": {
+      "main": "electron-main.js"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "RQBBOX-Experience-Setup-${version}.${ext}",
+      "signAndEditExecutable": false
+    },
+    "compression": "store",
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "RQBBOX Experience OS 1.0"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0",
+    "nexe": "^5.0.0-beta.4",
+    "pkg": "^5.8.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

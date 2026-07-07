@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#0a0a1a"/>
+  <rect x="8" y="8" width="48" height="48" rx="8" fill="#00bcd4" opacity=".15"/>
+  <g fill="none" stroke="#00bcd4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="14" y="18" width="16" height="28" rx="3"/>
+    <rect x="34" y="12" width="16" height="34" rx="3"/>
+    <line x1="22" y1="18" x2="22" y2="46"/>
+    <line x1="42" y1="12" x2="42" y2="46"/>
+  </g>
+  <text x="32" y="56" text-anchor="middle" font-size="7" font-weight="700" fill="#00bcd4" font-family="Segoe UI">ROBLOX</text>
+</svg>

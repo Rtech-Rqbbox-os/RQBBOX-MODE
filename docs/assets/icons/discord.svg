@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <rect x="8" y="8" width="240" height="240" rx="48" fill="#5865F2"/>
+  <g transform="translate(128,128)">
+    <path d="M -40 -60 C -50 -55 -60 -50 -65 -40 C -80 -10 -85 30 -60 60 C -55 65 -45 60 -40 55 C -35 58 -28 60 -20 62 L -20 50 C -15 52 -8 54 0 55 C 8 54 15 52 20 50 L 20 62 C 28 60 35 58 40 55 C 45 60 55 65 60 60 C 85 30 80 -10 65 -40 C 60 -50 50 -55 40 -60 Z" fill="white"/>
+    <circle cx="-35" cy="-10" r="10" fill="#5865F2"/>
+    <circle cx="35" cy="-10" r="10" fill="#5865F2"/>
+    <ellipse cx="-35" cy="15" rx="18" ry="12" fill="white"/>
+    <ellipse cx="35" cy="15" rx="18" ry="12" fill="white"/>
+  </g>
+</svg>
