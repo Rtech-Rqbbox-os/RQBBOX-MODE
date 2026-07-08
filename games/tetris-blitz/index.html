@@ -16,7 +16,7 @@ function merge(){currentPiece.shape.forEach((row,dy)=>row.forEach((val,dx)=>{if(
 function clearLines(){let lines=0;for(let y=ROWS-1;y>=0;y--){if(board[y].every(cell=>cell)){board.splice(y,1);board.unshift(Array(COLS).fill(0));lines++;y++}}score+=lines*100;document.getElementById('score').textContent='Score: '+score}
 function rotate(){const rotated=currentPiece.shape[0].map((_,i)=>currentPiece.shape.map(row=>row[i]).reverse());const old=currentPiece.shape;currentPiece.shape=rotated;if(collides())currentPiece.shape=old}
 function gameLoop(){if(gameOver){ctx.fillStyle='rgba(0,0,0,.9)';ctx.fillRect(0,0,300,600);ctx.fillStyle='#ff6600';ctx.font='28px system-ui';ctx.textAlign='center';ctx.fillText('GAME OVER',150,280);ctx.font='14px system-ui';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText('Score: '+score,150,310);return}
-draw()}
+draw();requestAnimationFrame(gameLoop)}
 function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,300,600)
 board.forEach((row,y)=>row.forEach((color,x)=>{if(color){ctx.fillStyle=color;ctx.shadowColor=color;ctx.shadowBlur=10;ctx.fillRect(x*BLOCK,y*BLOCK,BLOCK-1,BLOCK-1);ctx.shadowBlur=0}}))
 if(!gameOver){currentPiece.shape.forEach((row,dy)=>row.forEach((val,dx)=>{if(val){ctx.fillStyle=currentPiece.color;ctx.shadowColor=currentPiece.color;ctx.shadowBlur=10;ctx.fillRect((currentPiece.x+dx)*BLOCK,(currentPiece.y+dy)*BLOCK,BLOCK-1,BLOCK-1);ctx.shadowBlur=0}})}}

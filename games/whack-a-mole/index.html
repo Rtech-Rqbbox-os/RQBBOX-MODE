@@ -7,8 +7,9 @@
 const c=document.getElementById('game'),ctx=c.getContext('2d');
 const HOLES=9,SIZE=3,CELL=120,GAP=20;
 let moles=[],score=0,gameOver=false;
-function startGame(){moles=Array(HOLES).fill(false);score=0;gameOver=false;document.getElementById('score').textContent='Score: '+score;spawnMole();requestAnimationFrame(gameLoop)}
-function spawnMole(){if(gameOver)return;moles=moles.map(()=>false);const idx=Math.floor(Math.random()*HOLES);moles[idx]=true;setTimeout(spawnMole,800)}
+let moleTimer=null;
+function startGame(){if(moleTimer)clearTimeout(moleTimer);moles=Array(HOLES).fill(false);score=0;gameOver=false;document.getElementById('score').textContent='Score: '+score;spawnMole();requestAnimationFrame(gameLoop)}
+function spawnMole(){if(gameOver)return;moles=moles.map(()=>false);const idx=Math.floor(Math.random()*HOLES);moles[idx]=true;moleTimer=setTimeout(spawnMole,Math.max(400,800-score))}
 function gameLoop(){draw();requestAnimationFrame(gameLoop)}
 function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,400,400)
 for(let i=0;i<HOLES;i++){const x=(i%SIZE)*(CELL+GAP)+GAP,y=Math.floor(i/SIZE)*(CELL+GAP)+GAP;ctx.fillStyle='#1a1a2e';ctx.beginPath();ctx.arc(x+CELL/2,y+CELL/2,40,0,Math.PI*2);ctx.fill()

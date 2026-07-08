@@ -14,7 +14,7 @@ enemyBullets.forEach(b=>b.y+=4);enemyBullets=enemyBullets.filter(b=>b.y<500)
 if(Math.random()<.02)enemies.filter(e=>e.alive).forEach(e=>{if(Math.random()<.05)enemyBullets.push({x:e.x+e.w/2,y:e.y+e.h})})
 bullets.forEach(b=>{enemies.forEach(e=>{if(e.alive&&b.x>e.x&&b.x<e.x+e.w&&b.y>e.y&&b.y<e.y+e.h){e.alive=false;score+=10;document.getElementById('score').textContent='Score: '+score}})})
 enemyBullets.forEach(b=>{if(b.x>player.x&&b.x<player.x+player.w&&b.y>player.y&&b.y<player.y+player.h)gameOver=true})
-const alive=enemies.filter(e=>e.alive);if(alive.length===0){startGame();return}
+const alive=enemies.filter(e=>e.alive);enemies=enemies.filter(e=>e.alive);if(alive.length===0){startGame();return}
 let moveDown=false;alive.forEach(e=>{e.x+=enemyDir;if(e.x<=0||e.x+e.w>=600)moveDown=true})
 if(moveDown){enemyDir*=-1;alive.forEach(e=>e.y+=20)}
 if(alive.some(e=>e.y+e.h>=player.y))gameOver=true}

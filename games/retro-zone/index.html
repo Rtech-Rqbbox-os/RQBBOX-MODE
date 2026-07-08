@@ -17,7 +17,7 @@ if(ball.y<0)ball.vy*=-1
 if(ball.y>300){lives--;if(lives<=0)gameOver=true;else{ball.x=200;ball.y=260;ball.vx=2;ball.vy=-3}}
 if(ball.y+ball.r>paddle.y&&ball.x>paddle.x&&ball.x<paddle.x+paddle.w){ball.vy=-Math.abs(ball.vy)}
 bricks.forEach(b=>{if(b.alive&&ball.x>b.x&&ball.x<b.x+b.w&&ball.y>b.y&&ball.y<b.y+b.h){b.alive=false;ball.vy*=-1;score+=10}})
-bricks=bricks.filter(b=>b.alive||b.alive===false)}
+bricks=bricks.filter(b=>b.alive)}
 function draw(){ctx.fillStyle='#1a0a0a';ctx.fillRect(0,0,400,300)
 ctx.fillStyle='#ff6600';ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h)
 ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ball.x,ball.y,5,0,Math.PI*2);ctx.fill()

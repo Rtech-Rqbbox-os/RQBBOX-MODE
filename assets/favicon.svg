@@ -1,22 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <defs>
     <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#107c10"/>
-      <stop offset="100%" style="stop-color:#1db954"/>
+      <stop offset="0%" style="stop-color:#00b4d8"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
     </linearGradient>
   </defs>
-  <circle cx="16" cy="16" r="14" fill="#0e0e0e" stroke="url(#g)" stroke-width="2"/>
-  <g transform="translate(8, 9)">
-    <rect x="0" y="3" width="16" height="8" rx="2" fill="url(#g)"/>
-    <ellipse cx="2" cy="8" rx="3" ry="3" fill="url(#g)"/>
-    <ellipse cx="14" cy="8" rx="3" ry="3" fill="url(#g)"/>
-    <rect x="3" y="5" width="1" height="3" rx="0.5" fill="#0e0e0e"/>
-    <rect x="2" y="6" width="3" height="1" rx="0.5" fill="#0e0e0e"/>
-    <circle cx="12" cy="5" r="1" fill="#0e0e0e"/>
-    <circle cx="14" cy="6.5" r="1" fill="#0e0e0e"/>
-    <circle cx="12" cy="8" r="1" fill="#0e0e0e"/>
-    <circle cx="10" cy="6.5" r="1" fill="#0e0e0e"/>
-    <circle cx="8" cy="6.5" r="1.5" fill="#0e0e0e"/>
-    <path d="M 7 6 L 9 6.5 L 7 7 Z" fill="#107c10"/>
-  </g>
+  <rect width="64" height="64" rx="12" fill="#06080f"/>
+  <rect x="4" y="4" width="56" height="56" rx="10" fill="none" stroke="url(#g)" stroke-width="2"/>
+  <text x="32" y="39" font-family="system-ui,sans-serif" font-size="28" font-weight="800" text-anchor="middle" dominant-baseline="middle" fill="url(#g)">R</text>
 </svg>

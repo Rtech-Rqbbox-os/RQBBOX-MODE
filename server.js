@@ -961,7 +961,21 @@ const server = http.createServer(async (req, res) => {
       if (rel === '' || rel === '/') rel = 'index.html';
       if (rel === 'dashboard') rel = 'dashboard.html';
 
-      const filePath = path.join(ROOT, rel);
+      // Fix: files like index.html and dashboard.html are in docs/ folder
+      let filePath = path.join(ROOT, rel);
+      if (!fs.existsSync(filePath)) {
+        const docsPath = path.join(ROOT, 'docs', rel);
+        if (fs.existsSync(docsPath)) {
+          filePath = docsPath;
+        }
+      }
+      // Also try docs/games/ for game icon paths served from dashboard
+      if (!fs.existsSync(filePath)) {
+        const docsGamesPath = path.join(ROOT, 'docs', 'games', rel);
+        if (fs.existsSync(docsGamesPath)) {
+          filePath = docsGamesPath;
+        }
+      }
       const resolvedPath = path.resolve(filePath);
 
       if (!resolvedPath.startsWith(path.resolve(ROOT))) {

@@ -1,51 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="800" height="200">
   <defs>
-    <linearGradient id="bgH" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0a0a0a"/>
-      <stop offset="50%" style="stop-color:#0e0e0e"/>
-      <stop offset="100%" style="stop-color:#141414"/>
-    </linearGradient>
-    <linearGradient id="cyanH" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#00b4d8"/>
-      <stop offset="100%" style="stop-color:#0096c7"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
     </linearGradient>
-    <linearGradient id="purpleH" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="accentRev" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" style="stop-color:#7c3aed"/>
-      <stop offset="100%" style="stop-color:#6d28d9"/>
+      <stop offset="100%" style="stop-color:#00b4d8"/>
     </linearGradient>
   </defs>
-
-  <rect width="800" height="200" rx="24" fill="url(#bgH)"/>
-
-  <g opacity="0.03" stroke="white" stroke-width="1">
-    <line x1="0" y1="40" x2="800" y2="40"/>
-    <line x1="0" y1="80" x2="800" y2="80"/>
-    <line x1="0" y1="120" x2="800" y2="120"/>
-    <line x1="0" y1="160" x2="800" y2="160"/>
-    <line x1="200" y1="0" x2="200" y2="200"/>
-    <line x1="400" y1="0" x2="400" y2="200"/>
-    <line x1="600" y1="0" x2="600" y2="200"/>
+  <rect width="800" height="200" fill="#06080f" rx="16"/>
+  <rect x="30" y="30" width="140" height="140" rx="32" fill="rgba(0,180,216,0.15)" stroke="url(#accent)" stroke-width="2"/>
+  <text x="100" y="116" font-family="system-ui,sans-serif" font-size="80" font-weight="800" text-anchor="middle" dominant-baseline="middle" fill="url(#accent)">R</text>
+  <g transform="translate(200,60)">
+    <text font-family="system-ui,sans-serif" font-size="32" font-weight="200" letter-spacing="10" fill="rgba(255,255,255,0.4)">RQBBOX</text>
+    <text y="40" font-family="system-ui,sans-serif" font-size="20" font-weight="700" letter-spacing="4" fill="url(#accentRev)">EXPERIENCE OS 1.0</text>
+    <text y="65" font-family="system-ui,sans-serif" font-size="11" letter-spacing="3" fill="rgba(255,255,255,0.2)">BY RHYS-TECH</text>
   </g>
-
-  <g transform="translate(40, 50)">
-    <rect x="0" y="0" width="100" height="100" rx="16" fill="url(#cyanH)" opacity="0.15"/>
-    <rect x="8" y="8" width="84" height="84" rx="12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
-    <circle cx="30" cy="30" r="12" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
-    <path d="M 24 30 L 30 36 L 38 24" stroke="url(#cyanH)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <rect x="50" y="24" width="28" height="3" rx="1.5" fill="rgba(255,255,255,0.5)"/>
-    <rect x="50" y="32" width="20" height="3" rx="1.5" fill="rgba(255,255,255,0.3)"/>
-    <rect x="50" y="40" width="14" height="3" rx="1.5" fill="rgba(255,255,255,0.2)"/>
-    <rect x="12" y="56" width="76" height="24" rx="4" fill="rgba(255,255,255,0.05)"/>
-    <text x="50" y="72" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="6" fill="rgba(255,255,255,0.3)">BOOTABLE · PORTABLE</text>
-  </g>
-
-  <text x="170" y="105" font-family="Segoe UI Variable,Segoe UI,Arial,sans-serif" font-size="52" font-weight="800" fill="white" letter-spacing="4">RQBBOX</text>
-  <text x="170" y="138" font-family="Segoe UI Variable,Segoe UI,Arial,sans-serif" font-size="22" font-weight="300" fill="url(#cyanH)" letter-spacing="4">Experience OS 1.0</text>
-
-  <rect x="170" y="150" width="300" height="1" fill="rgba(0,180,216,0.3)"/>
-
-  <text x="170" y="172" font-family="Segoe UI,Arial,sans-serif" font-size="11" fill="rgba(255,255,255,0.3)" letter-spacing="2">CONSOLE GAMING EXPERIENCE</text>
-
-  <rect x="620" y="70" width="120" height="36" rx="18" fill="url(#purpleH)" opacity="0.9"/>
-  <text x="680" y="93" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="600" fill="white" letter-spacing="1">EXPERIENCE</text>
 </svg>

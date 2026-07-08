@@ -56,12 +56,12 @@ function update(){
   if(player.y<NEST.y+NEST.h&&player.x+player.w>NEST.x&&player.x<NEST.x+NEST.w&&player.y+player.h>NEST.y&&collected===lvl.leaves.length){
     gameRunning=false;
     if(currentLevel<LEVELS.length-1){
-      showOverlay('Level Complete!','All leaves collected! Onward to the next branch.','Next Level',()=>{currentLevel++;resetLevel(currentLevel);gameRunning=true;});
+      showOverlay('Level Complete!','All leaves collected! Onward to the next branch.','Next Level',()=>{currentLevel++;resetLevel(currentLevel);gameRunning=true;requestAnimationFrame(gameLoop);});
     }else{
-      showOverlay('🎉 YOU WIN!','You climbed to the top of PlayTree! Chapter 1 Season 1 complete!','Play Again',()=>{currentLevel=0;totalScore=0;document.getElementById('score').textContent='0';resetLevel(0);gameRunning=true;});
+      showOverlay('🎉 YOU WIN!','You climbed to the top of PlayTree! Chapter 1 Season 1 complete!','Play Again',()=>{currentLevel=0;totalScore=0;document.getElementById('score').textContent='0';resetLevel(0);gameRunning=true;requestAnimationFrame(gameLoop);});
     }
   }else if(player.y<NEST.y+NEST.h&&player.x+player.w>NEST.x&&player.x<NEST.x+NEST.w&&player.y+player.h>NEST.y&&collected<lvl.leaves.length){
-    showOverlay('Not Enough Leaves!','Collect all leaves before reaching the nest! '+(lvl.leaves.length-collected)+' remaining.','Keep Climbing',()=>{gameRunning=true;});
+    showOverlay('Not Enough Leaves!','Collect all leaves before reaching the nest! '+(lvl.leaves.length-collected)+' remaining.','Keep Climbing',()=>{gameRunning=true;requestAnimationFrame(gameLoop);});
   }
 }
 

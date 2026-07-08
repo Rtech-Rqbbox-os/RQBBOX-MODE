@@ -14,7 +14,7 @@ if(ball.x<ball.r||ball.x>500-ball.r)ball.vx*=-1
 if(ball.y<ball.r)ball.vy*=-1
 if(ball.y>400-ball.r)gameOver=true
 if(ball.y>paddle.y-ball.r&&ball.x>paddle.x&&ball.x<paddle.x+paddle.w){ball.vy=-Math.abs(ball.vy);ball.vx+=(ball.x-paddle.x-paddle.w/2)*0.1}
-bricks.forEach(b=>{if(b.alive&&ball.x>b.x&&ball.x<b.x+b.w&&ball.y>b.y&&ball.y<b.y+b.h){b.alive=false;ball.vy*=-1;score+=10;document.getElementById('score').textContent='Score: '+score}})}
+bricks.forEach(b=>{if(b.alive&&ball.x>b.x&&ball.x<b.x+b.w&&ball.y>b.y&&ball.y<b.y+b.h){b.alive=false;const hitFromLeft=ball.vx>0&&ball.x<b.x;const hitFromRight=ball.vx<0&&ball.x>b.x+b.w;if(hitFromLeft||hitFromRight)ball.vx*=-1;else ball.vy*=-1;score+=10;document.getElementById('score').textContent='Score: '+score}})}
 function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,500,400)
 const colors=['#ff00ff','#00ffff','#ff6600','#00ff00','#ffff00'];bricks.forEach((b,i)=>{if(b.alive){ctx.fillStyle=colors[i%5];ctx.shadowColor=colors[i%5];ctx.shadowBlur=10;ctx.fillRect(b.x,b.y,b.w,b.h);ctx.shadowBlur=0}})
 ctx.fillStyle='#fff';ctx.shadowColor='#fff';ctx.shadowBlur=15;ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0

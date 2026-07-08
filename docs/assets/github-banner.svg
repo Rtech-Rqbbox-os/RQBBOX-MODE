@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" width="1280" height="320">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06080f"/>
+      <stop offset="100%" style="stop-color:#080818"/>
+    </linearGradient>
+    <linearGradient id="cp" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00b4d8"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="cpRev" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#00b4d8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="320" fill="url(#bg)"/>
+  <rect y="316" width="1280" height="4" fill="url(#cp)"/>
+  <rect x="0" y="0" width="1280" height="2" fill="url(#cpRev)" opacity="0.5"/>
+  <g transform="translate(640,130)">
+    <text text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="300" letter-spacing="6" fill="rgba(255,255,255,0.2)">RHYS-TECH PRESENTS</text>
+    <text y="36" text-anchor="middle" font-family="system-ui,sans-serif" font-size="44" font-weight="800" letter-spacing="6" fill="url(#cp)">RQBBOX Experience OS 1.0</text>
+    <text y="68" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="300" letter-spacing="3" fill="rgba(255,255,255,0.3)">The Ultimate Desktop/Gaming Console Hybrid Platform</text>
+    <text y="90" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" letter-spacing="2" fill="rgba(255,255,255,0.12)">Electron • Node.js • NSIS • 23 Games • 41 Apps • AI • Cloud Sync</text>
+  </g>
+  <g transform="translate(60,280)">
+    <text font-family="system-ui,sans-serif" font-size="10" fill="rgba(255,255,255,0.1)">github.com/Rtech-Rqbbox-os/RQBBOX-Experience</text>
+  </g>
+</svg>

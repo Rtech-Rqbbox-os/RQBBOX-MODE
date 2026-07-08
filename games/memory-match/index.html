@@ -8,7 +8,7 @@ const c=document.getElementById('game'),ctx=c.getContext('2d');
 const SIZE=4,CELL=90,GAP=10;
 const EMOJIS=['🎮','🎯','🎲','🎸','🎺','🎻','🎹','🎤'];
 let cards=[],flipped=[],matched=[],moves=0;
-function startGame(){const deck=[...EMOJIS,...EMOJIS];deck.sort(()=>Math.random()-.5);cards=deck.map((emoji,i)=>({emoji,flipped:false,matched}));flipped=[];matched=[];moves=0;document.getElementById('score').textContent='Moves: '+moves;draw()}
+function startGame(){const deck=[...EMOJIS,...EMOJIS];deck.sort(()=>Math.random()-.5);cards=deck.map((emoji,i)=>({emoji,flipped:false,matched:false}));flipped=[];matched=[];moves=0;document.getElementById('score').textContent='Moves: '+moves;draw()}
 function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,400,400)
 cards.forEach((card,i)=>{const x=(i%SIZE)*(CELL+GAP)+GAP,y=Math.floor(i/SIZE)*(CELL+GAP)+GAP;ctx.fillStyle=card.flipped||card.matched?'#ff00ff':'#1a1a2e';ctx.shadowColor=card.flipped||card.matched?'#ff00ff':'transparent';ctx.shadowBlur=card.flipped||card.matched?15:0;ctx.fillRect(x,y,CELL,CELL);ctx.shadowBlur=0
 if(card.flipped||card.matched){ctx.fillStyle='#000';ctx.font='40px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(card.emoji,x+CELL/2,y+CELL/2)}})}

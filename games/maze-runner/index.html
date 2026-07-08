@@ -13,6 +13,7 @@ function draw(){ctx.fillStyle='#050810';ctx.fillRect(0,0,400,400)
 for(let y=0;y<SIZE;y++)for(let x=0;x<SIZE;x++){if(maze[y][x]){ctx.fillStyle='#1a1a2e';ctx.fillRect(x*CELL,y*CELL,CELL,CELL)}}
 ctx.fillStyle='#00ffcc';ctx.shadowColor='#00ffcc';ctx.shadowBlur=15;ctx.fillRect(player.x*CELL+2,player.y*CELL+2,CELL-4,CELL-4);ctx.shadowBlur=0
 ctx.fillStyle='#00ff00';ctx.shadowColor='#00ff00';ctx.shadowBlur=15;ctx.fillRect(exit.x*CELL+2,exit.y*CELL+2,CELL-4,CELL-4);ctx.shadowBlur=0}
-document.addEventListener('keydown',e=>{let nx=player.x,ny=player.y;if(e.key==='ArrowUp')ny--;if(e.key==='ArrowDown')ny++;if(e.key==='ArrowLeft')nx--;if(e.key==='ArrowRight')nx++;if(nx>=0&&nx<SIZE&&ny>=0&&ny<SIZE&&!maze[ny][nx]){player.x=nx;player.y=ny;draw()}})
+function checkWin(){if(player.x===exit.x&&player.y===exit.y){ctx.fillStyle='rgba(0,0,0,.85)';ctx.fillRect(0,0,400,400);ctx.fillStyle='#00ff00';ctx.font='28px system-ui';ctx.textAlign='center';ctx.fillText('🎉 YOU WIN!',200,180);ctx.font='14px system-ui';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText('New maze generated!',200,210);setTimeout(startGame,2000);return true}return false}
+document.addEventListener('keydown',e=>{let nx=player.x,ny=player.y;if(e.key==='ArrowUp')ny--;if(e.key==='ArrowDown')ny++;if(e.key==='ArrowLeft')nx--;if(e.key==='ArrowRight')nx++;if(nx>=0&&nx<SIZE&&ny>=0&&ny<SIZE&&!maze[ny][nx]){player.x=nx;player.y=ny;draw();checkWin()}})
 startGame()
 </script></body></html>

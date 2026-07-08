@@ -1,74 +1,34 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" width="1280" height="320">
   <defs>
-    <linearGradient id="bgOS" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0a0a0a"/>
-      <stop offset="50%" style="stop-color:#0e0e0e"/>
-      <stop offset="100%" style="stop-color:#0a0a0a"/>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#04060a"/>
+      <stop offset="50%" style="stop-color:#08081a"/>
+      <stop offset="100%" style="stop-color:#04060a"/>
     </linearGradient>
-    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#0a5c8a"/>
-      <stop offset="50%" style="stop-color:#107c9e"/>
-      <stop offset="100%" style="stop-color:#1db9c4"/>
+    <linearGradient id="cyanPurple" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00b4d8"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
     </linearGradient>
-    <radialGradient id="glowOS" cx="30%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:rgba(16,124,158,0.15)"/>
-      <stop offset="100%" style="stop-color:transparent"/>
-    </radialGradient>
-    <linearGradient id="lineGradOS" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:transparent"/>
-      <stop offset="20%" style="stop-color:rgba(29,185,196,0.5)"/>
-      <stop offset="80%" style="stop-color:rgba(29,185,196,0.5)"/>
-      <stop offset="100%" style="stop-color:transparent"/>
+    <linearGradient id="purpleCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#00b4d8"/>
     </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
-  <rect width="1280" height="320" fill="url(#bgOS)"/>
-  <rect width="1280" height="320" fill="url(#glowOS)"/>
-  <g opacity="0.04" fill="white">
-    <circle cx="100" cy="50" r="1.5"/><circle cx="200" cy="50" r="1.5"/><circle cx="300" cy="50" r="1.5"/><circle cx="400" cy="50" r="1.5"/>
-    <circle cx="500" cy="50" r="1.5"/><circle cx="600" cy="50" r="1.5"/><circle cx="700" cy="50" r="1.5"/><circle cx="800" cy="50" r="1.5"/>
-    <circle cx="900" cy="50" r="1.5"/><circle cx="1000" cy="50" r="1.5"/><circle cx="1100" cy="50" r="1.5"/><circle cx="1200" cy="50" r="1.5"/>
-    <circle cx="100" cy="100" r="1.5"/><circle cx="200" cy="100" r="1.5"/><circle cx="300" cy="100" r="1.5"/><circle cx="400" cy="100" r="1.5"/>
-    <circle cx="500" cy="100" r="1.5"/><circle cx="600" cy="100" r="1.5"/><circle cx="700" cy="100" r="1.5"/><circle cx="800" cy="100" r="1.5"/>
-    <circle cx="900" cy="100" r="1.5"/><circle cx="1000" cy="100" r="1.5"/><circle cx="1100" cy="100" r="1.5"/><circle cx="1200" cy="100" r="1.5"/>
-    <circle cx="100" cy="150" r="1.5"/><circle cx="200" cy="150" r="1.5"/><circle cx="300" cy="150" r="1.5"/><circle cx="400" cy="150" r="1.5"/>
-    <circle cx="500" cy="150" r="1.5"/><circle cx="600" cy="150" r="1.5"/><circle cx="700" cy="150" r="1.5"/><circle cx="800" cy="150" r="1.5"/>
-    <circle cx="900" cy="150" r="1.5"/><circle cx="1000" cy="150" r="1.5"/><circle cx="1100" cy="150" r="1.5"/><circle cx="1200" cy="150" r="1.5"/>
-    <circle cx="100" cy="200" r="1.5"/><circle cx="200" cy="200" r="1.5"/><circle cx="300" cy="200" r="1.5"/><circle cx="400" cy="200" r="1.5"/>
-    <circle cx="500" cy="200" r="1.5"/><circle cx="600" cy="200" r="1.5"/><circle cx="700" cy="200" r="1.5"/><circle cx="800" cy="200" r="1.5"/>
-    <circle cx="900" cy="200" r="1.5"/><circle cx="1000" cy="200" r="1.5"/><circle cx="1100" cy="200" r="1.5"/><circle cx="1200" cy="200" r="1.5"/>
-    <circle cx="100" cy="250" r="1.5"/><circle cx="200" cy="250" r="1.5"/><circle cx="300" cy="250" r="1.5"/><circle cx="400" cy="250" r="1.5"/>
-    <circle cx="500" cy="250" r="1.5"/><circle cx="600" cy="250" r="1.5"/><circle cx="700" cy="250" r="1.5"/><circle cx="800" cy="250" r="1.5"/>
-    <circle cx="900" cy="250" r="1.5"/><circle cx="1000" cy="250" r="1.5"/><circle cx="1100" cy="250" r="1.5"/><circle cx="1200" cy="250" r="1.5"/>
-    <circle cx="100" cy="300" r="1.5"/><circle cx="200" cy="300" r="1.5"/><circle cx="300" cy="300" r="1.5"/><circle cx="400" cy="300" r="1.5"/>
-    <circle cx="500" cy="300" r="1.5"/><circle cx="600" cy="300" r="1.5"/><circle cx="700" cy="300" r="1.5"/><circle cx="800" cy="300" r="1.5"/>
-    <circle cx="900" cy="300" r="1.5"/><circle cx="1000" cy="300" r="1.5"/><circle cx="1100" cy="300" r="1.5"/><circle cx="1200" cy="300" r="1.5"/>
+  <rect width="1280" height="320" fill="url(#bg)"/>
+  <rect x="0" y="310" width="1280" height="10" fill="url(#cyanPurple)" opacity="0.6"/>
+  <rect x="0" y="0" width="1280" height="4" fill="url(#purpleCyan)" opacity="0.4"/>
+  <circle cx="200" cy="160" r="160" fill="url(#cyanPurple)" opacity="0.03"/>
+  <circle cx="1080" cy="160" r="160" fill="url(#purpleCyan)" opacity="0.03"/>
+  <g transform="translate(640,120)">
+    <text text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="300" letter-spacing="10" fill="rgba(255,255,255,0.3)">RQBBOX</text>
+    <text y="48" text-anchor="middle" font-family="system-ui,sans-serif" font-size="52" font-weight="800" letter-spacing="8" fill="url(#cyanPurple)" filter="url(#glow)">EXPERIENCE OS</text>
+    <text y="82" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="300" letter-spacing="6" fill="rgba(255,255,255,0.25)">VERSION 1.0 — THE ULTIMATE PLATFORM</text>
   </g>
-  <rect x="0" y="316" width="1280" height="2" fill="url(#lineGradOS)"/>
-  <g transform="translate(100, 60)">
-    <rect x="0" y="0" width="200" height="200" rx="32" fill="url(#cyanGrad)" opacity="0.15"/>
-    <rect x="12" y="12" width="176" height="176" rx="24" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
-    <circle cx="60" cy="60" r="22" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
-    <path d="M 50 60 L 60 70 L 72 52" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <rect x="92" y="42" width="56" height="4" rx="2" fill="rgba(255,255,255,0.5)"/>
-    <rect x="92" y="54" width="42" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
-    <rect x="92" y="66" width="28" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
-    <rect x="20" y="110" width="160" height="48" rx="8" fill="rgba(255,255,255,0.05)"/>
-    <text x="100" y="138" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="10" fill="rgba(255,255,255,0.3)">BOOTABLE · PORTABLE · GAMING</text>
-  </g>
-  <text x="400" y="120" font-family="Segoe UI Variable,Segoe UI,Arial,sans-serif" font-size="64" font-weight="800" fill="white" letter-spacing="6">RQBBOX</text>
-  <text x="400" y="168" font-family="Segoe UI Variable,Segoe UI,Arial,sans-serif" font-size="32" font-weight="300" fill="url(#cyanGrad)" letter-spacing="10">OS</text>
-  <text x="400" y="198" font-family="Segoe UI,Arial,sans-serif" font-size="14" fill="rgba(255,255,255,0.4)" letter-spacing="6">PORTABLE USB EDITION</text>
-  <text x="400" y="230" font-family="Segoe UI,Arial,sans-serif" font-size="11" fill="rgba(255,255,255,0.25)" letter-spacing="2">A Full Console Gaming OS That Boots From Any USB Drive</text>
-  <g transform="translate(400, 260)">
-    <rect x="0" y="0" width="60" height="22" rx="11" fill="rgba(16,124,158,0.15)"/>
-    <text x="30" y="15" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="10" fill="#1db9c4">v1.0.0</text>
-    <rect x="72" y="0" width="100" height="22" rx="11" fill="rgba(16,124,158,0.15)"/>
-    <text x="122" y="15" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="10" fill="#1db9c4">USB BOOT</text>
-    <rect x="184" y="0" width="90" height="22" rx="11" fill="rgba(16,124,158,0.15)"/>
-    <text x="229" y="15" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="10" fill="#1db9c4">GAMING OS</text>
-  </g>
-  <g transform="translate(1040, 260)">
-    <rect x="0" y="0" width="140" height="28" rx="14" fill="url(#cyanGrad)" opacity="0.8"/>
-    <text x="70" y="19" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="11" font-weight="600" fill="white" letter-spacing="1">DOWNLOAD NOW</text>
+  <g transform="translate(80,280)">
+    <text font-family="system-ui,sans-serif" font-size="11" letter-spacing="2" fill="rgba(255,255,255,0.15)">By RhysTech</text>
   </g>
 </svg>

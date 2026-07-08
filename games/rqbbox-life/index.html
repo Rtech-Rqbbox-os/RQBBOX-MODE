@@ -881,11 +881,13 @@ function openJobs() {
   const container = document.getElementById('job-list');
   container.innerHTML = '';
   allJobs.forEach(job => {
+    const lvlReq = job.req !== undefined ? state.player.level >= job.req : true;
     const metCareer = state.player.career >= (job.careerReq || 0);
     const metSocial = state.player.social >= (job.socialReq || 0);
     const metVeh = job.vehReq ? state.vehicle >= 1 : true;
-    const canApply = metCareer && metSocial && metVeh && state.job !== job.id;
+    const canApply = lvlReq && metCareer && metSocial && metVeh && state.job !== job.id;
     let reqText = [];
+    if (job.req !== undefined) reqText.push(`Level ${job.req}`);
     if (job.careerReq) reqText.push(`Career ${job.careerReq}`);
     if (job.socialReq) reqText.push(`Social ${job.socialReq}`);
     if (job.vehReq) reqText.push('Vehicle Required');
@@ -903,6 +905,7 @@ function openJobs() {
 function closeJobs() { document.getElementById('jobs-overlay').classList.remove('active'); }
 function applyJob(job) {
   const p = state.player;
+  if (job.req !== undefined && p.level < job.req) { showToast('Level too low!', 'bad'); return; }
   if (job.careerReq && p.career < job.careerReq) { showToast('Career level too low!', 'bad'); return; }
   if (job.socialReq && p.social < job.socialReq) { showToast('Need more social skills!', 'bad'); return; }
   if (job.vehReq && state.vehicle < 1) { showToast('Need a vehicle!', 'bad'); return; }
@@ -1168,12 +1171,31 @@ function pollController() {
 }
 requestAnimationFrame(pollController);
 
+// ===== LOAD / SAVE =====
+function loadGame() {
+  try {
+    const save = localStorage.getItem('rqbbox-life-save');
+    if (save) {
+      const data = JSON.parse(save);
+      Object.assign(state, data);
+      state.achievements = data.achievements || [];
+      showToast('Save loaded! Welcome back!', 'good');
+      addLog('Welcome back! Save data restored.', 'special');
+      updateHUD();
+      updateRightPanel();
+      checkAchievements();
+      return true;
+    }
+  } catch(e) { console.error('Load failed:', e); }
+  return false;
+}
+
 // ===== AUTO-START FROM SAVE =====
 try {
   const save = localStorage.getItem('rqbbox-life-save');
   if (save) {
-    // Offer load option in future, for now just let them start fresh
-    console.log('RQBBOX LIFE: Save data found.');
+    console.log('RQBBOX LIFE: Save data found. Loading...');
+    setTimeout(() => loadGame(), 500);
   }
 } catch(e) {}
 
