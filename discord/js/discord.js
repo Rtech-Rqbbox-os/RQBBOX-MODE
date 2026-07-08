@@ -35,14 +35,20 @@ class DiscordIntegration {
     });
 
     // Login
-    document.getElementById('discord-login-btn').addEventListener('click', () => {
-      this.initiateOAuthLogin();
-    });
+    const loginBtn = document.getElementById('discord-login-btn');
+    if (loginBtn) {
+      loginBtn.addEventListener('click', () => {
+        this.initiateOAuthLogin();
+      });
+    }
 
     // Logout
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      this.logout();
-    });
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        this.logout();
+      });
+    }
 
     // Friends tabs
     document.querySelectorAll('.friends-tabs .tab-btn').forEach(btn => {
@@ -53,33 +59,51 @@ class DiscordIntegration {
     });
 
     // Voice controls
-    document.getElementById('voice-mute-btn').addEventListener('click', () => {
-      this.toggleMute();
-    });
+    const voiceMuteBtn = document.getElementById('voice-mute-btn');
+    if (voiceMuteBtn) {
+      voiceMuteBtn.addEventListener('click', () => {
+        this.toggleMute();
+      });
+    }
 
-    document.getElementById('voice-deafen-btn').addEventListener('click', () => {
-      this.toggleDeafen();
-    });
+    const voiceDeafenBtn = document.getElementById('voice-deafen-btn');
+    if (voiceDeafenBtn) {
+      voiceDeafenBtn.addEventListener('click', () => {
+        this.toggleDeafen();
+      });
+    }
 
-    document.getElementById('voice-disconnect-btn').addEventListener('click', () => {
-      this.disconnectVoice();
-    });
+    const voiceDisconnectBtn = document.getElementById('voice-disconnect-btn');
+    if (voiceDisconnectBtn) {
+      voiceDisconnectBtn.addEventListener('click', () => {
+        this.disconnectVoice();
+      });
+    }
 
     // Chat
-    document.getElementById('send-btn').addEventListener('click', () => {
-      this.sendMessage();
-    });
-
-    document.getElementById('message-input').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
+    const sendBtn = document.getElementById('send-btn');
+    if (sendBtn) {
+      sendBtn.addEventListener('click', () => {
         this.sendMessage();
-      }
-    });
+      });
+    }
+
+    const messageInput = document.getElementById('message-input');
+    if (messageInput) {
+      messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          this.sendMessage();
+        }
+      });
+    }
 
     // Streaming
-    document.getElementById('go-live-btn').addEventListener('click', () => {
-      this.toggleStreaming();
-    });
+    const goLiveBtn = document.getElementById('go-live-btn');
+    if (goLiveBtn) {
+      goLiveBtn.addEventListener('click', () => {
+        this.toggleStreaming();
+      });
+    }
 
     // Settings tabs
     document.querySelectorAll('.settings-tab-btn').forEach(btn => {
@@ -90,14 +114,20 @@ class DiscordIntegration {
     });
 
     // Overlay
-    document.getElementById('overlay-close-btn').addEventListener('click', () => {
-      this.toggleOverlay(false);
-    });
+    const overlayCloseBtn = document.getElementById('overlay-close-btn');
+    if (overlayCloseBtn) {
+      overlayCloseBtn.addEventListener('click', () => {
+        this.toggleOverlay(false);
+      });
+    }
 
     // Notification toast
-    document.getElementById('toast-close').addEventListener('click', () => {
-      this.hideNotification();
-    });
+    const toastClose = document.getElementById('toast-close');
+    if (toastClose) {
+      toastClose.addEventListener('click', () => {
+        this.hideNotification();
+      });
+    }
 
     // Settings changes
     this.bindSettingsEvents();
@@ -105,33 +135,48 @@ class DiscordIntegration {
 
   bindSettingsEvents() {
     // Auto-login
-    document.getElementById('auto-login').addEventListener('change', (e) => {
-      this.settings.autoLogin = e.target.checked;
-      this.saveSettings();
-    });
+    const autoLogin = document.getElementById('auto-login');
+    if (autoLogin) {
+      autoLogin.addEventListener('change', (e) => {
+        this.settings.autoLogin = e.target.checked;
+        this.saveSettings();
+      });
+    }
 
     // Overlay settings
-    document.getElementById('enable-overlay').addEventListener('change', (e) => {
-      this.settings.enableOverlay = e.target.checked;
-      this.saveSettings();
-    });
+    const enableOverlay = document.getElementById('enable-overlay');
+    if (enableOverlay) {
+      enableOverlay.addEventListener('change', (e) => {
+        this.settings.enableOverlay = e.target.checked;
+        this.saveSettings();
+      });
+    }
 
-    document.getElementById('overlay-opacity').addEventListener('input', (e) => {
-      this.settings.overlayOpacity = e.target.value;
-      this.saveSettings();
-      this.updateOverlayOpacity();
-    });
+    const overlayOpacity = document.getElementById('overlay-opacity');
+    if (overlayOpacity) {
+      overlayOpacity.addEventListener('input', (e) => {
+        this.settings.overlayOpacity = e.target.value;
+        this.saveSettings();
+        this.updateOverlayOpacity();
+      });
+    }
 
     // Notification settings
-    document.getElementById('notify-friend-online').addEventListener('change', (e) => {
-      this.settings.notifyFriendOnline = e.target.checked;
-      this.saveSettings();
-    });
+    const notifyFriendOnline = document.getElementById('notify-friend-online');
+    if (notifyFriendOnline) {
+      notifyFriendOnline.addEventListener('change', (e) => {
+        this.settings.notifyFriendOnline = e.target.checked;
+        this.saveSettings();
+      });
+    }
 
-    document.getElementById('notify-messages').addEventListener('change', (e) => {
-      this.settings.notifyMessages = e.target.checked;
-      this.saveSettings();
-    });
+    const notifyMessages = document.getElementById('notify-messages');
+    if (notifyMessages) {
+      notifyMessages.addEventListener('change', (e) => {
+        this.settings.notifyMessages = e.target.checked;
+        this.saveSettings();
+      });
+    }
   }
 
   checkAuth() {
@@ -663,9 +708,241 @@ class DiscordIntegration {
   }
 
   setupControllerShortcuts() {
-    // This would integrate with the RQBBOX controller system
-    // For demo, we'll add placeholder functionality
-    console.log('Controller shortcuts initialized');
+    // Gamepad API support
+    this.controllerIndex = null;
+    this.controllerPolling = null;
+    
+    window.addEventListener('gamepadconnected', (e) => {
+      this.controllerIndex = e.gamepad.index;
+      console.log('Gamepad connected:', e.gamepad.id);
+      this.startControllerPolling();
+    });
+    
+    window.addEventListener('gamepaddisconnected', (e) => {
+      if (this.controllerIndex === e.gamepad.index) {
+        this.controllerIndex = null;
+        this.stopControllerPolling();
+        console.log('Gamepad disconnected');
+      }
+    });
+    
+    // Check for already connected gamepads
+    const gamepads = navigator.getGamepads();
+    for (let i = 0; i < gamepads.length; i++) {
+      if (gamepads[i]) {
+        this.controllerIndex = i;
+        this.startControllerPolling();
+        break;
+      }
+    }
+  }
+
+  startControllerPolling() {
+    if (this.controllerPolling) return;
+    
+    this.controllerPolling = setInterval(() => {
+      this.pollController();
+    }, 16); // ~60fps
+  }
+
+  stopControllerPolling() {
+    if (this.controllerPolling) {
+      clearInterval(this.controllerPolling);
+      this.controllerPolling = null;
+    }
+  }
+
+  pollController() {
+    const gamepad = navigator.getGamepads()[this.controllerIndex];
+    if (!gamepad) return;
+    
+    // Track button states to detect presses
+    if (!this.buttonStates) {
+      this.buttonStates = new Array(gamepad.buttons.length).fill(false);
+    }
+    
+    // Check each button
+    for (let i = 0; i < gamepad.buttons.length; i++) {
+      const pressed = gamepad.buttons[i].pressed;
+      
+      // Button just pressed
+      if (pressed && !this.buttonStates[i]) {
+        this.handleControllerButton(i, gamepad);
+      }
+      
+      this.buttonStates[i] = pressed;
+    }
+    
+    // Handle D-pad and sticks for navigation
+    this.handleControllerAxes(gamepad);
+  }
+
+  handleControllerButton(buttonIndex, gamepad) {
+    // Common button mappings
+    const BUTTONS = {
+      0: 'A',      // Cross
+      1: 'B',      // Circle
+      2: 'X',      // Square
+      3: 'Y',      // Triangle
+      4: 'LB',     // Left Bumper
+      5: 'RB',     // Right Bumper
+      6: 'LT',     // Left Trigger
+      7: 'RT',     // Right Trigger
+      8: 'SELECT', // Select/Back
+      9: 'START',  // Start/Menu
+      10: 'L3',    // Left Stick Click
+      11: 'R3',    // Right Stick Click
+      12: 'UP',    // D-Pad Up
+      13: 'DOWN',  // D-Pad Down
+      14: 'LEFT',  // D-Pad Left
+      15: 'RIGHT'  // D-Pad Right
+    };
+    
+    const button = BUTTONS[buttonIndex];
+    
+    switch (button) {
+      case 'A':
+        // Confirm/Select
+        this.handleControllerConfirm();
+        break;
+      case 'B':
+        // Back/Cancel
+        this.handleControllerBack();
+        break;
+      case 'Y':
+        // Toggle overlay
+        this.toggleOverlay(!this.overlayVisible);
+        break;
+      case 'START':
+        // Open settings
+        this.navigateTo('settings');
+        break;
+      case 'SELECT':
+        // Navigate to home
+        this.navigateTo('home');
+        break;
+      case 'LB':
+        // Navigate left in sections
+        this.navigateSection(-1);
+        break;
+      case 'RB':
+        // Navigate right in sections
+        this.navigateSection(1);
+        break;
+      case 'UP':
+        // Navigate up in lists
+        this.navigateList(-1);
+        break;
+      case 'DOWN':
+        // Navigate down in lists
+        this.navigateList(1);
+        break;
+    }
+  }
+
+  handleControllerAxes(gamepad) {
+    const deadzone = 0.3;
+    const leftStickX = gamepad.axes[0];
+    const leftStickY = gamepad.axes[1];
+    const rightStickX = gamepad.axes[2];
+    const rightStickY = gamepad.axes[3];
+    
+    // Left stick horizontal - section navigation
+    if (Math.abs(leftStickX) > deadzone) {
+      if (leftStickX > deadzone && !this.stickLeftX) {
+        this.navigateSection(1);
+        this.stickLeftX = true;
+      } else if (leftStickX < -deadzone && !this.stickLeftX) {
+        this.navigateSection(-1);
+        this.stickLeftX = true;
+      }
+    } else {
+      this.stickLeftX = false;
+    }
+    
+    // Left stick vertical - list navigation
+    if (Math.abs(leftStickY) > deadzone) {
+      if (leftStickY > deadzone && !this.stickLeftY) {
+        this.navigateList(1);
+        this.stickLeftY = true;
+      } else if (leftStickY < -deadzone && !this.stickLeftY) {
+        this.navigateList(-1);
+        this.stickLeftY = true;
+      }
+    } else {
+      this.stickLeftY = false;
+    }
+    
+    // Right stick vertical - scroll content
+    if (Math.abs(rightStickY) > deadzone) {
+      this.scrollContent(-rightStickY * 20);
+    }
+  }
+
+  handleControllerConfirm() {
+    // Based on current section, perform appropriate action
+    const activeSection = document.querySelector('.content-section.active');
+    if (!activeSection) return;
+    
+    // If in navigation, select current item
+    const focusedItem = document.querySelector('[data-focused="true"]');
+    if (focusedItem) {
+      focusedItem.click();
+    }
+  }
+
+  handleControllerBack() {
+    // Go back to previous section or close overlay
+    if (this.overlayVisible) {
+      this.toggleOverlay(false);
+    } else {
+      this.navigateTo('home');
+    }
+  }
+
+  navigateSection(direction) {
+    const sections = ['home', 'friends', 'voice', 'chat', 'streaming', 'rich-presence', 'notifications', 'settings'];
+    const currentIndex = sections.indexOf(this.currentSection);
+    const newIndex = (currentIndex + direction + sections.length) % sections.length;
+    this.navigateTo(sections[newIndex]);
+  }
+
+  navigateList(direction) {
+    const activeSection = document.querySelector('.content-section.active');
+    if (!activeSection) return;
+    
+    // Find focusable items in current section
+    const focusableItems = activeSection.querySelectorAll('button, .friend-card, .message');
+    if (focusableItems.length === 0) return;
+    
+    // Find currently focused item
+    let currentIndex = -1;
+    focusableItems.forEach((item, index) => {
+      if (item.dataset.focused === 'true') {
+        currentIndex = index;
+      }
+    });
+    
+    // Calculate new index
+    const newIndex = (currentIndex + direction + focusableItems.length) % focusableItems.length;
+    
+    // Update focus
+    focusableItems.forEach((item, index) => {
+      item.dataset.focused = index === newIndex ? 'true' : 'false';
+      if (index === newIndex) {
+        item.style.outline = '2px solid var(--accent)';
+        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else {
+        item.style.outline = 'none';
+      }
+    });
+  }
+
+  scrollContent(amount) {
+    const activeSection = document.querySelector('.content-section.active');
+    if (!activeSection) return;
+    
+    activeSection.scrollTop += amount;
   }
 
   loadSettings() {

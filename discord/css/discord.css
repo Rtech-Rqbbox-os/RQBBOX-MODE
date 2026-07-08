@@ -602,6 +602,9 @@ body {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 300px);
 }
 
 .voice-channels h3 {
@@ -786,6 +789,9 @@ body {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 300px);
 }
 
 .setting-group {
@@ -900,7 +906,9 @@ body {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 24px;
-  margin-bottom: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 400px);
 }
 
 .notification-history {
@@ -908,6 +916,9 @@ body {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 400px);
 }
 
 .notification-history h3 {
@@ -1256,7 +1267,18 @@ body {
   font-size: 14px;
 }
 
-/* Scrollbar */
+/* Controller Focus Styles */
+[data-focused="true"] {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px;
+}
+
+button:focus,
+.friend-card:focus,
+.message:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 ::-webkit-scrollbar {
   width: 8px;
 }
