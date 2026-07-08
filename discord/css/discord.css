@@ -159,6 +159,8 @@ body {
   display: flex;
   flex-direction: column;
   padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar-header {
@@ -186,6 +188,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .nav-item {
@@ -261,6 +265,8 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .content-section {
@@ -293,6 +299,8 @@ body {
   display: flex;
   gap: 12px;
   align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 /* Buttons */
@@ -455,6 +463,9 @@ body {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 400px);
 }
 
 .activity-feed h3 {
@@ -477,6 +488,8 @@ body {
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .tab-btn {
@@ -522,6 +535,9 @@ body {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 300px);
 }
 
 .voice-status {
@@ -625,6 +641,8 @@ body {
   grid-template-columns: 200px 200px 1fr;
   gap: 16px;
   height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .servers-panel,
@@ -687,6 +705,8 @@ body {
   gap: 8px;
   padding: 16px;
   border-top: 1px solid var(--border);
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .icon-btn {
@@ -750,6 +770,8 @@ body {
   border-radius: 16px;
   padding: 32px;
   text-align: center;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .stream-indicator {
@@ -854,6 +876,8 @@ body {
   border-radius: 16px;
   padding: 32px;
   margin-bottom: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .presence-card {
@@ -1108,6 +1132,8 @@ body {
   display: grid;
   grid-template-columns: 300px 400px 250px;
   gap: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .overlay-panel {
@@ -1117,6 +1143,8 @@ body {
   padding: 16px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .overlay-panel h4 {
