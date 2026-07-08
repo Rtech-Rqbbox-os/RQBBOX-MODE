@@ -115,6 +115,7 @@
       <button class="sidebar-item" data-page="store" title="Store"><span class="si-icon">&#x1F6D2;</span><span class="si-label">Store</span></button>
       <button class="sidebar-item" data-page="browser" title="Browser"><span class="si-icon">&#x1F310;</span><span class="si-label">Browse</span></button>
       <button class="sidebar-item" data-page="community" title="Community"><span class="si-icon">&#x1F91D;</span><span class="si-label">Social</span></button>
+      <button class="sidebar-item" data-page="discord" title="Discord"><span class="si-icon">&#x1F4AC;</span><span class="si-label">Discord</span></button>
       <button class="sidebar-item" data-page="captures" title="Captures"><span class="si-icon">&#x1F4F7;</span><span class="si-label">Captures</span></button>
       <div class="sidebar-spacer"></div>
       <button class="sidebar-item" data-page="settings" title="Settings"><span class="si-icon">&#x2699;</span><span class="si-label">Settings</span></button>
@@ -318,6 +319,22 @@
         <div class="section">
           <div id="captures-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;padding:8px 28px">
             <div class="empty-state">No captures yet. Press Ctrl+Shift+S to take a screenshot.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page: Discord -->
+      <div id="page-discord" class="page">
+        <div class="page-header">
+          <h2>&#x1F4AC; Discord Integration</h2>
+          <div class="page-actions">
+            <button class="btn btn-sm btn-ghost" onclick="window.open('../discord/index.html', '_blank')">&#x1F517; Open Full Discord</button>
+          </div>
+        </div>
+        <div class="page-subtitle">Connect with friends, voice chat, and stream your gameplay</div>
+        <div class="section">
+          <div id="discord-embed" style="width:100%;height:calc(100vh - 200px);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden">
+            <iframe src="../discord/index.html" style="width:100%;height:100%;border:none" allow="microphone;camera"></iframe>
           </div>
         </div>
       </div>
