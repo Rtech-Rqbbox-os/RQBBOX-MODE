@@ -71,6 +71,9 @@ body {
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
   max-width: 500px;
   width: 90%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 90vh;
 }
 
 .branding {
@@ -100,6 +103,8 @@ body {
 
 .discord-login {
   margin-bottom: 30px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .discord-btn {
@@ -139,6 +144,8 @@ body {
 .rhystech-branding {
   padding-top: 20px;
   border-top: 1px solid var(--border);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .rhystech {
@@ -233,6 +240,8 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .mini-avatar {
@@ -818,6 +827,8 @@ body {
 
 .setting-group {
   margin-bottom: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .setting-group label {
@@ -1018,6 +1029,8 @@ body {
   padding: 12px 16px;
   background: var(--glass);
   border-radius: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .shortcut-list {
@@ -1080,6 +1093,8 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .overlay-avatar {
@@ -1247,6 +1262,9 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 200px;
 }
 
 .toast-avatar {
