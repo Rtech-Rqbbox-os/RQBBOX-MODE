@@ -327,9 +327,9 @@
   <!-- Runtime Overlay -->
   <div id="runtime-overlay">
     <div class="runtime-bar">
-      <button class="runtime-close" onclick="Runtime.close()">&#x2716;</button>
+      <button class="runtime-close" onclick="closeRuntime()">&#x2716;</button>
       <span id="runtime-title" style="font-size:0.78rem;color:var(--text-primary);flex:1">Game</span>
-      <button class="btn btn-sm btn-ghost" onclick="Runtime.openFullscreen()">&#x26F6; Fullscreen</button>
+      <button class="btn btn-sm btn-ghost" onclick="runtimeFullscreen()">&#x26F6; Fullscreen</button>
     </div>
     <iframe id="runtime-frame" style="flex:1;width:100%;border:none;background:#fff" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
   </div>
@@ -405,7 +405,6 @@
             updateBatteryUI();
           });
         } else {
-          // Fallback: simulate battery
           setInterval(() => {
             BATTERY.level = Math.max(5, BATTERY.level - Math.random() * 0.5);
             updateBatteryUI();
@@ -419,9 +418,7 @@
       const el = document.getElementById('status-battery');
       if (!el) return;
       const lvl = Math.round(BATTERY.level);
-      const icons = ['\u{1F50B}', '\u{1F50B}', '\u{1F50B}', '\u{1F50B}', '\u{1F50B}'];
-      let icon = lvl > 75 ? '\u{1F50B}' : lvl > 50 ? '\u{1F50B}' : lvl > 25 ? '\u{1F50B}' : lvl > 10 ? '\u{1F50B}' : '\u{1F50B}';
-      if (BATTERY.charging) icon = '\u{26A1}';
+      let icon = BATTERY.charging ? '\u{26A1}' : lvl > 75 ? '\u{1F50B}' : lvl > 25 ? '\u{1F50B}' : '\u{1F50B}';
       el.textContent = icon;
       el.title = `Battery: ${lvl}%${BATTERY.charging ? ' (Charging)' : ''}`;
       el.classList.toggle('active', lvl <= 15);
@@ -438,14 +435,10 @@
             const effective = conn.effectiveType || '';
             el.title = `Network: ${type}${effective ? ' (' + effective + ')' : ''}`;
             el.classList.toggle('active', type !== 'none' && !!type);
-            el.textContent = type !== 'none' && type ? '\u{1F4F6}' : '\u{1F4F6}';
           };
           updateWiFi();
           conn.addEventListener('change', updateWiFi);
-        } else {
-          el.title = 'Network: unknown';
-          el.classList.add('active');
-        }
+        } else { el.title = 'Network: unknown'; el.classList.add('active'); }
       } catch { el.classList.add('active'); }
     }
 
@@ -454,13 +447,8 @@
       const el = document.getElementById('status-bt');
       if (!el) return;
       if ('bluetooth' in navigator) {
-        el.title = 'Bluetooth: available';
-        el.classList.add('active');
-        el.textContent = '\u{1F9F0}';
-      } else {
-        el.title = 'Bluetooth: N/A';
-        el.textContent = '\u{1F9F0}';
-      }
+        el.title = 'Bluetooth: available'; el.classList.add('active');
+      } else { el.title = 'Bluetooth: N/A'; }
     }
 
     // ---- Apps rendering ----
@@ -502,11 +490,72 @@
       RQBOX.toast(`Launching ${app.title}...`);
       if (url.startsWith('http')) {
         document.getElementById('browser-url').value = url;
-        document.getElementById('browser-frame').src = url;
+        navigateBrowser(url);
         RQBOX.navigate('browser');
       } else {
         window.open(url, '_blank');
       }
+    }
+
+    // ---- Game Launch (inline via runtime overlay) ----
+    function launchGame(id) {
+      const game = (window.GameLibrary && GameLibrary.games) ? GameLibrary.games.find(g => g.id === id) : null;
+      if (!game) { RQBOX.toast('Game not found'); return; }
+
+      RQBOX.toast(`Loading ${game.title}...`);
+      Controller.vibrate(0.4, 80);
+
+      let url = '';
+      if (game.launchUrl) {
+        url = game.launchUrl.startsWith('http') ? game.launchUrl : game.launchUrl;
+      } else if (game.localPath) {
+        url = game.localPath.startsWith('http') ? game.localPath : game.localPath;
+      }
+
+      if (!url) { RQBOX.toast('No launch URL'); return; }
+
+      // External URLs (Roblox etc.) open in new tab
+      if (url.startsWith('http://') || url.startsWith('https://')) {
+        window.open(url, '_blank');
+        return;
+      }
+
+      // Relative URLs (local games) → use runtime overlay
+      const overlay = document.getElementById('runtime-overlay');
+      const frame = document.getElementById('runtime-frame');
+      const title = document.getElementById('runtime-title');
+      if (overlay && frame) {
+        if (title) title.textContent = game.title;
+        frame.src = url;
+        overlay.style.display = 'flex';
+        overlay.classList.add('active');
+        Controller.vibrate(0.3, 50);
+        Achievements.unlock('first-game');
+      } else {
+        window.open(url, '_blank');
+      }
+
+      // Save last game
+      try { localStorage.setItem('rqbox-lastGame', JSON.stringify(game)); } catch {}
+
+      // Track play
+      fetch('/api/games/' + id, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'launch' })
+      }).catch(() => {});
+    }
+
+    function closeRuntime() {
+      const overlay = document.getElementById('runtime-overlay');
+      const frame = document.getElementById('runtime-frame');
+      if (overlay) { overlay.style.display = 'none'; overlay.classList.remove('active'); }
+      if (frame) { frame.src = 'about:blank'; }
+    }
+
+    function runtimeFullscreen() {
+      const frame = document.getElementById('runtime-frame');
+      if (frame) { try { frame.requestFullscreen(); } catch {} }
     }
 
     // ---- Browser navigation ----
@@ -523,8 +572,7 @@
       try {
         const host = new URL(url).hostname.toLowerCase();
         if (BLOCKED_DOMAINS.some(d => host.includes(d))) {
-          const domain = BLOCKED_DOMAINS.find(d => host.includes(d));
-          return `${domain} blocks iframe embedding. Use "Open in new tab" to view this site.`;
+          return `${BLOCKED_DOMAINS.find(d => host.includes(d))} blocks iframe embedding. Use "Open in new tab" to view this site.`;
         }
       } catch {}
       return null;
@@ -536,43 +584,31 @@
       const frame = document.getElementById('browser-frame');
       const blockedReason = document.getElementById('browser-blocked-reason');
 
-      if (urlOrReload === 'reload') {
-        frame.src = frame.src;
-        return;
-      }
+      if (urlOrReload === 'reload') { frame.src = frame.src; return; }
 
       let url = (typeof urlOrReload === 'string' && urlOrReload !== 'reload') ? urlOrReload : (input ? input.value.trim() : '');
       if (!url) url = 'https://www.google.com/webhp?igu=1';
       if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
-
       if (input) input.value = url;
 
-      // Check for embed overrides (YouTube embeds, etc.)
       for (const [domain, transform] of Object.entries(EMBED_OVERRIDES)) {
         if (url.includes(domain)) {
           const reason = getBlockedReason(url);
           if (reason) {
-            // Try embed URL first
-            const embedUrl = transform(url);
-            if (blocked) { blocked.style.display = 'none'; }
-            frame.src = embedUrl;
+            if (blocked) blocked.style.display = 'none';
+            frame.src = transform(url);
             return;
           }
         }
       }
 
-      // Check if site blocks iframes
       const reason = getBlockedReason(url);
       if (reason) {
-        if (blocked) {
-          blocked.style.display = 'flex';
-          if (blockedReason) blockedReason.textContent = reason;
-        }
+        if (blocked) { blocked.style.display = 'flex'; if (blockedReason) blockedReason.textContent = reason; }
         frame.src = 'about:blank';
         return;
       }
 
-      // Hide blocked message, load normally
       if (blocked) blocked.style.display = 'none';
       frame.src = url;
     }
@@ -635,6 +671,11 @@
       try { Store.init(); } catch {}
       try { AchievementTracker.init(); } catch {}
 
+      // Override GameLibrary.launch to use inline runtime
+      if (window.GameLibrary) {
+        GameLibrary.launch = function(id) { launchGame(id); };
+      }
+
       // Load apps data separately
       await loadApps();
 
@@ -676,7 +717,22 @@
       setInterval(updateDashboardStatus, 5000);
       updateDashboardStatus();
 
+      // Add controller navigation support for cards
+      addControllerNav();
+
       RQBOX.toast('RQBBOX Experience OS 1.0 ready');
+    }
+
+    // ---- Controller card navigation ----
+    function addControllerNav() {
+      document.addEventListener('click', (e) => {
+        const card = e.target.closest('.card');
+        if (card) Controller.vibrate(0.2, 30);
+      });
+      document.addEventListener('mouseover', (e) => {
+        const card = e.target.closest('.card');
+        if (card) card.style.outline = 'none';
+      });
     }
 
     function updateDashboardStatus() {
@@ -740,6 +796,9 @@
         if (overlay) overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
       }
       if (e.key === 'Escape') {
+        // Close runtime overlay first, then guide overlay
+        const runtime = document.getElementById('runtime-overlay');
+        if (runtime && runtime.style.display === 'flex') { closeRuntime(); return; }
         const overlay = document.getElementById('guide-overlay');
         if (overlay && overlay.style.display === 'flex') overlay.style.display = 'none';
       }
@@ -752,6 +811,9 @@
     window.selectProfile = selectProfile;
     window.renderApps = renderApps;
     window.launchApp = launchApp;
+    window.launchGame = launchGame;
+    window.closeRuntime = closeRuntime;
+    window.runtimeFullscreen = runtimeFullscreen;
   </script>
 </body>
 </html>
