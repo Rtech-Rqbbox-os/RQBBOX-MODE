@@ -269,6 +269,7 @@ body {
   flex-direction: column;
   padding: 30px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .content-section.active {
@@ -466,6 +467,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 400px;
 }
 
 /* Friends Section */
@@ -501,6 +505,9 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 300px);
 }
 
 /* Voice Chat */
@@ -638,6 +645,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 250px);
 }
 
 .messages-panel {
@@ -826,6 +836,9 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 300px;
 }
 
 /* Rich Presence */
@@ -944,6 +957,9 @@ body {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 300px);
 }
 
 .settings-panel {
@@ -1101,6 +1117,7 @@ body {
 .overlay-list {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 8px;
