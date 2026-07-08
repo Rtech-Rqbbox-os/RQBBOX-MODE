@@ -5,961 +5,663 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>RQBBOX Experience OS 1.0</title>
   <meta name="msvalidate.01" content="37D5DC8997B23C62BB43E51C2729A569" />
-  <!-- Primary Meta Tags -->
-  <meta name="description" content="RQBBOX Experience OS 1.0 (Discontinued) - Xbox-style gaming dashboard by RhysTech. Full-screen kiosk mode, Quick Resume, game scanning, achievements, and system optimization for Windows.">
-  <meta name="keywords" content="RQBBOX Experience OS 1.0, RhysTech, Xbox Mode, gaming dashboard, Electron, game launcher, Windows kiosk, Quick Resume, discontinued">
+  <meta name="description" content="RQBBOX Experience OS 1.0 by RhysTech — the ultimate desktop/gaming console hybrid platform with 23 games, 41 apps, AI, cloud sync, Quick Resume, and more.">
+  <meta name="keywords" content="RQBBOX, RhysTech, gaming dashboard, Electron, game launcher, Windows">
   <meta name="author" content="RhysTech">
   <meta name="robots" content="index, follow">
-
-  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://rtech-rqbbox-os.github.io/RQBBOX-Experience/">
-  <meta property="og:title" content="RQBBOX Experience OS 1.0 — Ultimate Desktop/Gaming Console Hybrid by RhysTech">
-  <meta property="og:description" content="RQBBOX Experience OS 1.0 (Discontinued) - Xbox-style gaming dashboard Electron app by RhysTech. Full-screen kiosk mode, Quick Resume, game scanning, achievements, and system optimization for Windows.">
-  <meta property="og:image" content="https://raw.githubusercontent.com/Rtech-Rqbbox-os/RhysTech/main/og-image.png">
-
-  <!-- Twitter -->
+  <meta property="og:title" content="RQBBOX Experience OS 1.0 — Ultimate Desktop/Gaming Console Hybrid">
+  <meta property="og:description" content="23 games, 41 apps, AI, cloud sync, Quick Resume, achievements, controller support — all in one unified platform.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/Rtech-Rqbbox-os/RQBBOX-Experience-OS/main/assets/og-image.svg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://rtech-rqbbox-os.github.io/RQBBOX-Experience/">
-  <meta name="twitter:title" content="RQBBOX Experience OS 1.0 — Ultimate Desktop/Gaming Console Hybrid by RhysTech">
-  <meta name="twitter:description" content="RQBBOX Experience OS 1.0 (Discontinued) - Xbox-style gaming dashboard Electron app by RhysTech. Full-screen kiosk mode, Quick Resume, game scanning, achievements, and system optimization for Windows.">
-  <meta name="twitter:image" content="https://raw.githubusercontent.com/Rtech-Rqbbox-os/RhysTech/main/og-image.png">
-
-  <!-- Schema.org JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "RQBBOX Experience OS 1.0",
-    "operatingSystem": "Windows",
-    "applicationCategory": "GameApplication",
-    "description": "RQBBOX Experience OS 1.0 (Discontinued) - Xbox-style gaming dashboard Electron app by RhysTech. Full-screen kiosk mode, Quick Resume, game scanning, achievements, and system optimization for Windows.",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "author": { "@type": "Organization", "name": "RhysTech", "url": "https://rtech-rqbbox-os.github.io/RhysTech/" }
-  }
-  </script>
-  <meta name="theme-color" content="#107c10">
+  <meta name="twitter:title" content="RQBBOX Experience OS 1.0">
+  <meta name="twitter:description" content="The ultimate desktop/gaming console hybrid by RhysTech.">
+  <meta name="theme-color" content="#00b4d8">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="assets/logo.svg">
   <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="../css/main.css">
+  <link id="theme-css" rel="stylesheet" href="../css/themes/default.css">
   <style>
-    @font-face { font-family: 'Segoe UI'; src: local('Segoe UI'); }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --teal: #107c10;
-      --teal-light: #1db954;
-      --bg: #111;
-      --bg-dark: #0a0a0a;
-      --bg-card: rgba(255,255,255,0.06);
-      --bg-card-hover: rgba(255,255,255,0.1);
-      --text: #fff;
-      --text-dim: rgba(255,255,255,0.6);
-      --text-muted: rgba(255,255,255,0.35);
-      --border: rgba(255,255,255,0.08);
-    }
-    html, body {
-      font-family: 'Segoe UI', 'Segoe UI Variable', system-ui, -apple-system, sans-serif;
-      background: var(--bg-dark);
-      color: var(--text);
-      overflow: hidden;
-      height: 100vh;
-      width: 100vw;
-    }
-
-    /* Background teal gradient */
-    .bg { position: fixed; inset: 0; z-index: 0; background: linear-gradient(160deg, #0a2a1e 0%, #0a1510 40%, #0a0a0a 70%); }
-
-    /* LAYOUT */
-    .app {
-      position: relative; z-index: 1;
-      display: grid;
-      grid-template-columns: 56px 1fr;
-      grid-template-rows: auto 1fr;
-      height: 100vh;
-    }
-
-    /* SIDEBAR */
-    .sidebar {
-      grid-row: 1 / -1;
-      background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(16px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 12px 0;
-      gap: 2px;
-      border-right: 1px solid rgba(255,255,255,0.04);
-    }
-    .sb-btn {
-      width: 40px; height: 40px;
-      border-radius: 6px;
-      border: none;
-      background: transparent;
-      color: rgba(255,255,255,0.35);
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s;
-      position: relative;
-      flex-shrink: 0;
-    }
-    .sb-btn:hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.05); }
-    .sb-btn.active { color: var(--text); }
-    .sb-btn .badge {
-      position: absolute; top: 2px; right: 2px;
-      font-size: 0.55rem; background: var(--teal);
-      color: #fff; padding: 0 3px; border-radius: 3px; font-weight: 700;
-    }
-    .sb-spacer { flex: 1; }
-
-    /* TOP BAR */
-    .topbar {
-      grid-column: 2;
-      display: flex;
-      align-items: center;
-      padding: 10px 24px;
-      gap: 16px;
-      background: rgba(0,0,0,0.25);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .tb-user { display: flex; align-items: center; gap: 10px; }
-    .tb-avatar {
-      width: 44px; height: 44px; border-radius: 50%;
-      background: linear-gradient(135deg, #ff6b35 0%, #d4380d 100%);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem; font-weight: 700; color: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-    }
-    .tb-info { line-height: 1.2; }
-    .tb-name { font-size: 0.95rem; font-weight: 600; }
-    .tb-score { font-size: 0.7rem; color: rgba(255,255,255,0.5); display: flex; align-items: center; gap: 4px; }
-    .tb-score .g { color: #c7a000; font-weight: 700; }
-    .tb-nav { display: flex; gap: 28px; flex: 1; justify-content: center; }
-    .tb-nav a {
-      font-size: 0.9rem; color: rgba(255,255,255,0.5);
-      text-decoration: none; padding: 6px 2px;
-      transition: color 0.15s;
-    }
-    .tb-nav a:hover, .tb-nav a.active { color: #fff; }
-    .tb-right { display: flex; align-items: center; gap: 14px; }
-    .tb-time { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
-    .tb-battery { font-size: 0.85rem; }
-
-    /* MAIN */
-    .main {
-      grid-column: 2;
-      overflow-y: auto;
-      overflow-x: hidden;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255,255,255,0.08) transparent;
-    }
-    .main::-webkit-scrollbar { width: 4px; }
-    .main::-webkit-scrollbar-track { background: transparent; }
-    .main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
-
-    /* HERO */
-    .hero {
-      position: relative;
-      min-height: 280px;
-      display: grid;
-      grid-template-columns: 240px 1fr 240px;
-      gap: 0;
-      padding: 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .hero-art {
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: flex-end;
-      padding: 16px;
-    }
-    .hero-art-img {
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, #1a3a2a 0%, #0d2218 60%, #0a1510 100%);
-    }
-    .hero-art-img::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(to right, transparent 60%, rgba(0,0,0,0.4) 100%),
-                  linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 40%);
-    }
-    .hero-art-content {
-      position: relative; z-index: 1;
-      display: flex; align-items: flex-end; gap: 12px;
-    }
-    .hero-game-box {
-      width: 160px; height: 160px;
-      border-radius: 6px;
-      overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-      flex-shrink: 0;
-      border: 2px solid rgba(255,255,255,0.1);
-    }
-    .hero-game-box .game-art {
-      width: 100%; height: 100%;
-      background: linear-gradient(135deg, var(--teal) 0%, #0a3a1a 100%);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 3.5rem;
-    }
-    .hero-game-box img { width: 100%; height: 100%; object-fit: cover; }
-
-    .hero-center {
-      display: flex; flex-direction: column;
-      justify-content: center;
-      padding: 24px 32px;
-    }
-    .hero-label {
-      font-size: 0.75rem; color: rgba(255,255,255,0.5);
-      letter-spacing: 0.5px; margin-bottom: 4px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .hero-title {
-      font-size: 2.8rem; font-weight: 300;
-      letter-spacing: -0.5px;
-      line-height: 1.1;
-      margin-bottom: 12px;
-    }
-    .hero-players { display: flex; gap: 0; margin-bottom: 0; }
-    .hero-p {
-      width: 36px; height: 36px; border-radius: 50%;
-      border: 2px solid var(--bg-dark);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.7rem; font-weight: 700;
-      margin-left: -6px;
-    }
-    .hero-p:first-child { margin-left: 0; }
-    .hero-p.p1 { background: #1a6b1a; }
-    .hero-p.p2 { background: #c44; }
-    .hero-p.p3 { background: #3366cc; }
-    .hero-p.p4 { background: #8855aa; }
-    .hero-p.more { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); font-size: 0.6rem; }
-
-    .hero-right {
-      display: flex; flex-direction: column;
-      padding: 8px;
-      gap: 4px;
-      background: rgba(0,0,0,0.2);
-    }
-    .hr-card {
-      flex: 1;
-      padding: 14px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.15s;
-      position: relative;
-      overflow: hidden;
-      display: flex; flex-direction: column; justify-content: flex-end;
-    }
-    .hr-card:hover { background: rgba(255,255,255,0.06); }
-    .hr-card-icon { font-size: 0.9rem; margin-bottom: 4px; }
-    .hr-card-title { font-size: 0.85rem; font-weight: 500; line-height: 1.3; }
-    .hr-card-desc { font-size: 0.7rem; color: rgba(255,255,255,0.5); margin-top: 2px; line-height: 1.3; }
-    .hr-card-gold {
-      background: linear-gradient(135deg, rgba(199,160,0,0.15) 0%, rgba(138,110,0,0.1) 100%);
-      border: 1px solid rgba(199,160,0,0.2);
-    }
-    .hr-card-gold .hr-card-title { color: #c7a000; }
-    .hr-card-gold .gold-badge {
-      position: absolute; top: 8px; right: 8px;
-      background: #c7a000; color: #000;
-      font-size: 0.55rem; font-weight: 800;
-      padding: 1px 5px; border-radius: 2px;
-    }
-    .hr-card-gold .gold-art {
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(199,160,0,0.08) 0%, transparent 60%);
-    }
-
-    /* ACTION ROW */
-    .action-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .action-tile {
-      padding: 16px 20px;
-      cursor: pointer;
-      transition: background 0.15s;
-      border-right: 1px solid rgba(255,255,255,0.04);
-      display: flex; flex-direction: column;
-    }
-    .action-tile:last-child { border-right: none; }
-    .action-tile:hover { background: rgba(255,255,255,0.03); }
-    .action-tile-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-    .action-tile-icon { font-size: 1rem; }
-    .action-tile-title { font-size: 0.9rem; font-weight: 500; }
-    .action-tile-desc { font-size: 0.75rem; color: rgba(255,255,255,0.4); line-height: 1.4; }
-
-    /* CONTENT AREA */
-    .content {
-      display: grid;
-      grid-template-columns: 1fr 220px;
-      gap: 0;
-    }
-
-    /* GAME HUB FEED */
-    .feed { padding: 0; }
-    .hub-card {
-      display: grid;
-      grid-template-columns: 200px 1fr 200px;
-      min-height: 140px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .hub-card:hover { background: rgba(255,255,255,0.02); }
-    .hub-art {
-      position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .hub-art-bg {
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, #1a2a3a 0%, #0a1520 100%);
-    }
-    .hub-art-img {
-      position: absolute; inset: 0;
-      background-size: cover; background-position: center;
-      opacity: 0.7;
-    }
-    .hub-art-content {
-      position: relative; z-index: 1;
-      font-size: 3rem;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-    }
-    .hub-art-content img { width: 80px; height: 80px; }
-    .hub-info {
-      padding: 20px 24px;
-      display: flex; flex-direction: column; justify-content: center;
-    }
-    .hub-type { font-size: 0.8rem; color: var(--teal); font-weight: 500; margin-bottom: 4px; }
-    .hub-title { font-size: 1rem; font-weight: 500; margin-bottom: 4px; line-height: 1.3; }
-    .hub-desc { font-size: 0.8rem; color: rgba(255,255,255,0.4); line-height: 1.4; }
-    .hub-meta { font-size: 0.7rem; color: rgba(255,255,255,0.3); margin-top: 6px; }
-    .hub-avatars {
-      display: flex; align-items: center; gap: 4px; padding: 20px; justify-content: flex-end;
-    }
-    .hub-av {
-      width: 28px; height: 28px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.6rem; font-weight: 700; border: 2px solid var(--bg-dark);
-      margin-left: -6px;
-    }
-    .hub-av:first-child { margin-left: 0; }
-
-    /* RIGHT COLUMN */
-    .right-col { padding: 0; }
-    .rc-game {
-      position: relative;
-      min-height: 200px;
-      display: flex; flex-direction: column;
-      justify-content: flex-end;
-      padding: 12px;
-      cursor: pointer;
-      transition: background 0.15s;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      overflow: hidden;
-    }
-    .rc-game:hover { background: rgba(255,255,255,0.03); }
-    .rc-game-bg {
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, #2a3a4a 0%, #1a2530 100%);
-    }
-    .rc-game-img {
-      position: absolute; inset: 0;
-      background-size: cover; background-position: center;
-      opacity: 0.6;
-    }
-    .rc-game-title {
-      position: relative; z-index: 1;
-      font-size: 0.85rem; font-weight: 500;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-    }
-    .rc-sponsored {
-      padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .rc-sponsored-label {
-      font-size: 0.55rem; color: rgba(255,255,255,0.3);
-      letter-spacing: 1px; text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    .rc-sponsored-art {
-      width: 100%; aspect-ratio: 16/10;
-      background: linear-gradient(135deg, #3a2a2a 0%, #2a1a1a 100%);
-      border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; overflow: hidden;
-    }
-
-    /* BOOT SCREEN */
-    .boot-screen {
-      position: fixed; inset: 0; z-index: 9999;
-      background: #000;
-      display: flex; align-items: center; justify-content: center;
-      transition: opacity 0.6s;
-    }
-    .boot-screen.hidden { opacity: 0; pointer-events: none; }
-    .boot-content { text-align: center; }
-    .boot-logo { font-size: 3rem; font-weight: 200; letter-spacing: 12px; color: #fff; }
-    .boot-sub { font-size: 0.7rem; letter-spacing: 16px; color: var(--teal); margin-top: 4px; }
-    .boot-bar-wrap { width: 200px; height: 2px; background: rgba(255,255,255,0.08); border-radius: 1px; margin: 32px auto 0; overflow: hidden; }
-    .boot-bar { height: 100%; background: var(--teal); width: 0; transition: width 0.3s; }
-
-    /* AUTH SCREEN */
-    .auth-screen {
-      position: fixed; inset: 0; z-index: 9998;
-      background: var(--bg-dark);
-      display: none; align-items: center; justify-content: center;
-    }
-    .auth-panel { text-align: center; }
-    .auth-logo { font-size: 1.5rem; font-weight: 200; letter-spacing: 8px; color: var(--teal); margin-bottom: 24px; }
-    .profile-list { display: flex; gap: 16px; margin-bottom: 24px; }
-    .profile-card {
-      width: 100px; padding: 16px;
-      background: rgba(255,255,255,0.04);
-      border-radius: 12px; cursor: pointer;
-      transition: all 0.15s;
-      border: 2px solid transparent;
-    }
-    .profile-card:hover { border-color: var(--teal); transform: translateY(-4px); }
-    .profile-avatar {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: linear-gradient(135deg, #ff6b35, #d4380d);
-      margin: 0 auto 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; font-weight: 700;
-    }
-    .profile-name { font-size: 0.8rem; }
-    .btn {
-      padding: 12px 24px; border-radius: 4px; border: none;
-      font-size: 0.9rem; font-weight: 500; cursor: pointer;
-      font-family: inherit; transition: all 0.15s;
-    }
-    .btn-primary { background: var(--teal); color: white; }
-    .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
-
-    /* GUIDE OVERLAY */
-    .guide-overlay {
-      position: fixed; inset: 0; z-index: 5000;
-      background: rgba(0,0,0,0.6);
-      display: none; align-items: center; justify-content: center;
-    }
-    .guide-overlay.show { display: flex; }
-    .guide-panel {
-      width: 420px; background: #1a1a1a;
-      border-radius: 12px; overflow: hidden;
-      box-shadow: 0 16px 48px rgba(0,0,0,0.6);
-    }
-    .guide-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .guide-title { font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 8px; }
-    .guide-close { background: none; border: none; color: var(--text-muted); font-size: 1.1rem; cursor: pointer; }
-    .guide-body { padding: 20px; }
-
-    /* TOAST */
-    .toast-container {
-      position: fixed; bottom: 24px; right: 24px;
-      z-index: 9999; display: flex; flex-direction: column; gap: 8px;
-    }
-    .toast {
-      background: rgba(30,30,30,0.95);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 8px;
-      padding: 12px 20px;
-      display: flex; align-items: center; gap: 10px;
-      font-size: 0.85rem;
-      animation: toastIn 0.25s ease;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    }
-    @keyframes toastIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
-
-    /* PERFORMANCE OVERLAY */
-    .perf-overlay {
-      position: fixed; top: 8px; left: 64px; z-index: 100;
-      font-size: 0.6rem; color: rgba(255,255,255,0.2);
-      background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 4px;
-      pointer-events: none; font-variant-numeric: tabular-nums;
-      display: none;
-    }
-    .perf-overlay.show { display: block; }
-
-    /* ACHIEVEMENT POPUP */
-    .achievement-popup {
-      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      z-index: 10000;
-      display: none; align-items: center; gap: 16px;
-      padding: 16px 24px;
-      background: rgba(16,124,16,0.92);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(16,124,16,0.4);
-      border-radius: 12px;
-      animation: achSlide 0.3s ease;
-    }
-    .achievement-popup.show { display: flex; }
-    @keyframes achSlide { from { opacity: 0; transform: translateX(-50%) translateY(-16px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-    .ach-icon { font-size: 2rem; }
-    .ach-label { font-size: 0.65rem; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; }
-    .ach-title { font-size: 1rem; font-weight: 600; }
-    .ach-desc { font-size: 0.8rem; color: rgba(255,255,255,0.6); }
+    #boot-screen{z-index:99999}
+    #modal-container{position:fixed;inset:0;z-index:8000;pointer-events:none}
+    #modal-container .modal-overlay{pointer-events:auto}
+    #dashboard{display:none}
+    #runtime-overlay{position:fixed;inset:0;z-index:9999;display:none;flex-direction:column;background:#06080f}
+    #runtime-overlay.active{display:flex}
+    #runtime-overlay .runtime-bar{display:flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(6,8,15,0.95);border-bottom:1px solid var(--border-subtle);flex-shrink:0}
+    #runtime-overlay .runtime-close{background:none;border:none;color:var(--text-muted);font-size:1rem;cursor:pointer;padding:4px 8px}
+    #runtime-overlay .runtime-close:hover{color:var(--text-primary)}
+    #runtime-overlay iframe{flex:1;width:100%;border:none;background:#fff}
+    #perf-overlay{position:fixed;top:6px;right:6px;z-index:100;font-size:0.55rem;color:rgba(255,255,255,0.2);background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;pointer-events:none;font-variant-numeric:tabular-nums}
+    #task-switcher{position:fixed;inset:0;z-index:9999;background:rgba(6,8,15,0.85);backdrop-filter:blur(20px);display:none;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s}
+    #task-switcher.active{display:flex;opacity:1}
+    #controller-indicator{position:fixed;bottom:20px;right:20px;z-index:100;display:none}
+    .browser-url-bar{display:flex;gap:6px;padding:6px 12px;border-bottom:1px solid var(--border-subtle);align-items:center}
+    .browser-url-bar input{flex:1;padding:5px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border-subtle);border-radius:6px;color:var(--text-primary);font-size:0.75rem;outline:none;font-family:inherit}
+    .browser-url-bar input:focus{border-color:var(--accent-dim)}
+    .browser-frame{flex:1;width:100%;border:none;background:#fff}
+    .page-browser{display:flex;flex-direction:column;height:calc(100vh - var(--header-height))}
+    .wifi-panel,.bt-panel{font-size:0.65rem;color:var(--text-muted)}
   </style>
 </head>
 <body>
-  <div class="bg"></div>
-
-  <!-- Boot -->
-  <div id="boot" class="boot-screen">
+  <!-- Boot Screen -->
+  <div id="boot-screen" class="boot-screen">
     <div class="boot-content">
-      <div class="boot-logo">RQBBOX</div>
-      <div class="boot-sub">M O D E</div>
-      <div class="boot-bar-wrap"><div id="bootBar" class="boot-bar"></div></div>
+      <div class="boot-logo">RQ<span>BBOX</span></div>
+      <div class="boot-subtitle">Experience OS</div>
+      <div class="boot-tagline">by RhysTech</div>
+      <div class="boot-loader"><div id="boot-bar" class="boot-bar"></div></div>
+      <div id="boot-status" class="boot-status">Initializing...</div>
     </div>
   </div>
 
-  <!-- Auth -->
-  <div id="auth" class="auth-screen">
+  <!-- Auth Screen -->
+  <div id="auth-screen" class="overlay-screen" style="display:none">
     <div class="auth-panel">
-      <div class="auth-logo">RQBBOX Experience OS 1.0 <span style="font-size:0.5em;opacity:0.5;display:block;letter-spacing:3px">by RhysTech</span></div>
-      <h2 style="margin-bottom:24px;font-weight:400;">Who's Playing?</h2>
-      <div id="profileList" class="profile-list"></div>
-      <button class="btn btn-ghost">+ Add Profile</button>
+      <div class="auth-logo">RQBBOX EXPERIENCE OS 1.0</div>
+      <h2>Who's Playing?</h2>
+      <div id="profile-list" class="profile-list"></div>
+      <button class="btn btn-ghost" onclick="showAuth()">+ Add Profile</button>
     </div>
   </div>
 
   <!-- Dashboard -->
-  <div id="dash" class="app" style="display:none">
-    <!-- Sidebar -->
-    <nav class="sidebar">
-      <button class="sb-btn active" data-page="home" title="Home"><img src="assets/icons/home.svg" alt="" width="20" height="20"></button>
-      <button class="sb-btn" data-page="friends" title="Friends">
-        <img src="assets/icons/friends.svg" alt="" width="20" height="20">
-        <span class="badge">18</span>
-      </button>
-      <button class="sb-btn" data-page="xbox" title="Xbox"><img src="assets/icons/games.svg" alt="" width="20" height="20"></button>
-      <button class="sb-btn" data-page="messages" title="Messages">
-        <img src="assets/icons/notifications.svg" alt="" width="20" height="20">
-        <span class="badge">5</span>
-      </button>
-      <button class="sb-btn" data-page="store" title="Store">
-        <img src="assets/icons/store.svg" alt="" width="20" height="20">
-        <span class="badge">2</span>
-      </button>
-      <button class="sb-btn" data-page="captures" title="Captures"><img src="assets/icons/captures.svg" alt="" width="20" height="20"></button>
-      <div class="sb-spacer"></div>
-      <button class="sb-btn" data-page="controller" title="Controller"><img src="assets/icons/controller.svg" alt="" width="20" height="20"></button>
-      <button class="sb-btn" data-page="settings" title="Settings"><img src="assets/icons/settings.svg" alt="" width="20" height="20"></button>
-    </nav>
+  <div id="dashboard">
+    <!-- Background Orbs -->
+    <div class="bg-layer">
+      <div class="bg-orb" id="bg-orb-1"></div>
+      <div class="bg-orb" id="bg-orb-2"></div>
+    </div>
 
     <!-- Top Bar -->
-    <header class="topbar">
-      <div class="tb-user">
-        <div class="tb-avatar">R</div>
-        <div class="tb-info">
-          <div class="tb-name">RQBBOX</div>
-          <div class="tb-score"><span class="g">G</span> 287145</div>
-        </div>
+    <header class="top-bar">
+      <div class="top-left">
+        <div class="brand-logo">R</div>
+        <span class="brand">RQBBOX</span>
       </div>
-      <nav class="tb-nav">
-        <a class="active" data-page="home">Home</a>
-        <a data-page="friends">Community</a>
-        <a data-page="store">Store</a>
+      <nav class="top-center">
+        <button class="nav-pill active" data-page="home">Home</button>
+        <button class="nav-pill" data-page="games">Games</button>
+        <button class="nav-pill" data-page="apps">Apps</button>
+        <button class="nav-pill" data-page="store">Store</button>
+        <button class="nav-pill" data-page="browser">Browser</button>
+        <button class="nav-pill" data-page="community">Community</button>
+        <button class="nav-pill" data-page="settings">Settings</button>
       </nav>
-      <div class="tb-right">
-        <span class="tb-battery">🔋</span>
-        <span class="tb-time" id="clock">9:57 pm</span>
+      <div class="top-right">
+        <span id="status-wifi" class="status-icon" title="WiFi">&#x1F4F6;</span>
+        <span id="status-bt" class="status-icon" title="Bluetooth">&#x1F9F0;</span>
+        <span id="status-battery" class="status-icon" title="Battery">&#x1F50B;</span>
+        <span id="status-controller" class="status-icon" title="Controller">&#x1F3AE;</span>
+        <span id="status-performance" class="status-icon" title="Performance">&#x26A1;</span>
+        <span id="status-notif" class="status-icon" title="Notifications">&#x1F514;</span>
+        <span id="current-time" class="current-time">--:-- --</span>
+        <div id="user-badge" class="user-badge">
+          <div class="user-avatar">R</div>
+          <span class="user-name">RQBBOX</span>
+        </div>
       </div>
     </header>
 
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <button class="sidebar-item active" data-page="home" title="Home"><span class="si-icon">&#x1F3E0;</span><span class="si-label">Home</span></button>
+      <button class="sidebar-item" data-page="games" title="Games"><span class="si-icon">&#x1F3AE;</span><span class="si-label">Games</span></button>
+      <button class="sidebar-item" data-page="apps" title="Apps"><span class="si-icon">&#x1F4F1;</span><span class="si-label">Apps</span></button>
+      <button class="sidebar-item" data-page="store" title="Store"><span class="si-icon">&#x1F6D2;</span><span class="si-label">Store</span></button>
+      <button class="sidebar-item" data-page="browser" title="Browser"><span class="si-icon">&#x1F310;</span><span class="si-label">Browse</span></button>
+      <button class="sidebar-item" data-page="community" title="Community"><span class="si-icon">&#x1F91D;</span><span class="si-label">Social</span></button>
+      <button class="sidebar-item" data-page="captures" title="Captures"><span class="si-icon">&#x1F4F7;</span><span class="si-label">Captures</span></button>
+      <div class="sidebar-spacer"></div>
+      <button class="sidebar-item" data-page="settings" title="Settings"><span class="si-icon">&#x2699;</span><span class="si-label">Settings</span></button>
+    </nav>
+
     <!-- Main Content -->
-    <div class="main" id="main">
-      <!-- Welcome Banner -->
-      <div style="background:linear-gradient(135deg,#00b4d8,#7c3aed);padding:24px 32px;color:#fff;text-align:center">
-        <div style="font-size:11px;letter-spacing:3px;opacity:.7;margin-bottom:6px">WELCOME</div>
-        <div style="font-size:24px;font-weight:700;margin-bottom:8px">RQBBOX Experience OS 1.0 — The Ultimate Platform</div>
-        <div style="font-size:13px;opacity:.7;max-width:500px;margin:0 auto">Gaming • AI • Productivity • Media — All in one unified experience by RhysTech.</div>
-      </div>
-      <!-- Hero Section -->
-      <div class="hero">
-        <!-- Game Art Left -->
-        <div class="hero-art">
-          <div class="hero-art-img"></div>
-          <div class="hero-art-content">
-            <div class="hero-game-box">
-              <div class="game-art">🎮</div>
-            </div>
+    <div id="main-content" class="main-content">
+      <!-- Page: Home -->
+      <div id="page-home" class="page active">
+        <div class="hero-section">
+          <div class="hero-tag">&#x25B6; RQBBOX Experience OS 1.0</div>
+          <div class="hero-text">
+            <h1>Your Ultimate Platform</h1>
+            <p>Gaming &bull; AI &bull; Productivity &bull; Media &bull; Cloud &mdash; All in one.</p>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-card"><span id="stat-games" class="stat-value">23</span><span class="stat-label">Games</span></div>
+            <div class="stat-card"><span id="stat-apps" class="stat-value">41</span><span class="stat-label">Apps</span></div>
+            <div class="stat-card"><span id="stat-achievements" class="stat-value">0</span><span class="stat-label">Achievements</span></div>
+            <div class="stat-card"><span id="stat-friends" class="stat-value">0</span><span class="stat-label">Friends</span></div>
+            <div class="stat-card"><span id="stat-playtime" class="stat-value">0</span><span class="stat-label">Hours Played</span></div>
           </div>
         </div>
 
-        <!-- Center: Title + Players -->
-        <div class="hero-center">
-          <div class="hero-label">▶ Resume</div>
-          <div class="hero-title" id="heroTitle">RQBBOX Experience OS 1.0</div>
-          <div class="hero-players">
-            <div class="hero-p p1">R</div>
-            <div class="hero-p p2">A</div>
-            <div class="hero-p p3">M</div>
-            <div class="hero-p more">+3</div>
+        <div class="section">
+          <div class="section-header">
+            <h3>&#x1F3C6; Recent Games</h3>
+            <button class="section-action" onclick="RQBOX.navigate('games')">See All</button>
+          </div>
+          <div id="recent-games-row" class="horz-scroll">
+            <div class="empty-state">Loading games...</div>
           </div>
         </div>
 
-        <!-- Right: Cards -->
-        <div class="hero-right">
-          <div class="hr-card" onclick="RQBOX.navigate('games')">
-            <div class="hr-card-icon">📋</div>
-            <div class="hr-card-title">My games & apps</div>
+        <div class="section">
+          <div class="section-header">
+            <h3>&#x1F4A1; Recommended For You</h3>
           </div>
-          <div class="hr-card">
-            <div class="hr-card-title">Check out looking for groups, clubs and tournaments</div>
-          </div>
-          <div class="hr-card hr-card-gold">
-            <div class="gold-art"></div>
-            <div class="gold-badge">GOLD</div>
-            <div class="hr-card-title">Join now and start saving</div>
+          <div id="recommended-row" class="horz-scroll">
+            <div class="empty-state">Loading...</div>
           </div>
         </div>
-      </div>
 
-      <div style="text-align:center;padding:20px;background:rgba(16,124,16,.08);border:1px solid rgba(16,124,16,.2);border-radius:12px;margin:20px auto;max-width:500px">
-        <a href="https://github.com/rtech-rqbbox-os/RQBBOX-Experience/releases/latest" style="display:inline-block;padding:12px 32px;background:#107c10;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:16px">⬇ Download for Windows</a>
-        <p style="margin-top:8px;font-size:12px;color:rgba(255,255,255,.4)">Windows 10/11 · Electron Desktop App</p>
-      </div>
-
-      <!-- Action Row -->
-      <div class="action-row">
-        <div class="action-tile" onclick="RQBOX.navigate('games')">
-          <div class="action-tile-header">
-            <span class="action-tile-icon">📋</span>
-            <span class="action-tile-title">Game hub</span>
+        <div class="section">
+          <div class="section-header">
+            <h3>&#x1F4FA; Quick Resume</h3>
           </div>
-          <div class="action-tile-desc">You're in charge of the RQBBOX Festival. Customize everything...</div>
-        </div>
-        <div class="action-tile">
-          <div class="action-tile-header">
-            <span class="action-tile-icon">👥</span>
-            <span class="action-tile-title">Clubs</span>
+          <div id="quick-resume-row" class="horz-scroll">
+            <div class="empty-state">No suspended games</div>
           </div>
-          <div class="action-tile-desc">Looking for group</div>
-        </div>
-        <div class="action-tile">
-          <div class="action-tile-header">
-            <span class="action-tile-icon">📤</span>
-            <span class="action-tile-title">Share</span>
-          </div>
-          <div class="action-tile-desc">1 game clip<br>1 screenshot</div>
         </div>
       </div>
 
-      <!-- Content Area -->
-      <div class="content">
-        <!-- Feed -->
-        <div class="feed">
-          <!-- Hub Card 1 -->
-          <div class="hub-card" onclick="GameLibrary.launch('neon-drift-racing')">
-            <div class="hub-art">
-              <div class="hub-art-bg"></div>
-              <div class="hub-art-content">
-                <img src="../games/neon-drift-racing/icon.svg" alt="Neon Drift">
-              </div>
-            </div>
-            <div class="hub-info">
-              <div class="hub-type">Game hub</div>
-              <div class="hub-title">Come check out the latest happenings in Neon Drift Racing...</div>
-              <div class="hub-meta">2 Clubs recommended</div>
-            </div>
-            <div class="hub-avatars">
-              <div class="hub-av" style="background:#1a6b1a;">R</div>
-              <div class="hub-av" style="background:#c44;">A</div>
-              <div class="hub-av" style="background:#36c;">M</div>
-            </div>
-          </div>
-
-          <!-- Hub Card 2 -->
-          <div class="hub-card" onclick="GameLibrary.launch('pixel-quest')">
-            <div class="hub-art">
-              <div class="hub-art-bg" style="background:linear-gradient(135deg,#2a1a3a,#150a20);"></div>
-              <div class="hub-art-content">
-                <img src="../games/pixel-quest/icon.svg" alt="Pixel Quest">
-              </div>
-            </div>
-            <div class="hub-info">
-              <div class="hub-type">Game hub</div>
-              <div class="hub-title">The tale of a young orphan destined for heroics...</div>
-              <div class="hub-meta">4 Clubs recommended</div>
-            </div>
-            <div class="hub-avatars">
-              <div class="hub-av" style="background:#c44;">A</div>
-              <div class="hub-av" style="background:#8855aa;">K</div>
-            </div>
-          </div>
-
-          <!-- Hub Card 3 -->
-          <div class="hub-card" onclick="GameLibrary.launch('star-fighter-x')">
-            <div class="hub-art">
-              <div class="hub-art-bg" style="background:linear-gradient(135deg,#1a2a4a,#0a1530);"></div>
-              <div class="hub-art-content">
-                <img src="../games/star-fighter-x/icon.svg" alt="Star Fighter X">
-              </div>
-            </div>
-            <div class="hub-info">
-              <div class="hub-type">Game hub</div>
-              <div class="hub-title">Blast off into the cosmos and fight for the galaxy...</div>
-              <div class="hub-meta">1 Club recommended</div>
-            </div>
-            <div class="hub-avatars">
-              <div class="hub-av" style="background:#36c;">M</div>
-            </div>
-          </div>
-
-          <!-- Hub Card 4 -->
-          <div class="hub-card" onclick="GameLibrary.launch('void-craft-sandbox')">
-            <div class="hub-art">
-              <div class="hub-art-bg" style="background:linear-gradient(135deg,#1a3a3a,#0a2020);"></div>
-              <div class="hub-art-content">
-                <img src="../games/void-craft-sandbox/icon.svg" alt="Void Craft">
-              </div>
-            </div>
-            <div class="hub-info">
-              <div class="hub-type">Game hub</div>
-              <div class="hub-title">Build, craft, and survive in the endless void...</div>
-              <div class="hub-meta">3 Clubs recommended</div>
-            </div>
-            <div class="hub-avatars">
-              <div class="hub-av" style="background:#1a6b1a;">R</div>
-              <div class="hub-av" style="background:#8855aa;">K</div>
-            </div>
-          </div>
-
-          <!-- Roblox Hub Card -->
-          <div class="hub-card" onclick="GameLibrary.launch('roblox')">
-            <div class="hub-art">
-              <div class="hub-art-bg" style="background:linear-gradient(135deg,#003344,#001a22);"></div>
-              <div class="hub-art-content">
-                <img src="../games/roblox/icon.svg" alt="Roblox">
-              </div>
-            </div>
-            <div class="hub-info">
-              <div class="hub-type">Game hub</div>
-              <div class="hub-title">Browse and launch millions of Roblox experiences — powered by RQBBOX...</div>
-              <div class="hub-meta">5 Clubs recommended</div>
-            </div>
-            <div class="hub-avatars">
-              <div class="hub-av" style="background:#00bcd4;">R</div>
-              <div class="hub-av" style="background:#0097a7;">B</div>
-              <div class="hub-av" style="background:#00838f;">L</div>
-              <div class="hub-av" style="background:#006064;">X</div>
-            </div>
+      <!-- Page: Games -->
+      <div id="page-games" class="page">
+        <div class="page-header">
+          <h2>&#x1F3AE; Games</h2>
+          <div class="page-actions">
+            <button class="btn btn-sm btn-ghost" onclick="GameLibrary.refresh()">&#x1F504; Refresh</button>
           </div>
         </div>
+        <div class="page-subtitle">Your full game library &mdash; 23 titles</div>
+        <div id="games-filter-bar" class="filter-bar">
+          <button class="filter-pill active" data-filter="all">All</button>
+          <button class="filter-pill" data-filter="installed">Installed</button>
+          <button class="filter-pill" data-filter="recent">Recent</button>
+          <button class="filter-pill" data-filter="favorites">Favorites</button>
+        </div>
+        <div id="games-grid" class="card-grid">
+          <div class="empty-state">Loading games...</div>
+        </div>
+      </div>
 
-        <!-- Right Column -->
-        <div class="right-col">
-          <div class="rc-game">
-            <div class="rc-game-bg" style="background:linear-gradient(135deg,#2a4a2a,#1a3020);"></div>
-            <div class="rc-game-img" style="background:linear-gradient(135deg,#3a5a3a,#2a4a30);opacity:0.4;"></div>
-            <div class="rc-game-title">Minecraft: RQBBOX Edition</div>
+      <!-- Page: Apps -->
+      <div id="page-apps" class="page">
+        <div class="page-header">
+          <h2>&#x1F4F1; Apps</h2>
+          <div class="page-actions">
+            <button class="btn btn-sm btn-ghost" onclick="renderApps()">&#x1F504; Refresh</button>
           </div>
-          <div class="rc-game">
-            <div class="rc-game-bg" style="background:linear-gradient(135deg,#3a2a2a,#2a1a1a);"></div>
-            <div class="rc-game-img" style="background:linear-gradient(135deg,#4a3a3a,#3a2a2a);opacity:0.4;"></div>
-            <div class="rc-game-title">Retro Zone</div>
+        </div>
+        <div class="page-subtitle">41 integrated apps &mdash; gaming, media, productivity, and more</div>
+        <div id="apps-filter-bar" class="filter-bar">
+          <button class="filter-pill active" data-app-filter="all">All</button>
+          <button class="filter-pill" data-app-filter="Gaming">Gaming</button>
+          <button class="filter-pill" data-app-filter="Media">Media</button>
+          <button class="filter-pill" data-app-filter="Social">Social</button>
+          <button class="filter-pill" data-app-filter="Development">Dev</button>
+          <button class="filter-pill" data-app-filter="Utilities">Utilities</button>
+        </div>
+        <div id="apps-grid" class="card-grid">
+          <div class="empty-state">Loading apps...</div>
+        </div>
+      </div>
+
+      <!-- Page: Store -->
+      <div id="page-store" class="page">
+        <div class="page-header">
+          <h2>&#x1F6D2; Store</h2>
+        </div>
+        <div class="page-subtitle">Discover featured games and apps</div>
+        <div class="section">
+          <div class="section-header"><h3>&#x2B50; Featured</h3></div>
+          <div id="store-featured" class="horz-scroll"></div>
+        </div>
+        <div class="section">
+          <div class="section-header"><h3>&#x1F3B2; Top Games</h3></div>
+          <div id="store-top" class="card-grid"></div>
+        </div>
+      </div>
+
+      <!-- Page: Browser -->
+      <div id="page-browser" class="page page-browser">
+        <div class="page-header">
+          <h2>&#x1F310; Web Browser</h2>
+        </div>
+        <div class="browser-url-bar">
+          <span style="font-size:0.7rem;color:var(--text-muted)">&#x1F512;</span>
+          <input id="browser-url" type="text" placeholder="Enter URL..." value="https://www.google.com/webhp?igu=1" onkeydown="if(event.key==='Enter')navigateBrowser()">
+          <button class="btn btn-sm btn-primary" onclick="navigateBrowser()">Go</button>
+          <button class="btn btn-sm btn-ghost" onclick="document.getElementById('browser-frame').src='https://www.google.com/webhp?igu=1';document.getElementById('browser-url').value='https://www.google.com/webhp?igu=1'">&#x1F504;</button>
+        </div>
+        <iframe id="browser-frame" class="browser-frame" src="about:blank" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+      </div>
+
+      <!-- Page: Community -->
+      <div id="page-community" class="page">
+        <div class="page-header">
+          <h2>&#x1F91D; Community</h2>
+        </div>
+        <div class="page-subtitle">Friends, parties, and activity</div>
+        <div class="section">
+          <div class="section-header"><h3>&#x1F465; Friends Online</h3></div>
+          <div id="friends-list" class="task-list">
+            <div class="empty-state">No friends online</div>
           </div>
-          <div class="rc-game">
-            <div class="rc-game-bg" style="background:linear-gradient(135deg,#2a2a4a,#1a1a30);"></div>
-            <div class="rc-game-img" style="background:linear-gradient(135deg,#3a3a5a,#2a2a40);opacity:0.4;"></div>
-            <div class="rc-game-title">Cube Runner 3D</div>
+        </div>
+        <div class="section">
+          <div class="section-header"><h3>&#x1F4AC; Recent Activity</h3></div>
+          <div id="activity-feed" class="task-list">
+            <div class="empty-state">No recent activity</div>
           </div>
-          <div class="rc-sponsored">
-            <div class="rc-sponsored-label">SPONSORED</div>
-            <div class="rc-sponsored-art">🎮</div>
+        </div>
+      </div>
+
+      <!-- Page: Settings -->
+      <div id="page-settings" class="page">
+        <div class="page-header" style="padding-bottom:0">
+          <h2>&#x2699; Settings</h2>
+        </div>
+        <div class="settings-layout">
+          <nav class="settings-nav">
+            <button class="settings-nav-item active" data-tab="general">General</button>
+            <button class="settings-nav-item" data-tab="display">Display</button>
+            <button class="settings-nav-item" data-tab="controller">Controller</button>
+            <button class="settings-nav-item" data-tab="performance">Performance</button>
+            <button class="settings-nav-item" data-tab="gaming">Gaming</button>
+            <button class="settings-nav-item" data-tab="audio">Audio</button>
+            <button class="settings-nav-item" data-tab="capture">Capture</button>
+            <button class="settings-nav-item" data-tab="theme">Theme</button>
+            <button class="settings-nav-item" data-tab="social">Social</button>
+            <button class="settings-nav-item" data-tab="parental">Parental</button>
+            <button class="settings-nav-item" data-tab="startup">Startup</button>
+            <button class="settings-nav-item" data-tab="windows">Windows</button>
+          </nav>
+          <div id="settings-content" class="settings-content"></div>
+        </div>
+      </div>
+
+      <!-- Page: Captures -->
+      <div id="page-captures" class="page">
+        <div class="page-header">
+          <h2>&#x1F4F7; Captures</h2>
+          <div class="page-actions">
+            <button class="btn btn-sm btn-primary" onclick="Capture.screenshot()">&#x1F4F7; Screenshot</button>
+          </div>
+        </div>
+        <div class="page-subtitle">Screenshots and game clips</div>
+        <div class="section">
+          <div id="captures-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;padding:8px 28px">
+            <div class="empty-state">No captures yet. Press Ctrl+Shift+S to take a screenshot.</div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Runtime Overlay -->
+  <div id="runtime-overlay">
+    <div class="runtime-bar">
+      <button class="runtime-close" onclick="Runtime.close()">&#x2716;</button>
+      <span id="runtime-title" style="font-size:0.78rem;color:var(--text-primary);flex:1">Game</span>
+      <button class="btn btn-sm btn-ghost" onclick="Runtime.openFullscreen()">&#x26F6; Fullscreen</button>
+    </div>
+    <iframe id="runtime-frame" style="flex:1;width:100%;border:none;background:#fff" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Modal -->
+  <div id="modal-container"></div>
 
   <!-- Guide Overlay -->
-  <div id="guideOverlay" class="guide-overlay">
-    <div class="guide-panel">
-      <div class="guide-header">
-        <span class="guide-title"><img src="assets/favicon.svg" alt="" style="width:18px;height:18px;"> RQBBOX Experience OS 1.0 (Discontinued)</span>
-        <button class="guide-close" onclick="document.getElementById('guideOverlay').classList.remove('show')">✕</button>
+  <div id="guide-overlay" style="position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center">
+    <div style="width:380px;background:#1a1a1a;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,0.6)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.06)">
+        <span style="font-size:0.85rem;font-weight:500;display:flex;align-items:center;gap:8px"><span style="color:var(--neon-cyan)">R</span> RQBBOX Experience OS 1.0</span>
+        <button id="guide-close" style="background:none;border:none;color:var(--text-muted);font-size:1rem;cursor:pointer">&#x2715;</button>
       </div>
-      <div class="guide-body" id="guideBody"></div>
+      <div id="guide-body" style="padding:16px 18px;min-height:120px"></div>
     </div>
   </div>
+
+  <!-- Controller Indicator -->
+  <div id="controller-indicator" class="controller-indicator">&#x1F3AE; Controller Connected</div>
 
   <!-- Performance Overlay -->
-  <div id="perfOverlay" class="perf-overlay">FPS: 60 | CPU: 12% | RAM: 45%</div>
+  <div id="perf-overlay"></div>
 
-  <!-- Achievement Popup -->
-  <div id="achPopup" class="achievement-popup">
-    <div class="ach-icon">🏆</div>
-    <div>
-      <div class="ach-label">Achievement Unlocked</div>
-      <div class="ach-title" id="achTitle">First Launch</div>
-      <div class="ach-desc" id="achDesc">Started RQBBOX Experience OS 1.0 (Discontinued)</div>
-    </div>
-  </div>
+  <!-- Task Switcher -->
+  <div id="task-switcher"></div>
 
-  <!-- Toast Container -->
-  <div id="toasts" class="toast-container"></div>
+  <!-- Scripts -->
+  <script src="../js/core.js"></script>
+  <script src="../js/themes.js"></script>
+  <script src="../js/controller.js"></script>
+  <script src="../js/performance.js"></script>
+  <script src="../js/achievements.js"></script>
+  <script src="../js/achievement-tracker.js"></script>
+  <script src="../js/overlay.js"></script>
+  <script src="../js/library.js"></script>
+  <script src="../js/quick-resume.js"></script>
+  <script src="../js/capture.js"></script>
+  <script src="../js/parental-controls.js"></script>
+  <script src="../js/task-switcher.js"></script>
+  <script src="../js/game-optimized.js"></script>
+  <script src="../js/performance-overlay.js"></script>
+  <script src="../js/background-suppression.js"></script>
+  <script src="../js/cloud-gaming.js"></script>
+  <script src="../js/social.js"></script>
+  <script src="../js/social-panel.js"></script>
+  <script src="../js/wishlist.js"></script>
+  <script src="../js/settings.js"></script>
+  <script src="../js/store.js"></script>
 
   <script>
-    // Boot sequence
-    const boot = document.getElementById('boot');
-    const bootBar = document.getElementById('bootBar');
-    const auth = document.getElementById('auth');
-    const dash = document.getElementById('dash');
+    // ---- Inline: Battery, WiFi, Bluetooth, Browser, Bootstrap ----
+    const BATTERY = { level: 100, charging: false };
+    let appsData = [];
 
-    const statuses = [
-      'Loading RQBBOX Experience OS 1.0 (Discontinued)...',
-      'Initializing controller...',
-      'Scanning game library...',
-      'Loading achievements...',
-      'Preparing dashboard...'
-    ];
-
-    let progress = 0;
-    const bootInterval = setInterval(() => {
-      progress += Math.random() * 25 + 10;
-      if (progress >= 100) {
-        progress = 100;
-        bootBar.style.width = '100%';
-        clearInterval(bootInterval);
-        setTimeout(() => {
-          boot.classList.add('hidden');
-          showAuth();
-        }, 400);
-      }
-      bootBar.style.width = progress + '%';
-    }, 500);
-
-    function showAuth() {
-      auth.style.display = 'flex';
-      const profiles = [
-        { name: 'RQBBOX', avatar: 'R' },
-        { name: 'Player 2', avatar: 'P' }
-      ];
-      const list = document.getElementById('profileList');
-      profiles.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'profile-card';
-        card.innerHTML = `<div class="profile-avatar">${p.avatar}</div><div class="profile-name">${p.name}</div>`;
-        card.onclick = () => {
-          auth.style.display = 'none';
-          dash.style.display = 'grid';
-          startDashboard();
-        };
-        list.appendChild(card);
-      });
+    // ---- Battery Status API ----
+    async function initBattery() {
+      try {
+        if ('getBattery' in navigator) {
+          const bat = await navigator.getBattery();
+          BATTERY.level = Math.round(bat.level * 100);
+          BATTERY.charging = bat.charging;
+          updateBatteryUI();
+          bat.addEventListener('levelchange', () => {
+            BATTERY.level = Math.round(bat.level * 100);
+            updateBatteryUI();
+          });
+          bat.addEventListener('chargingchange', () => {
+            BATTERY.charging = bat.charging;
+            updateBatteryUI();
+          });
+        } else {
+          // Fallback: simulate battery
+          setInterval(() => {
+            BATTERY.level = Math.max(5, BATTERY.level - Math.random() * 0.5);
+            updateBatteryUI();
+          }, 60000);
+          updateBatteryUI();
+        }
+      } catch { updateBatteryUI(); }
     }
 
-    function startDashboard() {
-      // Clock
-      updateClock();
-      setInterval(updateClock, 30000);
-
-      // Load saved game
-      const saved = localStorage.getItem('rqbox-lastGame');
-      if (saved) {
-        try {
-          const g = JSON.parse(saved);
-          document.getElementById('heroTitle').textContent = g.title || 'RQBBOX Experience OS 1.0 (Discontinued)';
-        } catch(e) {}
-      }
-
-      // Toast
-      showToast('🎮', 'RQBBOX Experience OS 1.0 (Discontinued) loaded');
-
-      // Achievement
-      setTimeout(() => showAchievement('First Launch', 'Started RQBBOX Experience OS 1.0 (Discontinued)'), 1500);
-
-      // Fullscreen
-      setTimeout(() => {
-        try { document.documentElement.requestFullscreen(); } catch(e) {}
-      }, 500);
+    function updateBatteryUI() {
+      const el = document.getElementById('status-battery');
+      if (!el) return;
+      const lvl = Math.round(BATTERY.level);
+      const icons = ['\u{1F50B}', '\u{1F50B}', '\u{1F50B}', '\u{1F50B}', '\u{1F50B}'];
+      let icon = lvl > 75 ? '\u{1F50B}' : lvl > 50 ? '\u{1F50B}' : lvl > 25 ? '\u{1F50B}' : lvl > 10 ? '\u{1F50B}' : '\u{1F50B}';
+      if (BATTERY.charging) icon = '\u{26A1}';
+      el.textContent = icon;
+      el.title = `Battery: ${lvl}%${BATTERY.charging ? ' (Charging)' : ''}`;
+      el.classList.toggle('active', lvl <= 15);
     }
 
-    function updateClock() {
-      const el = document.getElementById('clock');
-      if (el) el.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // ---- WiFi / Network Info API ----
+    function initWiFi() {
+      const el = document.getElementById('status-wifi');
+      try {
+        if ('connection' in navigator) {
+          const conn = navigator.connection;
+          const updateWiFi = () => {
+            const type = conn.type || 'unknown';
+            const effective = conn.effectiveType || '';
+            el.title = `Network: ${type}${effective ? ' (' + effective + ')' : ''}`;
+            el.classList.toggle('active', type !== 'none' && !!type);
+            el.textContent = type !== 'none' && type ? '\u{1F4F6}' : '\u{1F4F6}';
+          };
+          updateWiFi();
+          conn.addEventListener('change', updateWiFi);
+        } else {
+          el.title = 'Network: unknown';
+          el.classList.add('active');
+        }
+      } catch { el.classList.add('active'); }
     }
 
-    function showToast(icon, msg) {
-      const c = document.getElementById('toasts');
-      const t = document.createElement('div');
-      t.className = 'toast';
-      t.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
-      c.appendChild(t);
-      setTimeout(() => t.remove(), 3000);
-    }
-
-    function showAchievement(title, desc) {
-      const p = document.getElementById('achPopup');
-      document.getElementById('achTitle').textContent = title;
-      document.getElementById('achDesc').textContent = desc;
-      p.classList.add('show');
-      setTimeout(() => p.classList.remove('show'), 4000);
-    }
-
-    // Navigation
-    document.querySelectorAll('[data-page]').forEach(el => {
-      el.addEventListener('click', () => {
-        document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tb-nav a').forEach(a => a.classList.remove('active'));
-        const page = el.dataset.page;
+    // ---- Bluetooth Detection ----
+    function initBluetooth() {
+      const el = document.getElementById('status-bt');
+      if (!el) return;
+      if ('bluetooth' in navigator) {
+        el.title = 'Bluetooth: available';
         el.classList.add('active');
-        document.querySelector(`.tb-nav a[data-page="${page}"]`)?.classList.add('active');
-        showToast('📁', `Navigated to ${page}`);
-      });
-    });
+        el.textContent = '\u{1F9F0}';
+      } else {
+        el.title = 'Bluetooth: N/A';
+        el.textContent = '\u{1F9F0}';
+      }
+    }
 
-    // Keyboard shortcuts
+    // ---- Apps rendering ----
+    async function loadApps() {
+      try {
+        const res = await fetch('/api/apps');
+        const data = await res.json();
+        appsData = data.data || [];
+        renderApps();
+      } catch { appsData = []; renderApps(); }
+    }
+
+    function renderApps(filter) {
+      filter = filter || 'all';
+      const grid = document.getElementById('apps-grid');
+      if (!grid) return;
+      const filtered = filter === 'all' ? appsData : appsData.filter(a => {
+        const cat = (a.category || '').toLowerCase();
+        return cat.includes(filter.toLowerCase());
+      });
+      grid.innerHTML = filtered.length
+        ? filtered.map(a => {
+            const icon = a.icon || '\u{1F4F1}';
+            return `<div class="card" onclick="launchApp('${a.id}')">
+              <div class="card-art" style="font-size:2.5rem">${icon}</div>
+              <div class="card-info">
+                <div class="card-title">${a.title}</div>
+                <div class="card-sub">${a.category || 'App'}</div>
+              </div>
+            </div>`;
+          }).join('')
+        : '<div class="empty-state" style="grid-column:1/-1">No apps found</div>';
+    }
+
+    function launchApp(id) {
+      const app = appsData.find(a => a.id === id);
+      if (!app) { RQBOX.toast('App not found'); return; }
+      const url = app.launchUrl || app.webUrl || '';
+      RQBOX.toast(`Launching ${app.title}...`);
+      if (url.startsWith('http')) {
+        document.getElementById('browser-url').value = url;
+        document.getElementById('browser-frame').src = url;
+        RQBOX.navigate('browser');
+      } else {
+        window.open(url, '_blank');
+      }
+    }
+
+    // ---- Browser navigation ----
+    function navigateBrowser() {
+      const input = document.getElementById('browser-url');
+      let url = input.value.trim();
+      if (!url) url = 'https://www.google.com/webhp?igu=1';
+      if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+      input.value = url;
+      document.getElementById('browser-frame').src = url;
+    }
+
+    // ---- Auth ----
+    function showAuth() {
+      const screen = document.getElementById('auth-screen');
+      if (!screen) return;
+      screen.style.display = 'flex';
+      const list = document.getElementById('profile-list');
+      if (!list) return;
+      const profiles = [
+        { name: 'RQBBOX', avatar: 'R', color: 'var(--gradient-accent)' },
+        { name: 'Guest', avatar: 'G', color: 'rgba(255,255,255,0.1)' }
+      ];
+      list.innerHTML = profiles.map((p, i) =>
+        `<button class="profile-btn" onclick="selectProfile(${i})">
+          <div class="profile-btn-avatar" style="background:${p.color}">${p.avatar}</div>
+          <span>${p.name}</span>
+        </button>`
+      ).join('');
+    }
+
+    function selectProfile(idx) {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'flex';
+      startDashboard();
+    }
+
+    // ---- Dashboard init ----
+    async function startDashboard() {
+      try { await RQBOX.init(); } catch {}
+      try { Controller.init(); } catch {}
+      try { PerformanceEngine.init(); } catch {}
+      try { Themes.init(); } catch {}
+      try { GuideOverlay.init(); } catch {}
+      try { Notifications.init(); } catch {}
+      try { Achievements.init(); } catch {}
+      try { GameLibrary.init(); } catch {}
+      try { QuickResume.init(); } catch {}
+      try { Capture.init(); } catch {}
+      try { TaskSwitcher.init(); } catch {}
+      try { GameOptimized.init(); } catch {}
+      try { PerformanceOverlay.init(); } catch {}
+      try { BackgroundSuppression.init(); } catch {}
+      try { CloudGaming.init(); } catch {}
+      try { Social.init(); } catch {}
+      try { SocialPanel.init(); } catch {}
+      try { Wishlist.init(); } catch {}
+      try { ParentalControls.init(); } catch {}
+      try { Settings.init(); } catch {}
+      try { Store.init(); } catch {}
+      try { AchievementTracker.init(); } catch {}
+
+      // Load apps data separately
+      await loadApps();
+
+      // Init hardware features
+      initBattery();
+      initWiFi();
+      initBluetooth();
+
+      // Navigation
+      document.querySelectorAll('[data-page]').forEach(el => {
+        el.addEventListener('click', () => {
+          const page = el.dataset.page;
+          RQBOX.navigate(page);
+          document.querySelectorAll('.sidebar-item, .nav-pill').forEach(b => b.classList.remove('active'));
+          el.classList.add('active');
+          document.querySelector(`.nav-pill[data-page="${page}"]`)?.classList.add('active');
+        });
+      });
+
+      // App filter bar
+      document.querySelectorAll('[data-app-filter]').forEach(el => {
+        el.addEventListener('click', () => {
+          document.querySelectorAll('[data-app-filter]').forEach(p => p.classList.remove('active'));
+          el.classList.add('active');
+          renderApps(el.dataset.appFilter);
+        });
+      });
+
+      // Top-level nav pills also update sidebar
+      document.querySelectorAll('.nav-pill').forEach(el => {
+        el.addEventListener('click', () => {
+          document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+          const match = document.querySelector(`.sidebar-item[data-page="${el.dataset.page}"]`);
+          if (match) match.classList.add('active');
+        });
+      });
+
+      // Update status periodically
+      setInterval(updateDashboardStatus, 5000);
+      updateDashboardStatus();
+
+      RQBOX.toast('RQBBOX Experience OS 1.0 ready');
+    }
+
+    function updateDashboardStatus() {
+      const ctrlEl = document.getElementById('status-controller');
+      if (ctrlEl) {
+        try {
+          const pads = navigator.getGamepads();
+          const hasCtrl = Array.from(pads).some(g => g);
+          ctrlEl.classList.toggle('active', hasCtrl);
+          ctrlEl.title = hasCtrl ? 'Controller connected' : 'No controller';
+        } catch {}
+      }
+      const perfEl = document.getElementById('status-performance');
+      if (perfEl) {
+        perfEl.classList.toggle('active', !!(window.PerformanceEngine && PerformanceEngine.active));
+      }
+      const notifEl = document.getElementById('status-notif');
+      if (notifEl && window.Notifications) {
+        notifEl.classList.toggle('active', Notifications.unread > 0);
+      }
+    }
+
+    // ---- Boot sequence ----
+    (async function boot() {
+      const bootScreen = document.getElementById('boot-screen');
+      const bar = document.getElementById('boot-bar');
+      const status = document.getElementById('boot-status');
+
+      const steps = [
+        { pct: 15, msg: 'Initializing RQBBOX kernel...' },
+        { pct: 30, msg: 'Loading game library...' },
+        { pct: 45, msg: 'Starting controller service...' },
+        { pct: 60, msg: 'Mounting app catalog...' },
+        { pct: 75, msg: 'Optimizing performance...' },
+        { pct: 88, msg: 'Preparing dashboard...' },
+        { pct: 100, msg: 'Ready!' },
+      ];
+
+      for (const step of steps) {
+        await new Promise(r => setTimeout(r, 200 + Math.random() * 250));
+        if (bar) bar.style.width = step.pct + '%';
+        if (status) status.textContent = step.msg;
+      }
+
+      await new Promise(r => setTimeout(r, 400));
+      if (bootScreen) bootScreen.classList.add('hidden');
+      setTimeout(() => { if (bootScreen) bootScreen.style.display = 'none'; }, 600);
+
+      showAuth();
+    })();
+
+    // ---- Keyboard shortcuts ----
     document.addEventListener('keydown', e => {
       if (e.key === 'F11') {
         e.preventDefault();
-        try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); } catch(err) {}
+        try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); } catch {}
       }
       if (e.key === 'g' && e.ctrlKey) {
         e.preventDefault();
-        document.getElementById('guideOverlay').classList.toggle('show');
+        const overlay = document.getElementById('guide-overlay');
+        if (overlay) overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
+      }
+      if (e.key === 'Escape') {
+        const overlay = document.getElementById('guide-overlay');
+        if (overlay && overlay.style.display === 'flex') overlay.style.display = 'none';
       }
     });
 
-    // Game library (minimal)
-    const GameLibrary = {
-      launch(id) {
-        const games = {
-          'neon-drift-racing': { title: 'Neon Drift Racing', url: '../games/neon-drift-racing/index.html' },
-          'pixel-quest': { title: 'Pixel Quest', url: '../games/pixel-quest/index.html' },
-          'star-fighter-x': { title: 'Star Fighter X', url: '../games/star-fighter-x/index.html' },
-          'void-craft-sandbox': { title: 'Void Craft Sandbox', url: '../games/void-craft-sandbox/index.html' },
-          'retro-zone': { title: 'Retro Zone', url: '../games/retro-zone/index.html' },
-          'cube-runner-3d': { title: 'Cube Runner 3D', url: '../games/cube-runner-3d/index.html' },
-          'playtree-c1s1': { title: 'PlayTree Chapter 1 Season 1', url: '../games/playtree-c1s1/index.html' },
-          'roblox': { title: 'Roblox', url: '../games/roblox/index.html' }
-        };
-        const game = games[id];
-        if (game) {
-          localStorage.setItem('rqbox-lastGame', JSON.stringify(game));
-          showToast('🚀', `Launching ${game.title}...`);
-          window.location.href = game.url;
-        }
-      },
-      launchAll() { RQBOX.navigate('games'); }
-    };
-
-    // RQBOX global
-    const RQBOX = {
-      navigate(page) { showToast('📁', `Opening ${page}...`); }
-    };
+    // ---- Expose globals ----
+    window.navigateBrowser = navigateBrowser;
+    window.showAuth = showAuth;
+    window.selectProfile = selectProfile;
+    window.renderApps = renderApps;
+    window.launchApp = launchApp;
   </script>
 </body>
 </html>
