@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs');
 
 const ROOT = path.resolve(__dirname, '..');
-const PORT = 19778;
+const PORT = 19779;
 const URL_BASE = `http://127.0.0.1:${PORT}`;
 
 function isServerRunning() {

@@ -10,7 +10,7 @@ const { execFileSync, execSync, spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-const PORT = 19778;
+const PORT = 19779;
 const DASHBOARD_URL = `http://localhost:${PORT}/dashboard`;
 
 function buildLaunchCommand(url, options = {}) {
@@ -81,7 +81,7 @@ function main() {
   console.log('  ==============================');
   console.log('');
 
-  const appDir = path.dirname(process.execPath);
+  const appDir = __dirname;
   const serverPath = path.join(appDir, 'server.js');
 
   if (!fs.existsSync(serverPath)) {

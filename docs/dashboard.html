@@ -70,7 +70,7 @@
   </div>
 
   <!-- Dashboard -->
-  <div id="dashboard">
+  <div id="dashboard" class="dashboard">
     <!-- Background Orbs -->
     <div class="bg-layer">
       <div class="bg-orb" id="bg-orb-1"></div>
@@ -639,25 +639,47 @@
     }
 
     // ---- Auth ----
-    function showAuth() {
+    async function showAuth() {
       const screen = document.getElementById('auth-screen');
       if (!screen) return;
       screen.style.display = 'flex';
       const list = document.getElementById('profile-list');
       if (!list) return;
-      const profiles = [
+
+      let profiles = [
         { name: 'RQBBOX', avatar: 'R', color: 'var(--gradient-accent)' },
         { name: 'Guest', avatar: 'G', color: 'rgba(255,255,255,0.1)' }
       ];
+
+      try {
+        const res = await fetch('/api/profiles');
+        const data = await res.json();
+        if (data.ok && data.data && data.data.users && data.data.users.length > 0) {
+          profiles = data.data.users.map(u => ({
+            name: u.name || u.username || 'User',
+            avatar: u.avatar || (u.name || u.username || 'U')[0].toUpperCase(),
+            color: 'var(--gradient-accent)',
+            id: u.id,
+            token: u.token
+          }));
+        }
+      } catch {}
+
       list.innerHTML = profiles.map((p, i) =>
-        `<button class="profile-btn" onclick="selectProfile(${i})">
+        `<button class="profile-btn" onclick="selectProfile(${i}, '${p.id || ''}', '${p.token || ''}')">
           <div class="profile-btn-avatar" style="background:${p.color}">${p.avatar}</div>
           <span>${p.name}</span>
         </button>`
       ).join('');
     }
 
-    function selectProfile(idx) {
+    function selectProfile(idx, userId, token) {
+      if (userId) {
+        try { localStorage.setItem('rqbox-userId', userId); } catch {}
+      }
+      if (token) {
+        try { localStorage.setItem('rqbox-token', token); } catch {}
+      }
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('dashboard').style.display = 'flex';
       startDashboard();
