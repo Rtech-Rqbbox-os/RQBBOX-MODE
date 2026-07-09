@@ -261,6 +261,10 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 /* CONTROLLER INDICATOR */
 .controller-indicator{position:fixed;bottom:20px;right:20px;z-index:100;padding:6px 14px;background:rgba(0,0,0,0.7);backdrop-filter:blur(12px);border:1px solid var(--accent-dim);border-radius:20px;font-size:0.7rem;color:var(--neon-cyan);animation:slideUp 0.3s ease}
 
+/* Controller Focus */
+.card.focused,.filter-pill.focused,.settings-nav-item.focused,.guide-item.focused,.btn.focused{outline:2px solid var(--neon-cyan);outline-offset:2px;box-shadow:0 0 16px rgba(0,229,255,0.25);transform:scale(1.02);transition:all 0.15s ease}
+.card.focused .card-title{color:var(--neon-cyan)}
+
 /* TASK SWITCHER */
 .task-switcher{position:fixed;inset:0;z-index:9999;background:rgba(6,8,15,0.85);backdrop-filter:blur(20px);display:none;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s}
 .task-switcher.active{display:flex;opacity:1}

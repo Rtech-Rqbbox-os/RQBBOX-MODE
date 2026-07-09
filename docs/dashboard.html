@@ -346,9 +346,10 @@
     <div class="runtime-bar">
       <button class="runtime-close" onclick="closeRuntime()">&#x2716;</button>
       <span id="runtime-title" style="font-size:0.78rem;color:var(--text-primary);flex:1">Game</span>
+      <span id="runtime-controls" style="font-size:0.65rem;color:var(--text-muted);max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
       <button class="btn btn-sm btn-ghost" onclick="runtimeFullscreen()">&#x26F6; Fullscreen</button>
     </div>
-    <iframe id="runtime-frame" style="flex:1;width:100%;border:none;background:#fff" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+    <iframe id="runtime-frame" style="flex:1;width:100%;border:none;background:#fff" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"></iframe>
   </div>
 
   <!-- Toast -->
@@ -500,20 +501,6 @@
         : '<div class="empty-state" style="grid-column:1/-1">No apps found</div>';
     }
 
-    function launchApp(id) {
-      const app = appsData.find(a => a.id === id);
-      if (!app) { RQBOX.toast('App not found'); return; }
-      const url = app.launchUrl || app.webUrl || '';
-      RQBOX.toast(`Launching ${app.title}...`);
-      if (url.startsWith('http')) {
-        document.getElementById('browser-url').value = url;
-        navigateBrowser(url);
-        RQBOX.navigate('browser');
-      } else {
-        window.open(url, '_blank');
-      }
-    }
-
     // ---- Game Launch (inline via runtime overlay) ----
     function launchGame(id) {
       const game = (window.GameLibrary && GameLibrary.games) ? GameLibrary.games.find(g => g.id === id) : null;
@@ -524,39 +511,56 @@
 
       let url = '';
       if (game.launchUrl) {
-        url = game.launchUrl.startsWith('http') ? game.launchUrl : game.launchUrl;
+        url = game.launchUrl;
       } else if (game.localPath) {
-        url = game.localPath.startsWith('http') ? game.localPath : game.localPath;
+        url = game.localPath;
       }
 
       if (!url) { RQBOX.toast('No launch URL'); return; }
 
+      // Resolve relative URLs with server origin
+      if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('steam://') && !url.startsWith('roblox://')) {
+        url = window.location.origin + '/' + url.replace(/^\//, '');
+      }
+
       // External URLs (Roblox etc.) open in new tab
       if (url.startsWith('http://') || url.startsWith('https://')) {
-        window.open(url, '_blank');
+        // Check if it's a local game file (served by our server)
+        const isLocal = url.includes(window.location.host);
+        if (isLocal) {
+          openGameInRuntime(url, game);
+        } else {
+          window.open(url, '_blank');
+        }
         return;
       }
 
-      // Relative URLs (local games) → use runtime overlay
+      // Protocol URLs (steam://, roblox://) open via system
+      window.open(url, '_blank');
+    }
+
+    function openGameInRuntime(url, game) {
       const overlay = document.getElementById('runtime-overlay');
       const frame = document.getElementById('runtime-frame');
       const title = document.getElementById('runtime-title');
-      if (overlay && frame) {
-        if (title) title.textContent = game.title;
-        frame.src = url;
-        overlay.style.display = 'flex';
-        overlay.classList.add('active');
-        Controller.vibrate(0.3, 50);
-        Achievements.unlock('first-game');
-      } else {
-        window.open(url, '_blank');
-      }
+      const controls = document.getElementById('runtime-controls');
+      if (!overlay || !frame) { window.open(url, '_blank'); return; }
+
+      if (title) title.textContent = game.title || 'Game';
+      if (controls) controls.textContent = game.controls || '';
+      frame.src = url;
+      overlay.style.display = 'flex';
+      overlay.classList.add('active');
+      Controller.vibrate(0.3, 50);
+
+      // Track achievements
+      if (window.Achievements) Achievements.unlock('first-game');
 
       // Save last game
       try { localStorage.setItem('rqbox-lastGame', JSON.stringify(game)); } catch {}
 
-      // Track play
-      fetch('/api/games/' + id, {
+      // Track play via API
+      fetch('/api/games/' + game.id, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'launch' })
@@ -571,11 +575,55 @@
     }
 
     function runtimeFullscreen() {
-      const frame = document.getElementById('runtime-frame');
-      if (frame) { try { frame.requestFullscreen(); } catch {} }
+      const overlay = document.getElementById('runtime-overlay');
+      if (overlay) {
+        try {
+          if (document.fullscreenElement) { document.exitFullscreen(); }
+          else { overlay.requestFullscreen(); }
+        } catch {}
+      }
     }
 
-    // ---- Browser navigation ----
+    // ---- App Launch ----
+    function launchApp(id) {
+      const app = appsData.find(a => a.id === id);
+      if (!app) { RQBOX.toast('App not found'); return; }
+
+      Controller.vibrate(0.3, 50);
+      RQBOX.toast(`Launching ${app.title}...`);
+
+      const webUrl = app.webUrl || '';
+      const launchUrl = app.launchUrl || '';
+
+      // Protocol URLs (steam://, discord://, etc.) open via system
+      if (launchUrl && !launchUrl.startsWith('http')) {
+        window.open(launchUrl, '_blank');
+        // Track launch
+        fetch('/api/apps/' + id, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'launch' })
+        }).catch(() => {});
+        return;
+      }
+
+      // HTTP URLs open in browser page iframe
+      const url = webUrl || launchUrl;
+      if (url && url.startsWith('http')) {
+        document.getElementById('browser-url').value = url;
+        navigateBrowser(url);
+        RQBOX.navigate('browser');
+        // Track launch
+        fetch('/api/apps/' + id, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'launch' })
+        }).catch(() => {});
+        return;
+      }
+
+      RQBOX.toast('No launch URL available for this app');
+    }
     const BLOCKED_DOMAINS = ['youtube.com','twitter.com','x.com','facebook.com','instagram.com','tiktok.com','linkedin.com','pinterest.com','threads.net','bsky.app'];
     const EMBED_OVERRIDES = {
       'youtube.com': (url) => {
