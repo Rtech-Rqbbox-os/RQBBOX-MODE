@@ -19,7 +19,7 @@ win:
         - x64
   artifactName: "RQBBOX-Experience-Full-${version}.${ext}"
   signAndEditExecutable: false
-compression: store
+compression: normal
 nsis:
   oneClick: false
   perMachine: false
@@ -27,3 +27,4 @@ nsis:
   createDesktopShortcut: true
   createStartMenuShortcut: true
   shortcutName: "RQBBOX Experience OS 1.0"
+  unicode: true

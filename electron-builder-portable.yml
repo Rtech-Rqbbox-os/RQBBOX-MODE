@@ -23,9 +23,8 @@ extraMetadata:
   main: electron-main.js
 win:
   target:
-    - target: portable
+    - target: dir
       arch:
         - x64
-  artifactName: "RQBBOX-Experience-Portable-${version}.${ext}"
   signAndEditExecutable: false
 compression: store

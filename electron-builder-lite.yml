@@ -22,7 +22,6 @@ files:
   - "!games/maze-runner"
   - "!games/breakout-neon"
   - "!games/zombie-defense"
-  - "!games/dungeon-crawler"
   - "!captures"
   - "!discord"
   - "!build-scripts"
@@ -43,7 +42,7 @@ win:
         - x64
   artifactName: "RQBBOX-Experience-Lite-${version}.${ext}"
   signAndEditExecutable: false
-compression: store
+compression: normal
 nsis:
   oneClick: false
   perMachine: false
@@ -51,3 +50,4 @@ nsis:
   createDesktopShortcut: true
   createStartMenuShortcut: true
   shortcutName: "RQBBOX Experience Lite"
+  unicode: true
