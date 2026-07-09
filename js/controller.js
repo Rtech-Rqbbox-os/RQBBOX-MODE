@@ -190,7 +190,7 @@ const Controller = {
       <div class="guide-section">
         <h4 style="font-size:0.85rem;font-weight:500;margin-bottom:12px;">Quick Actions</h4>
         <button class="btn btn-primary" style="width:100%;margin-bottom:8px;" onclick="RQBOX.navigate('home');Controller.toggleGuide()">🏠 Home</button>
-        <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="RQBOX.navigate('games');Controller.toggleGuide()">🎮 Games</button>
+        <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="RQBOX.navigate('store');Controller.toggleGuide()">🏪 RhysTech Store</button>
         <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="RQBOX.navigate('resume');Controller.toggleGuide()">⏸️ Quick Resume</button>
         <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="RQBOX.navigate('friends');Controller.toggleGuide()">👥 Friends</button>
         <button class="btn btn-ghost" style="width:100%;margin-bottom:8px;" onclick="RQBOX.navigate('settings');Controller.toggleGuide()">⚙️ Settings</button>

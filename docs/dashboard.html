@@ -87,7 +87,7 @@
         <button class="nav-pill active" data-page="home">Home</button>
         <button class="nav-pill" data-page="games">Games</button>
         <button class="nav-pill" data-page="apps">Apps</button>
-        <button class="nav-pill" data-page="store">Store</button>
+        <button class="nav-pill" data-page="store">🏪 RhysTech Store</button>
         <button class="nav-pill" data-page="browser">Browser</button>
         <button class="nav-pill" data-page="community">Community</button>
         <button class="nav-pill" data-page="settings">Settings</button>
@@ -112,7 +112,7 @@
       <button class="sidebar-item active" data-page="home" title="Home"><span class="si-icon">&#x1F3E0;</span><span class="si-label">Home</span></button>
       <button class="sidebar-item" data-page="games" title="Games"><span class="si-icon">&#x1F3AE;</span><span class="si-label">Games</span></button>
       <button class="sidebar-item" data-page="apps" title="Apps"><span class="si-icon">&#x1F4F1;</span><span class="si-label">Apps</span></button>
-      <button class="sidebar-item" data-page="store" title="Store"><span class="si-icon">&#x1F6D2;</span><span class="si-label">Store</span></button>
+      <button class="sidebar-item" data-page="store" title="RhysTech Store"><span class="si-icon">&#x1F6D2;</span><span class="si-label">Store</span></button>
       <button class="sidebar-item" data-page="browser" title="Browser"><span class="si-icon">&#x1F310;</span><span class="si-label">Browse</span></button>
       <button class="sidebar-item" data-page="community" title="Community"><span class="si-icon">&#x1F91D;</span><span class="si-label">Social</span></button>
       <button class="sidebar-item" data-page="discord" title="Discord"><span class="si-icon">&#x1F4AC;</span><span class="si-label">Discord</span></button>
@@ -211,19 +211,30 @@
         </div>
       </div>
 
-      <!-- Page: Store -->
+      <!-- Page: RhysTech Store -->
       <div id="page-store" class="page">
         <div class="page-header">
-          <h2>&#x1F6D2; Store</h2>
+          <h2>&#x1F6D2; RhysTech Store</h2>
+          <div class="page-actions">
+            <button class="btn btn-sm btn-ghost" onclick="Store.init()">&#x1F504; Refresh</button>
+          </div>
         </div>
-        <div class="page-subtitle">Discover featured games and apps</div>
+        <div class="page-subtitle">Discover, install, and play games &amp; apps — all playable in iframe</div>
+        <div id="store-filter-bar" style="display:flex;gap:6px;padding:8px 28px;flex-wrap:wrap">
+          <button class="filter-pill active" data-filter="all">All</button>
+          <button class="filter-pill" data-filter="games">🎮 Games</button>
+          <button class="filter-pill" data-filter="apps">📱 Apps</button>
+          <button class="filter-pill" data-filter="free">🆓 Free</button>
+          <button class="filter-pill" data-filter="popular">🔥 Popular</button>
+          <button class="filter-pill" data-filter="new">✨ New</button>
+        </div>
         <div class="section">
           <div class="section-header"><h3>&#x2B50; Featured</h3></div>
           <div id="store-featured" class="horz-scroll"></div>
         </div>
         <div class="section">
-          <div class="section-header"><h3>&#x1F3B2; Top Games</h3></div>
-          <div id="store-top" class="card-grid"></div>
+          <div class="section-header"><h3>&#x1F3B2; All Items</h3></div>
+          <div id="store-grid" class="card-grid"></div>
         </div>
       </div>
 
