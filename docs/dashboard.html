@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>RQBBOX Experience OS 1.0</title>
+  <title>RQBBOX Experience OS 2.0</title>
   <meta name="msvalidate.01" content="37D5DC8997B23C62BB43E51C2729A569" />
-  <meta name="description" content="RQBBOX Experience OS 1.0 by RhysTech — the ultimate desktop/gaming console hybrid platform with 23 games, 41 apps, AI, cloud sync, Quick Resume, and more.">
-  <meta name="keywords" content="RQBBOX, RhysTech, gaming dashboard, Electron, game launcher, Windows">
+  <meta name="description" content="RQBBOX Experience OS 2.0 by RhysTech — the ultimate desktop/gaming console hybrid platform with 23 games, 41 apps, AI, cloud sync, emulation, and more.">
+  <meta name="keywords" content="RQBBOX, RhysTech, gaming dashboard, Electron, game launcher, Windows, emulation, Limbo">
   <meta name="author" content="RhysTech">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://rtech-rqbbox-os.github.io/RQBBOX-Experience/">
-  <meta property="og:title" content="RQBBOX Experience OS 1.0 — Ultimate Desktop/Gaming Console Hybrid">
-  <meta property="og:description" content="23 games, 41 apps, AI, cloud sync, Quick Resume, achievements, controller support — all in one unified platform.">
+  <meta property="og:title" content="RQBBOX Experience OS 2.0 — Ultimate Desktop/Gaming Console Hybrid">
+  <meta property="og:description" content="23 games, 41 apps, AI, cloud sync, emulation, controller support — all in one unified platform.">
   <meta property="og:image" content="https://raw.githubusercontent.com/Rtech-Rqbbox-os/RQBBOX-Experience-OS/main/assets/og-image.svg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="RQBBOX Experience OS 1.0">
+  <meta name="twitter:title" content="RQBBOX Experience OS 2.0">
   <meta name="twitter:description" content="The ultimate desktop/gaming console hybrid by RhysTech.">
   <meta name="theme-color" content="#00b4d8">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -89,6 +89,7 @@
         <button class="nav-pill" data-page="apps">Apps</button>
         <button class="nav-pill" data-page="store">🏪 RhysTech Store</button>
         <button class="nav-pill" data-page="browser">Browser</button>
+        <button class="nav-pill" data-page="emulation">🖥️ Emulation</button>
         <button class="nav-pill" data-page="community">Community</button>
         <button class="nav-pill" data-page="settings">Settings</button>
       </nav>
@@ -114,6 +115,7 @@
       <button class="sidebar-item" data-page="apps" title="Apps"><span class="si-icon">&#x1F4F1;</span><span class="si-label">Apps</span></button>
       <button class="sidebar-item" data-page="store" title="RhysTech Store"><span class="si-icon">&#x1F6D2;</span><span class="si-label">Store</span></button>
       <button class="sidebar-item" data-page="browser" title="Browser"><span class="si-icon">&#x1F310;</span><span class="si-label">Browse</span></button>
+      <button class="sidebar-item" data-page="emulation" title="Emulation"><span class="si-icon">&#x1F5A5;</span><span class="si-label">Emulation</span></button>
       <button class="sidebar-item" data-page="community" title="Community"><span class="si-icon">&#x1F91D;</span><span class="si-label">Social</span></button>
       <button class="sidebar-item" data-page="discord" title="Discord"><span class="si-icon">&#x1F4AC;</span><span class="si-label">Discord</span></button>
       <button class="sidebar-item" data-page="captures" title="Captures"><span class="si-icon">&#x1F4F7;</span><span class="si-label">Captures</span></button>
@@ -126,7 +128,7 @@
       <!-- Page: Home -->
       <div id="page-home" class="page active">
         <div class="hero-section">
-          <div class="hero-tag">&#x25B6; RQBBOX Experience OS 1.0</div>
+          <div class="hero-tag">&#x25B6; RQBBOX Experience OS 2.0</div>
           <div class="hero-text">
             <h1>Your Ultimate Platform</h1>
             <p>Gaming &bull; AI &bull; Productivity &bull; Media &bull; Cloud &mdash; All in one.</p>
@@ -349,6 +351,168 @@
           </div>
         </div>
       </div>
+
+      <!-- Page: Emulation (Limbo PC Emulator + qcow2) -->
+      <div id="page-emulation" class="page">
+        <div class="page-header">
+          <h2>&#x1F5A5; Emulation</h2>
+          <div class="page-actions">
+            <button class="btn btn-sm btn-ghost" onclick="Emulation.refresh()">&#x1F504; Refresh</button>
+            <button class="btn btn-sm btn-primary" onclick="Emulation.importQcow2()">&#x2B07; Import QCOW2</button>
+          </div>
+        </div>
+        <div class="page-subtitle">Limbo PC Emulator — x86 VMs via qcow2 disk images</div>
+
+        <div id="emulation-status-bar" class="emulation-status-bar">
+          <div class="emulation-status-item">
+            <span class="emulation-status-icon">&#x1F4BB;</span>
+            <span id="emu-limbo-status">Limbo: Checking...</span>
+          </div>
+          <div class="emulation-status-item">
+            <span class="emulation-status-icon">&#x1F4BE;</span>
+            <span id="emu-disk-count">0 Disks</span>
+          </div>
+          <div class="emulation-status-item">
+            <span class="emulation-status-icon">&#x26A1;</span>
+            <span id="emu-active-vm">No Active VM</span>
+          </div>
+        </div>
+
+        <div class="emulation-layout">
+          <div class="emulation-sidebar">
+            <div class="emulation-section-title">Disk Images</div>
+            <div id="qcow2-list" class="qcow2-list">
+              <div class="empty-state">No qcow2 files imported</div>
+            </div>
+            <button class="btn btn-primary emulation-import-btn" onclick="Emulation.importQcow2()">+ Import QCOW2</button>
+
+            <div class="emulation-section-title" style="margin-top:16px">Quick Presets</div>
+            <div class="preset-list">
+              <button class="preset-item" onclick="Emulation.launchPreset('dos')">
+                <span class="preset-icon">&#x1F4C0;</span>
+                <div><div class="preset-name">MS-DOS</div><div class="preset-desc">Classic DOS environment</div></div>
+              </button>
+              <button class="preset-item" onclick="Emulation.launchPreset('win98')">
+                <span class="preset-icon">&#x1F5A5;</span>
+                <div><div class="preset-name">Windows 98</div><div class="preset-desc">Retro Windows gaming</div></div>
+              </button>
+              <button class="preset-item" onclick="Emulation.launchPreset('winxp')">
+                <span class="preset-icon">&#x1F5A5;</span>
+                <div><div class="preset-name">Windows XP</div><div class="preset-desc">Classic desktop</div></div>
+              </button>
+              <button class="preset-item" onclick="Emulation.launchPreset('linux')">
+                <span class="preset-icon">&#x1F427;</span>
+                <div><div class="preset-name">Linux</div><div class="preset-desc">Ubuntu / Debian</div></div>
+              </button>
+            </div>
+          </div>
+
+          <div class="emulation-main">
+            <div class="emulation-config" id="emulation-config">
+              <div class="emulation-config-title">VM Configuration</div>
+              <div class="emulation-config-grid">
+                <div class="config-field">
+                  <label>Disk Image</label>
+                  <select id="emu-disk-select" class="config-select">
+                    <option value="">Select a qcow2 file...</option>
+                  </select>
+                </div>
+                <div class="config-field">
+                  <label>RAM (MB)</label>
+                  <select id="emu-ram" class="config-select">
+                    <option value="64">64 MB</option>
+                    <option value="128">128 MB</option>
+                    <option value="256" selected>256 MB</option>
+                    <option value="512">512 MB</option>
+                    <option value="1024">1 GB</option>
+                    <option value="2048">2 GB</option>
+                  </select>
+                </div>
+                <div class="config-field">
+                  <label>CPU Cores</label>
+                  <select id="emu-cpu" class="config-select">
+                    <option value="1" selected>1 Core</option>
+                    <option value="2">2 Cores</option>
+                    <option value="4">4 Cores</option>
+                  </select>
+                </div>
+                <div class="config-field">
+                  <label>Architecture</label>
+                  <select id="emu-arch" class="config-select">
+                    <option value="x86" selected>x86 (32-bit)</option>
+                    <option value="x86_64">x86_64 (64-bit)</option>
+                    <option value="arm">ARM</option>
+                    <option value="mips">MIPS</option>
+                  </select>
+                </div>
+                <div class="config-field">
+                  <label>Machine Type</label>
+                  <select id="emu-machine" class="config-select">
+                    <option value="pc" selected>PC (i440FX)</option>
+                    <option value="isapc">ISA PC</option>
+                    <option value="virt">Virtual</option>
+                  </select>
+                </div>
+                <div class="config-field">
+                  <label>VGA</label>
+                  <select id="emu-vga" class="config-select">
+                    <option value="std" selected>Standard</option>
+                    <option value="cirrus">Cirrus</option>
+                    <option value="vmware">VMware</option>
+                    <option value="virtio">VirtIO</option>
+                  </select>
+                </div>
+                <div class="config-field">
+                  <label>Audio</label>
+                  <select id="emu-audio" class="config-select">
+                    <option value="none">None</option>
+                    <option value="sb16" selected>SoundBlaster 16</option>
+                    <option value="adlib">AdLib</option>
+                    <option value="pcspk">PC Speaker</option>
+                  </select>
+                </div>
+                <div class="config-field">
+                  <label>Network</label>
+                  <select id="emu-network" class="config-select">
+                    <option value="none" selected>None</option>
+                    <option value="user">User Mode (NAT)</option>
+                    <option value="tap">TAP</option>
+                  </select>
+                </div>
+              </div>
+              <div class="emulation-actions">
+                <button class="btn btn-primary btn-lg" id="emu-launch-btn" onclick="Emulation.launch()">
+                  &#x25B6; Launch VM
+                </button>
+                <button class="btn btn-ghost btn-lg" onclick="Emulation.saveConfig()">
+                  &#x1F4BE; Save Config
+                </button>
+              </div>
+            </div>
+
+            <div class="emulation-vm-display" id="emulation-vm-display" style="display:none">
+              <div class="vm-display-bar">
+                <span id="vm-display-title" class="vm-display-title">VM Running</span>
+                <div class="vm-display-actions">
+                  <button class="btn btn-sm btn-ghost" onclick="Emulation.sendCtrlAltDel()">&#x2380; Ctrl+Alt+Del</button>
+                  <button class="btn btn-sm btn-ghost" onclick="Emulation.toggleFullscreen()">&#x26F6; Fullscreen</button>
+                  <button class="btn btn-sm btn-danger" onclick="Emulation.stop()">&#x23F9; Stop</button>
+                </div>
+              </div>
+              <div class="vm-screen" id="vm-screen">
+                <div class="vm-no-display">VM display will appear here</div>
+              </div>
+            </div>
+
+            <div class="emulation-saved-configs">
+              <div class="emulation-section-title">Saved Configurations</div>
+              <div id="saved-configs-list" class="saved-configs-list">
+                <div class="empty-state">No saved configurations</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -373,7 +537,7 @@
   <div id="guide-overlay" style="position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center">
     <div style="width:380px;background:#1a1a1a;border-radius:12px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,0.6)">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.06)">
-        <span style="font-size:0.85rem;font-weight:500;display:flex;align-items:center;gap:8px"><span style="color:var(--neon-cyan)">R</span> RQBBOX Experience OS 1.0</span>
+        <span style="font-size:0.85rem;font-weight:500;display:flex;align-items:center;gap:8px"><span style="color:var(--neon-cyan)">R</span> RQBBOX Experience OS 2.0</span>
         <button id="guide-close" style="background:none;border:none;color:var(--text-muted);font-size:1rem;cursor:pointer">&#x2715;</button>
       </div>
       <div id="guide-body" style="padding:16px 18px;min-height:120px"></div>
@@ -411,6 +575,7 @@
   <script src="../js/wishlist.js"></script>
   <script src="../js/settings.js"></script>
   <script src="../js/store.js"></script>
+  <script src="../js/emulation.js"></script>
 
   <script>
     // ---- Inline: Battery, WiFi, Bluetooth, Browser, Bootstrap ----

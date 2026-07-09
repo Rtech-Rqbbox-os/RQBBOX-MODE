@@ -3,7 +3,8 @@ const path = require('path');
 const http = require('http');
 
 const PORT = 19779;
-const DASHBOARD_URL = `http://127.0.0.1:${PORT}/dashboard?fullscreen=1`;
+const APP_VERSION = '2.0.0';
+const DASHBOARD_URL = `http://127.0.0.1:${PORT}/dashboard?fullscreen=1&v=${APP_VERSION}`;
 let mainWindow = null;
 let tray = null;
 let isQuitting = false;

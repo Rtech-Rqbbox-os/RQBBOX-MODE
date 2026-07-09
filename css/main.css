@@ -668,3 +668,59 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 .widget-stat-mini { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.75rem; }
 .widget-stat-mini .label { color: var(--text-muted); }
 .widget-stat-mini .value { font-weight: 500; }
+
+/* == EMULATION (LIMBO PC EMULATOR + QCOW2) == */
+.emulation-status-bar { display: flex; gap: 16px; padding: 10px 28px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); margin: 8px 28px; }
+.emulation-status-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-muted); }
+.emulation-status-icon { font-size: 1rem; }
+.emulation-layout { display: flex; gap: 16px; padding: 12px 28px; min-height: calc(100vh - 180px); }
+.emulation-sidebar { width: 280px; flex-shrink: 0; }
+.emulation-main { flex: 1; min-width: 0; }
+.emulation-section-title { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 0 4px; }
+.emulation-import-btn { width: 100%; margin-top: 8px; }
+.qcow2-list { display: flex; flex-direction: column; gap: 4px; }
+.qcow2-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); cursor: pointer; transition: all 0.15s; }
+.qcow2-item:hover { border-color: var(--accent); }
+.qcow2-item.active { border-color: var(--accent); background: rgba(0,180,216,0.08); }
+.qcow2-icon { font-size: 1.4rem; }
+.qcow2-info { flex: 1; min-width: 0; }
+.qcow2-name { font-size: 0.78rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qcow2-meta { font-size: 0.65rem; color: var(--text-muted); }
+.qcow2-actions { display: flex; gap: 4px; }
+.preset-list { display: flex; flex-direction: column; gap: 4px; }
+.preset-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); cursor: pointer; transition: all 0.15s; text-align: left; }
+.preset-item:hover { border-color: var(--accent); transform: translateX(4px); }
+.preset-icon { font-size: 1.4rem; }
+.preset-name { font-size: 0.78rem; font-weight: 500; }
+.preset-desc { font-size: 0.65rem; color: var(--text-muted); }
+.emulation-config { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; }
+.emulation-config-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; }
+.emulation-config-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.config-field label { display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+.config-select { width: 100%; padding: 8px 10px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.78rem; outline: none; font-family: inherit; }
+.config-select:focus { border-color: var(--accent); }
+.config-select option { background: #1a1a2e; color: var(--text-primary); }
+.emulation-actions { display: flex; gap: 10px; margin-top: 20px; }
+.btn-lg { padding: 10px 24px; font-size: 0.85rem; }
+.btn-danger { background: #ef4444; color: #fff; border: none; }
+.btn-danger:hover { background: #dc2626; }
+.emulation-vm-display { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
+.vm-display-bar { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; background: rgba(0,0,0,0.3); border-bottom: 1px solid var(--border-subtle); }
+.vm-display-title { font-size: 0.78rem; font-weight: 500; }
+.vm-display-actions { display: flex; gap: 6px; }
+.vm-screen { background: #000; min-height: 400px; display: flex; align-items: center; justify-content: center; }
+.vm-no-display { color: var(--text-muted); font-size: 0.8rem; }
+.emulation-saved-configs { margin-top: 16px; }
+.saved-configs-list { display: flex; flex-direction: column; gap: 4px; }
+.config-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); }
+.config-item-info { flex: 1; }
+.config-item-name { font-size: 0.78rem; font-weight: 500; }
+.config-item-meta { font-size: 0.65rem; color: var(--text-muted); }
+.config-item-actions { display: flex; gap: 4px; }
+.btn-xs { padding: 3px 8px; font-size: 0.65rem; }
+
+@media (max-width: 768px) {
+  .emulation-layout { flex-direction: column; }
+  .emulation-sidebar { width: 100%; }
+  .emulation-config-grid { grid-template-columns: 1fr; }
+}

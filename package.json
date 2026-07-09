@@ -1,7 +1,7 @@
 {
   "name": "@rqbbox/experience",
-  "version": "1.0.0",
-  "description": "RQBBOX Experience — Next-generation digital platform combining gaming, AI, productivity, media, and cloud services into one unified RhysTech experience.",
+  "version": "2.0.0",
+  "description": "RQBBOX Experience OS 2.0 — Desktop/gaming console hybrid with emulation (Limbo PC Emulator + qcow2), 23 games, 41 apps, AI, cloud sync, controller support.",
   "private": false,
   "main": "electron-main.js",
   "bin": {
@@ -14,7 +14,9 @@
     "build:full": "electron-builder --win --config --config electron-builder-full.yml",
     "build:lite": "electron-builder --win --config --config electron-builder-lite.yml",
     "build:portable": "electron-builder --win --config --config electron-builder-portable.yml",
-    "build:all": "npm run build:full && npm run build:lite && npm run build:portable"
+    "build:all": "npm run build:full && npm run build:lite && npm run build:portable",
+    "build:android": "npx cap sync android && cd android && gradlew assembleDebug",
+    "android:open": "npx cap open android"
   },
   "repository": {
     "type": "git",
@@ -64,7 +66,9 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "artifactName": "RQBBOX-Experience-${version}.${ext}",
@@ -86,5 +90,14 @@
   },
   "engines": {
     "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.4.1",
+    "@capacitor/browser": "^8.0.3",
+    "@capacitor/cli": "^8.4.1",
+    "@capacitor/core": "^8.4.1",
+    "@capacitor/dialog": "^8.0.1",
+    "@capacitor/filesystem": "^8.1.2",
+    "astral-regex": "^2.0.0"
   }
 }
