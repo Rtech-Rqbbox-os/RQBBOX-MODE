@@ -45,6 +45,7 @@ function createWindow() {
     width: 1920,
     height: 1080,
     fullscreen: true,
+    maximized: true,
     autoHideMenuBar: true,
     frame: false,
     resizable: true,

@@ -902,7 +902,28 @@
       }
     });
 
-    // ---- Expose globals ----
+    // ---- Auto-fit screen on resize ----
+    let _resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(_resizeTimer);
+      _resizeTimer = setTimeout(() => {
+        // Auto-adjust card grid columns based on viewport width
+        const grids = document.querySelectorAll('.card-grid');
+        grids.forEach(grid => {
+          const w = window.innerWidth;
+          if (w < 480) grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(100px,1fr))';
+          else if (w < 768) grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(120px,1fr))';
+          else if (w < 1200) grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(160px,1fr))';
+          else if (w < 1600) grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(180px,1fr))';
+          else grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(200px,1fr))';
+        });
+        // Auto-adjust sidebar visibility
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) sidebar.style.display = w < 480 ? 'none' : 'flex';
+      }, 100);
+    });
+    // Trigger initial fit
+    window.dispatchEvent(new Event('resize'));
     window.navigateBrowser = navigateBrowser;
     window.openInNewTab = openInNewTab;
     window.showAuth = showAuth;
