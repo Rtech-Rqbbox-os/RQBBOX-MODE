@@ -1,0 +1,53 @@
+appId: com.rhystech.rqbbox.lite
+productName: RQBBOX Experience Lite
+directories:
+  output: dist
+files:
+  - "**/*"
+  - "!dist"
+  - "!windows/scripts"
+  - "!node_modules/electron"
+  - "!node_modules/electron-builder"
+  - "!*.bat"
+  - "!*.cmd"
+  - "!games/dungeon-crawler"
+  - "!games/rqbbox-life"
+  - "!games/void-craft-sandbox"
+  - "!games/playtree-c1s1"
+  - "!games/cube-runner-3d"
+  - "!games/basketball-shots"
+  - "!games/air-hockey"
+  - "!games/whack-a-mole"
+  - "!games/memory-match"
+  - "!games/maze-runner"
+  - "!games/breakout-neon"
+  - "!games/zombie-defense"
+  - "!games/dungeon-crawler"
+  - "!captures"
+  - "!discord"
+  - "!build-scripts"
+  - "!*.ps1"
+  - "!*.reg"
+  - "!*.lnk.bat"
+  - "!GITHUB-GUIDE.md"
+  - "!README.md"
+  - "!INSTALLATION-CHECKLIST.md"
+  - "!QUICK-SETUP.md"
+  - "!GAMING-SETTINGS-GUIDE.md"
+extraMetadata:
+  main: electron-main.js
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  artifactName: "RQBBOX-Experience-Lite-${version}.${ext}"
+  signAndEditExecutable: false
+compression: store
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: "RQBBOX Experience Lite"

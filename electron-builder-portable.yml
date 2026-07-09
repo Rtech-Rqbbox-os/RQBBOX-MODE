@@ -1,0 +1,31 @@
+appId: com.rhystech.rqbbox.portable
+productName: RQBBOX Experience Portable
+directories:
+  output: dist
+files:
+  - "**/*"
+  - "!dist"
+  - "!windows/scripts"
+  - "!node_modules/electron"
+  - "!node_modules/electron-builder"
+  - "!*.bat"
+  - "!*.cmd"
+  - "!build-scripts"
+  - "!*.ps1"
+  - "!*.reg"
+  - "!*.lnk.bat"
+  - "!GITHUB-GUIDE.md"
+  - "!README.md"
+  - "!INSTALLATION-CHECKLIST.md"
+  - "!QUICK-SETUP.md"
+  - "!GAMING-SETTINGS-GUIDE.md"
+extraMetadata:
+  main: electron-main.js
+win:
+  target:
+    - target: portable
+      arch:
+        - x64
+  artifactName: "RQBBOX-Experience-Portable-${version}.${ext}"
+  signAndEditExecutable: false
+compression: store

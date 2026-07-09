@@ -1,0 +1,29 @@
+appId: com.rhystech.rqbbox.experience
+productName: RQBBOX Experience
+directories:
+  output: dist
+files:
+  - "**/*"
+  - "!dist"
+  - "!windows/scripts"
+  - "!node_modules/electron"
+  - "!node_modules/electron-builder"
+  - "!*.bat"
+  - "!*.cmd"
+extraMetadata:
+  main: electron-main.js
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  artifactName: "RQBBOX-Experience-Full-${version}.${ext}"
+  signAndEditExecutable: false
+compression: store
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: "RQBBOX Experience OS 1.0"

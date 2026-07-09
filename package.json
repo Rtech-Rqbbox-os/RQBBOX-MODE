@@ -11,10 +11,10 @@
     "start": "electron .",
     "dev": "node server.js --dev",
     "server": "node server.js",
-    "build:exe": "electron-builder --win --config",
-    "build:electron": "electron-builder --win --config",
-    "build:pkg": "pkg rqbbox-launcher.js --targets node18-win-x64 --output RQBBOX-Experience.exe",
-    "build:all": "npm run build:electron"
+    "build:full": "electron-builder --win --config --config electron-builder-full.yml",
+    "build:lite": "electron-builder --win --config --config electron-builder-lite.yml",
+    "build:portable": "electron-builder --win --config --config electron-builder-portable.yml",
+    "build:all": "npm run build:full && npm run build:lite && npm run build:portable"
   },
   "repository": {
     "type": "git",
@@ -46,7 +46,6 @@
     "directories": {
       "output": "dist"
     },
-    "artifactName": "RQBBOX-Experience-Setup-${version}.${ext}",
     "files": [
       "**/*",
       "!dist",
@@ -68,7 +67,7 @@
           "arch": ["x64"]
         }
       ],
-      "artifactName": "RQBBOX-Experience-Setup-${version}.${ext}",
+      "artifactName": "RQBBOX-Experience-${version}.${ext}",
       "signAndEditExecutable": false
     },
     "compression": "store",
@@ -83,9 +82,7 @@
   },
   "devDependencies": {
     "electron": "^33.0.0",
-    "electron-builder": "^25.0.0",
-    "nexe": "^5.0.0-beta.4",
-    "pkg": "^5.8.1"
+    "electron-builder": "^25.0.0"
   },
   "engines": {
     "node": ">=16.0.0"
